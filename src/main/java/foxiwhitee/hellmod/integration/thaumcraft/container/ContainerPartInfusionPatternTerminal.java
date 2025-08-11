@@ -6,8 +6,9 @@ import appeng.container.slot.SlotRestrictedInput;
 import appeng.helpers.InventoryAction;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.IAEAppEngInventory;
+import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.thaumcraft.ThaumcraftIntegration;
 import foxiwhitee.hellmod.integration.thaumcraft.parts.PartInfusionPatternTerminal;
@@ -26,7 +27,7 @@ public class ContainerPartInfusionPatternTerminal extends ContainerPatternTermin
 
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[16];
     private final SlotFakeCraftingMatrix[] coreSlots = new SlotFakeCraftingMatrix[1];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
 
     public ContainerPartInfusionPatternTerminal(InventoryPlayer ip, ITerminalHost host) {
         super(ip, host);
@@ -44,9 +45,7 @@ public class ContainerPartInfusionPatternTerminal extends ContainerPatternTermin
             craftingSlots[i] = slot;
         }
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.getInventoryCrafting(), patternInv, this.getInventoryOut(), 403, 168, this, 1, this));
-        this.outputSlot.setIIcon(-1);
-
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 403, 168));
     }
 
     @Override
@@ -71,7 +70,7 @@ public class ContainerPartInfusionPatternTerminal extends ContainerPatternTermin
     public void doAction(EntityPlayerMP player, InventoryAction action, int slot, long id) {
         if (slot >= 0 && slot < this.inventorySlots.size()) {
             Slot s = this.getSlot(slot);
-            if (s instanceof SlotFakeCraftingMatrix && slot != 38) {
+            if (s instanceof SlotFakeCraftingMatrix && slot != 38 && !(s instanceof SlotFakeOutput)) {
                 ItemStack hand = player != null ? player.inventory.getItemStack() : null;
                 switch (action) {
                     case PICKUP_OR_SET_DOWN:
@@ -141,5 +140,7 @@ public class ContainerPartInfusionPatternTerminal extends ContainerPatternTermin
     public void clear() {
         super.clear();
         coreSlots[0].putStack(null);
+        detectAndSendChanges();
+        System.out.println("CLEAR " + Platform.isServer());
     }
 }

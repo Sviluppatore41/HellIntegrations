@@ -8,6 +8,7 @@ import fox.spiteful.avaritia.crafting.CompressorRecipe;
 import foxiwhitee.hellmod.integration.avaritia.AvaritiaIntegration;
 import foxiwhitee.hellmod.integration.avaritia.recipes.CustomNeutronCompressorRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -35,10 +36,8 @@ public class PartNeutronCompressorPatternTerminal extends PartAvaritiaPatternTer
                     }
                 }
             }
-            getInventoryOutput().setInventorySlotContents(0, null);
-        } else {
-            getInventoryOutput().setInventorySlotContents(0, null);
         }
+        getInventoryOutput().setInventorySlotContents(0, null);
     }
 
     @Override

@@ -4,11 +4,11 @@ import appeng.api.AEApi;
 import appeng.api.definitions.IDefinitions;
 import appeng.api.storage.ITerminalHost;
 import appeng.container.guisync.GuiSync;
-import appeng.container.slot.OptionalSlotFake;
-import appeng.container.slot.SlotFakeCraftingMatrix;
-import appeng.container.slot.SlotRestrictedInput;
+import appeng.container.slot.*;
+import appeng.helpers.InventoryAction;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.parts.PartPatternTerminal;
 import foxiwhitee.hellmod.parts.PartTerminal;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -41,6 +41,20 @@ public abstract class ContainerPatternTerminal extends ContainerTerminal {
         this.addSlotToContainer((Slot)(patternSlotIN = new SlotRestrictedInput(SlotRestrictedInput.PlacableItemType.BLANK_PATTERN, patternInv, 0, 242, 146, ip)));
         this.addSlotToContainer((Slot)(patternSlotOUT = new SlotRestrictedInput(SlotRestrictedInput.PlacableItemType.ENCODED_PATTERN, patternInv, 1, 242, 203, ip)));
         this.patternSlotOUT.setStackLimit(1);
+    }
+
+    @Override
+    public void doAction(EntityPlayerMP player, InventoryAction action, int slot, long id) {
+        if (slot >= 0 && slot < this.inventorySlots.size()) {
+            Slot s = this.getSlot(slot);
+            if (s instanceof SlotFakeOutput) {
+                ((SlotFakeOutput)s).doClick(action, player);
+            } else {
+                super.doAction(player, action, slot, id);
+            }
+        } else {
+            super.doAction(player, action, slot, id);
+        }
     }
 
     public void encode() {
@@ -179,10 +193,6 @@ public abstract class ContainerPatternTerminal extends ContainerTerminal {
 
     public IInventory getInventoryCrafting() {
         return crafting;
-    }
-
-    protected IInventory getInventoryPattern() {
-        return patternInv;
     }
 
     abstract protected Item getPattern();

@@ -52,7 +52,7 @@ public class AvaritiaIntegration implements IIntegration {
     public static Block neutronUnifier = new BlockNeutronUnifier("neutronUnifier");
 
     public static ItemEncodedPattern BIG_PATTERN = new ItemEncodedBigPattern("encoded_big_pattern");
-    public static ItemEncodedPattern BIG_PROCESSING_PATTERN = new ItemEncodedBigPattern("encoded_big_processing_pattern");
+    public static ItemEncodedPattern BIG_PROCESSING_PATTERN = new ItemEncodedBigProcessingPattern("encoded_big_processing_pattern");
     public static ItemEncodedPattern NEUTRON_PATTERN = new ItemEncodedNeutronPattern("encoded_neutron_pattern");
 
     private static HashMap<Integer, GuiBridge> guiBridges = new HashMap<>();

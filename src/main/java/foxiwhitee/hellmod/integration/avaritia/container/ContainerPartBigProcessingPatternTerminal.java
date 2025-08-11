@@ -1,13 +1,11 @@
 package foxiwhitee.hellmod.integration.avaritia.container;
 
-
 import appeng.api.storage.ITerminalHost;
 import appeng.container.guisync.GuiSync;
 import appeng.container.slot.OptionalSlotFake;
 import appeng.container.slot.SlotFakeCraftingMatrix;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.AvaritiaIntegration;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;

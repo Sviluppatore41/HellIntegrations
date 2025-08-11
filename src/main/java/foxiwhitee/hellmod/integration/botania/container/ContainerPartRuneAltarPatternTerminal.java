@@ -6,7 +6,7 @@ import appeng.container.slot.SlotFakeCraftingMatrix;
 import appeng.helpers.InventoryAction;
 import appeng.util.item.AEItemStack;
 import foxiwhitee.hellmod.ModItems;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 import foxiwhitee.hellmod.integration.botania.helpers.ManaRecipeHelper;
@@ -22,7 +22,7 @@ import vazkii.botania.common.block.ModBlocks;
 public class ContainerPartRuneAltarPatternTerminal extends ContainerManaPatternTerminal {
 
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[16];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
 
     public ContainerPartRuneAltarPatternTerminal(InventoryPlayer ip, ITerminalHost host) {
         super(ip, host);
@@ -37,8 +37,7 @@ public class ContainerPartRuneAltarPatternTerminal extends ContainerManaPatternT
             craftingSlots[i] = slot;
         }
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.crafting, patternInv, this.getInventoryOut(), 403, 168, this, 1, this));
-        this.outputSlot.setIIcon(-1);
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 403, 168));
     }
 
     @Override
@@ -72,7 +71,7 @@ public class ContainerPartRuneAltarPatternTerminal extends ContainerManaPatternT
     public void doAction(EntityPlayerMP player, InventoryAction action, int slot, long id) {
         if (slot >= 0 && slot < this.inventorySlots.size()) {
             Slot s = this.getSlot(slot);
-            if (s instanceof SlotFakeCraftingMatrix) {
+            if (s instanceof SlotFakeCraftingMatrix && !(s instanceof SlotFakeOutput)) {
                 ItemStack hand = player != null ? player.inventory.getItemStack() : null;
                 switch (action) {
                     case PICKUP_OR_SET_DOWN:

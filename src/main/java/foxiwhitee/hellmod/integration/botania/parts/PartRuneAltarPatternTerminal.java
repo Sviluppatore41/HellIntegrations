@@ -42,6 +42,7 @@ public class PartRuneAltarPatternTerminal extends PartBotaniaPatternTerminal {
                 ICraftingPatternItem pattern = (ICraftingPatternItem)is.getItem();
                 ICraftingPatternDetails details = pattern.getPatternForItem(is, this.getHost().getTile().getWorldObj());
                 if (details != null) {
+                    this.clear(crafting);
                     IAEItemStack item;
                     for (int x = 0; x < this.getInventoryCrafting().getSizeInventory() && x < (details.getInputs()).length; x++) {
                         item = details.getInputs()[x];

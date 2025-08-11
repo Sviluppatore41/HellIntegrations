@@ -9,7 +9,7 @@ import appeng.tile.inventory.IAEAppEngInventory;
 import appeng.util.item.AEItemStack;
 import fox.spiteful.avaritia.crafting.CompressorManager;
 import fox.spiteful.avaritia.crafting.CompressorRecipe;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.AvaritiaIntegration;
 import foxiwhitee.hellmod.recipes.IHellRecipe;
@@ -28,16 +28,14 @@ import java.util.List;
 public class ContainerPartNeutronCompressorPatternTerminal extends ContainerPatternTerminal {
 
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[1];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
 
     public ContainerPartNeutronCompressorPatternTerminal(InventoryPlayer ip, ITerminalHost host) {
         super(ip, host);
 
         this.addSlotToContainer(this.craftingSlots[0] = new SlotFakeCraftingMatrix(this.crafting, 0, 403, 87));
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.crafting, patternInv, this.getInventoryOut(), 403, 168, this, 1, this));
-        this.outputSlot.setIIcon(-1);
-
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 403, 168));
     }
 
     @Override
@@ -46,6 +44,7 @@ public class ContainerPartNeutronCompressorPatternTerminal extends ContainerPatt
         AEItemStack[] in = this.getInputs();
         ItemStack[] out = this.getOutputs();
         if (in != null && out != null) {
+            in[0] = (AEItemStack) in[0].copy();
             if (output == null || this.isPattern(output)) {
                 if (output == null) {
                     output = this.getPatternSlotIN().getStack();

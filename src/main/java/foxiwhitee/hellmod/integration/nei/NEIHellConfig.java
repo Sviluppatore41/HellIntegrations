@@ -12,15 +12,22 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.brandon3055.draconicevolution.integration.nei.DENEIGuiHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
+import foxiwhitee.hellmod.integration.avaritia.client.gui.GuiPartBigPatternTerminal;
+import foxiwhitee.hellmod.integration.avaritia.client.gui.GuiPartNeutronCompressorPatternTerminal;
+import foxiwhitee.hellmod.integration.botania.client.gui.*;
 import foxiwhitee.hellmod.integration.draconic.DraconicEvolutionIntegration;
 import foxiwhitee.hellmod.integration.draconic.client.gui.GuiDraconicAssembler;
 import foxiwhitee.hellmod.integration.draconic.client.gui.GuiFusionCraftingCore;
+import foxiwhitee.hellmod.integration.nei.avaritia.ExtremeRecipeOverlayHandler;
+import foxiwhitee.hellmod.integration.nei.botania.BotaniaRecipeOverlayHandler;
 import foxiwhitee.hellmod.integration.nei.draconic.DraconicNEIGuiHandler;
 import foxiwhitee.hellmod.integration.nei.draconic.assembler.DrAssemblerRecipeOverlayHandler;
 import foxiwhitee.hellmod.integration.nei.draconic.assembler.GuiDraconicAssemblerHandler;
 import foxiwhitee.hellmod.integration.nei.draconic.fusion.GuiFusionCraftingHandler;
+import foxiwhitee.hellmod.integration.nei.thaumcraft.InfusionRecipeOverlayHandler;
+import foxiwhitee.hellmod.integration.thaumcraft.client.gui.GuiPartAlchemicalConstructionPatternTerminal;
+import foxiwhitee.hellmod.integration.thaumcraft.client.gui.GuiPartInfusionPatternTerminal;
 import net.minecraft.item.ItemStack;
 import foxiwhitee.hellmod.HellCore;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,6 +56,20 @@ public class NEIHellConfig implements IConfigureNEI {
         sendHandlerInfo("foxiwhitee.hellmod.integration.nei.draconic.fusion.GuiFusionCraftingHandler", DraconicEvolutionIntegration.fusion_core.getUnlocalizedName().replace("tile.", ""), 112, 164, 2);
         TemplateRecipeHandler.RecipeTransferRectHandler.registerRectsToGuis(Arrays.asList(GuiFusionCraftingCore.class ), Collections.singletonList(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(98, 63, 11, 31), "fusioncrafting", new Object[0])));
         API.registerNEIGuiHandler(new DraconicNEIGuiHandler());
+
+        API.registerGuiOverlayHandler(GuiPartNeutronCompressorPatternTerminal.class, new TerminalsRecipeOverlayHandler(1), "extreme_compression");
+
+        BotaniaRecipeOverlayHandler botaniaRecipeOverlayHandler = new BotaniaRecipeOverlayHandler();
+        API.registerGuiOverlayHandler(GuiPartElvenTradePatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        API.registerGuiOverlayHandler(GuiPartManaPoolPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        API.registerGuiOverlayHandler(GuiPartPetalsPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        API.registerGuiOverlayHandler(GuiPartPureDaisyPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        API.registerGuiOverlayHandler(GuiPartRuneAltarPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+
+        API.registerGuiOverlayHandler(GuiPartAlchemicalConstructionPatternTerminal.class, new TerminalsRecipeOverlayHandler(1), "cruciblerecipe");
+        API.registerGuiOverlayHandler(GuiPartInfusionPatternTerminal.class, new InfusionRecipeOverlayHandler(), "infusionCrafting");
+        API.registerGuiOverlayHandler(GuiPartBigPatternTerminal.class, new ExtremeRecipeOverlayHandler(), "extreme");
+        API.registerGuiOverlay(GuiPartBigPatternTerminal.class, "extreme", 267, 15);
     }
 
     private void sendHandlerInfo(String handler, String nameItem, int height, int width, int perPage) {

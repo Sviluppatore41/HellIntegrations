@@ -8,7 +8,7 @@ import appeng.helpers.InventoryAction;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.IAEAppEngInventory;
 import appeng.util.item.AEItemStack;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 import foxiwhitee.hellmod.recipes.IHellRecipe;
@@ -27,7 +27,7 @@ import vazkii.botania.common.item.ModItems;
 public class ContainerPartPetalsPatternTerminal extends ContainerPatternTerminal {
 
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[16];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
 
     public ContainerPartPetalsPatternTerminal(InventoryPlayer ip, ITerminalHost host) {
         super(ip, host);
@@ -42,14 +42,13 @@ public class ContainerPartPetalsPatternTerminal extends ContainerPatternTerminal
             craftingSlots[i] = slot;
         }
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.crafting, patternInv, this.getInventoryOut(), 403, 168, this, 1, this));
-        this.outputSlot.setIIcon(-1);
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 403, 168));
     }
 
     public void doAction(EntityPlayerMP player, InventoryAction action, int slot, long id) {
         if (slot >= 0 && slot < this.inventorySlots.size()) {
             Slot s = this.getSlot(slot);
-            if (s instanceof SlotFakeCraftingMatrix) {
+            if (s instanceof SlotFakeCraftingMatrix && !(s instanceof SlotFakeOutput)) {
                 ItemStack hand = player != null ? player.inventory.getItemStack() : null;
                 switch (action) {
                     case PICKUP_OR_SET_DOWN:

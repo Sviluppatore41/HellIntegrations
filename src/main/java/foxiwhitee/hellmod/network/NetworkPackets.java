@@ -16,7 +16,9 @@ public enum NetworkPackets {
     SPAWN_PARTICLE_Packet(PacketSpawnParticle.class),
     FUSION_CORE_PACKET(PacketFusionCore.class),
     UPDATE_ENERGY_PACKET(PacketUpdateEnergy.class),
-    UPDATE_MANA_PACKET(PacketUpdateMana.class);
+    UPDATE_MANA_PACKET(PacketUpdateMana.class),
+    TERMINALS_MANA_POOL_NEI_PACKET(PacketTerminalManaPoolRecipe.class),
+    TERMINALS_NEI_PACKET(PacketTerminalRecipes.class);
 
     private final Class<? extends BasePacket> pktClass;
     private final Constructor<? extends BasePacket> pktConstructor;

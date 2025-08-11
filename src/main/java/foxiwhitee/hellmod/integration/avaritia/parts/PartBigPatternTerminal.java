@@ -4,6 +4,8 @@ import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.client.texture.CableBusTextures;
+import appeng.container.ContainerNull;
+import appeng.core.AELog;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.InvOperation;
@@ -36,7 +38,7 @@ public class PartBigPatternTerminal extends PartAvaritiaPatternTerminal {
     @Override
     protected void updateRecipe() {
         if (craftingMode) {
-            InventoryCrafting matrix = new InventoryCrafting(null, 9, 9);
+            InventoryCrafting matrix = new InventoryCrafting(new ContainerNull(), 9, 9);
             for (int x = 0; x < matrix.getSizeInventory(); x++)
                 matrix.setInventorySlotContents(x, this.crafting.getStackInSlot(x));
             int i = 0;
@@ -85,12 +87,16 @@ public class PartBigPatternTerminal extends PartAvaritiaPatternTerminal {
     }
 
     public void onChangeInventory(IInventory inv, int slot, InvOperation mc, ItemStack removedStack, ItemStack newStack) {
+        if (inv == getInventoryCrafting() && mc != InvOperation.markDirty) {
+            this.updateRecipe();
+        }
         if (inv == this.getInventoryPattern() && slot == 1) {
             ItemStack is = this.getInventoryPattern().getStackInSlot(1);
             if (is != null && is.getItem() instanceof ICraftingPatternItem) {
                 ICraftingPatternItem pattern = (ICraftingPatternItem)is.getItem();
                 ICraftingPatternDetails details = pattern.getPatternForItem(is, getHost().getTile().getWorldObj());
                 if (details != null) {
+                    this.clear(crafting);
                     setCraftingRecipe(details.isCraftable());
                     setSubstitution(details.canSubstitute());
                     int x;
@@ -159,5 +165,25 @@ public class PartBigPatternTerminal extends PartAvaritiaPatternTerminal {
 
     protected GuiBridge getThisGui() {
         return AvaritiaIntegration.getGuiBridge(0);
+    }
+
+    @Override
+    public void readNEINBT(NBTTagCompound tag) {
+        clear(this.getInventoryCrafting());
+        for (int i = 0; i < this.getInventoryCrafting().getSizeInventory(); i++) {
+            try {
+
+                NBTTagCompound itemTag = tag.getCompoundTag("#" + i);
+                if (!itemTag.hasNoTags()) {
+                    ItemStack requiredStack = null;
+                    if (!itemTag.hasKey("null")) {
+                        requiredStack = ItemStack.loadItemStackFromNBT(itemTag);
+                    }
+                    this.getInventoryCrafting().setInventorySlotContents(i, requiredStack == null ? null : requiredStack.copy());
+                }
+            } catch (Exception e) {
+                AELog.debug(e);
+            }
+        }
     }
 }

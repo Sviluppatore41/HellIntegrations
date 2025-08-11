@@ -7,7 +7,7 @@ import appeng.container.slot.SlotRestrictedInput;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.IAEAppEngInventory;
 import foxiwhitee.hellmod.ModItems;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 import foxiwhitee.hellmod.recipes.IHellRecipe;
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerPartElvenTradePatternTerminal extends ContainerManaPatternTerminal {
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[3];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
 
     public ContainerPartElvenTradePatternTerminal(InventoryPlayer ip, ITerminalHost host) {
         super(ip, host);
@@ -28,9 +28,7 @@ public class ContainerPartElvenTradePatternTerminal extends ContainerManaPattern
         this.addSlotToContainer(this.craftingSlots[1] = new SlotFakeCraftingMatrix(this.crafting, 1, 403, 105));
         this.addSlotToContainer(this.craftingSlots[2] = new SlotFakeCraftingMatrix(this.crafting, 2, 439, 105));
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.crafting, patternInv, this.getInventoryOut(), 403, 168, this, 1, this));
-        this.outputSlot.setIIcon(-1);
-
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 403, 168));
     }
 
     @Override

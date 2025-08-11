@@ -55,6 +55,7 @@ public class PartBigProcessingPatternTerminal extends PartAvaritiaPatternTermina
                 ICraftingPatternItem pattern = (ICraftingPatternItem)is.getItem();
                 ICraftingPatternDetails details = pattern.getPatternForItem(is, getHost().getTile().getWorldObj());
                 if (details != null) {
+                    this.clear(crafting);
                     setCraftingRecipe(details.isCraftable());
                     setSubstitution(details.canSubstitute());
                     int x;

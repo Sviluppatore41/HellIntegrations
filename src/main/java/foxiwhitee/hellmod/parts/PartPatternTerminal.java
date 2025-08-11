@@ -3,6 +3,7 @@ package foxiwhitee.hellmod.parts;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.core.AELog;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.InvOperation;
 import net.minecraft.inventory.IInventory;
@@ -50,11 +51,13 @@ public abstract class PartPatternTerminal extends PartTerminal {
                 ICraftingPatternItem pattern = (ICraftingPatternItem)is.getItem();
                 ICraftingPatternDetails details = pattern.getPatternForItem(is, this.getHost().getTile().getWorldObj());
                 if (details != null) {
+                    this.clear(getInventoryCrafting());
                     IAEItemStack item;
                     for (int x = 0; x < this.getInventoryCrafting().getSizeInventory() && x < (details.getInputs()).length; x++) {
                         item = details.getInputs()[x];
                         this.getInventoryCrafting().setInventorySlotContents(x, (item == null) ? null : item.getItemStack());
                     }
+                    this.getInventoryOutput().setInventorySlotContents(0, (details.getOutputs()[0] == null) ? null : details.getOutputs()[0].getItemStack());
                 }
             }
         }
@@ -83,4 +86,28 @@ public abstract class PartPatternTerminal extends PartTerminal {
     abstract public AppEngInternalInventory getInventoryCrafting();
 
     abstract public AppEngInternalInventory getInventoryOutput();
+
+    public void clear(AppEngInternalInventory inv) {
+        for (int i = 0; i < inv.getSizeInventory(); i++) {
+            inv.setInventorySlotContents(i, null);
+        }
+    }
+
+    //public abstract void readNEINBT(NBTTagCompound tag);
+    public void readNEINBT(NBTTagCompound tag) {
+        clear(this.getInventoryCrafting());
+        for (int i = 0; i < this.getInventoryCrafting().getSizeInventory(); i++) {
+            try {
+                NBTTagCompound itemTag = tag.getCompoundTag("#" + i);
+                if (!itemTag.hasNoTags()) {
+                    ItemStack requiredStack = ItemStack.loadItemStackFromNBT(itemTag);
+                    if (requiredStack != null) {
+                        this.getInventoryCrafting().setInventorySlotContents(i, requiredStack.copy());
+                    }
+                }
+            } catch (Exception e) {
+                AELog.debug(e);
+            }
+        }
+    }
 }

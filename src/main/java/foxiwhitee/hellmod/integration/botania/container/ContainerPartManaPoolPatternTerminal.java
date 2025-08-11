@@ -8,7 +8,7 @@ import appeng.container.slot.SlotRestrictedInput;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.IAEAppEngInventory;
 import appeng.util.Platform;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 import foxiwhitee.hellmod.integration.botania.helpers.ManaRecipeHelper;
@@ -32,7 +32,7 @@ import java.io.IOException;
 public class ContainerPartManaPoolPatternTerminal extends ContainerManaPatternTerminal {
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[1];
     private final Slot[] disabledSlot = new Slot[1];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
     private static final ItemStack[] stacks = new ItemStack[]{new ItemStack(ModBlocks.pool), new ItemStack(ModBlocks.alchemyCatalyst), new ItemStack(ModBlocks.conjurationCatalyst)};
 
     public ContainerPartManaPoolPatternTerminal(InventoryPlayer ip, ITerminalHost host) {
@@ -42,9 +42,7 @@ public class ContainerPartManaPoolPatternTerminal extends ContainerManaPatternTe
         this.addSlotToContainer(this.disabledSlot[0] = new SlotDisabled(this.crafting, 1, 403, 128));
         this.disabledSlot[0].putStack(stacks[0].copy());
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.crafting, patternInv, this.getInventoryOut(), 403, 168, this, 1, this));
-        this.outputSlot.setIIcon(-1);
-
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 403, 168));
     }
 
     @Override
@@ -81,4 +79,7 @@ public class ContainerPartManaPoolPatternTerminal extends ContainerManaPatternTe
         return this.craftingSlots;
     }
 
+    public void setCraftType(int idx) {
+        disabledSlot[0].putStack(stacks[idx]);
+    }
 }

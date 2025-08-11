@@ -4,9 +4,11 @@ import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.client.texture.CableBusTextures;
+import appeng.core.AELog;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.InvOperation;
+import appeng.util.Platform;
 import foxiwhitee.hellmod.integration.thaumcraft.ThaumcraftIntegration;
 import foxiwhitee.hellmod.integration.thaumcraft.helpers.ThaumcraftRecipeHelper;
 import net.minecraft.inventory.IInventory;
@@ -27,7 +29,7 @@ public class PartInfusionPatternTerminal extends PartThaumcraftPatternTerminal {
 
     @Override
     protected void updateRecipe() {
-        this.getInventoryOutput().setInventorySlotContents(0, (ItemStack)null);
+        this.getInventoryOutput().setInventorySlotContents(0, (ItemStack) null);
         ItemStack central = this.getInventoryCore().getStackInSlot(0);
         if (central != null) {
             ArrayList<ItemStack> inputList = new ArrayList<>();
@@ -40,7 +42,7 @@ public class PartInfusionPatternTerminal extends PartThaumcraftPatternTerminal {
             if (recipe != null) {
                 Object recipeOut = recipe.getRecipeOutput();
                 if (recipeOut instanceof ItemStack) {
-                    this.getInventoryOutput().setInventorySlotContents(0, (ItemStack)recipeOut);
+                    this.getInventoryOutput().setInventorySlotContents(0, (ItemStack) recipeOut);
                 }
             }
         }
@@ -57,6 +59,8 @@ public class PartInfusionPatternTerminal extends PartThaumcraftPatternTerminal {
                 ICraftingPatternItem pattern = (ICraftingPatternItem)is.getItem();
                 ICraftingPatternDetails details = pattern.getPatternForItem(is, this.getHost().getTile().getWorldObj());
                 if (details != null) {
+                    this.clear(crafting);
+                    this.clear(core);
                     IAEItemStack item;
                     for (int x = 0; x < this.getInventoryCrafting().getSizeInventory() && x < (details.getInputs()).length; x++) {
                         item = details.getInputs()[x];
@@ -120,5 +124,27 @@ public class PartInfusionPatternTerminal extends PartThaumcraftPatternTerminal {
         return ThaumcraftIntegration.getBusTextureDark(1);
     }
 
+    @Override
+    public void readNEINBT(NBTTagCompound tag) {
+        clear(this.getInventoryCrafting());
+        clear(this.getInventoryCore());
+        for (int i = 0; i < this.getInventoryCrafting().getSizeInventory() + 1; i++) {
+            try {
+                NBTTagCompound itemTag = tag.getCompoundTag("#" + i);
+                if (!itemTag.hasNoTags()) {
+                    ItemStack requiredStack = ItemStack.loadItemStackFromNBT(itemTag);
+                    if (requiredStack != null) {
+                        if (i == 0) {
+                            this.getInventoryCore().setInventorySlotContents(0, requiredStack.copy());
+                        } else {
+                            this.getInventoryCrafting().setInventorySlotContents(i - 1, requiredStack.copy());
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                AELog.debug(e);
+            }
+        }
+    }
 }
 

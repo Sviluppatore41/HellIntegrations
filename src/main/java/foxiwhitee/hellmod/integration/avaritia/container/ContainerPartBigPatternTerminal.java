@@ -8,8 +8,7 @@ import appeng.container.slot.*;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternOutputs;
-import foxiwhitee.hellmod.container.slots.CustomSlotPatternTerm;
+import foxiwhitee.hellmod.container.slots.SlotFakeOutput;
 import foxiwhitee.hellmod.container.terminals.ContainerPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.AvaritiaIntegration;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
@@ -34,7 +33,7 @@ import java.util.List;
 public class ContainerPartBigPatternTerminal extends ContainerPatternTerminal {
 
     private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[81];
-    private final CustomSlotPatternTerm outputSlot;
+    private final SlotFakeOutput outputSlot;
 
     public ContainerPartBigPatternTerminal(InventoryPlayer ip, ITerminalHost host) {
         super(ip, host);
@@ -46,7 +45,7 @@ public class ContainerPartBigPatternTerminal extends ContainerPatternTerminal {
             }
         }
 
-        this.addSlotToContainer(this.outputSlot = new CustomSlotPatternTerm(ip.player, this.getActionSource(), this.getPowerSource(), host, this.crafting, patternInv, this.getInventoryOut(), 424, 203, this, 2, this));
+        this.addSlotToContainer(this.outputSlot = new SlotFakeOutput(this.output, 424, 203));
         this.outputSlot.setIIcon(-1);
 
     }

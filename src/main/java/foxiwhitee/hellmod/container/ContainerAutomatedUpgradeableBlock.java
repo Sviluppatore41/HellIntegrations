@@ -3,7 +3,6 @@ package foxiwhitee.hellmod.container;
 import appeng.container.AEBaseContainer;
 import appeng.container.slot.AppEngSlot;
 import appeng.container.slot.SlotRestrictedInput;
-import foxiwhitee.hellmod.container.slots.CustomAppEngSlot;
 import foxiwhitee.hellmod.container.slots.CustomSlotRestrictedInput;
 import foxiwhitee.hellmod.tile.TileAutomatedUpgradeableBlock;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,0 +1,40 @@
+package foxiwhitee.HellIntegrations.integration.draconic.event;
+
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+
+public class CEventHandler {
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public void onLivingAttack(LivingAttackEvent event) {
+        if (event.entityLiving instanceof EntityPlayer)
+            CCustomArmorHandler.onPlayerAttacked(event);
+    }
+
+    @SubscribeEvent
+    public void onLivingHurt(LivingHurtEvent event) {
+        if (event.entityLiving instanceof EntityPlayer)
+            CCustomArmorHandler.onPlayerHurt(event);
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public void onLivingDeath(LivingDeathEvent event) {
+        if (event.entityLiving instanceof EntityPlayer)
+            CCustomArmorHandler.onPlayerDeath(event);
+    }
+
+    @SubscribeEvent
+    public void onLivingJumpEvent(LivingEvent.LivingJumpEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer)event.entityLiving;
+            CCustomArmorHandler.ArmorSummery summery = (new CCustomArmorHandler.ArmorSummery()).getSummery(player);
+            if (summery != null && summery.jumpModifier > 0.0F)
+                player.motionY += (summery.jumpModifier * 0.1F);
+        }
+    }
+}

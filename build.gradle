@@ -71,7 +71,7 @@ processResources {
 jar {
     exclude "appeng"
     manifest {
-        attributes 'FMLCorePlugin': 'foxiwhitee.hellmod.asm.ASMCoreMod,thaumicenergistics.fml.ThECore,foxiwhitee.UkrainianLocalizationFixer.asm.ASMCoreMod'
+        attributes 'FMLCorePlugin': 'foxiwhitee.HellIntegrations.asm.ASMCoreMod,thaumicenergistics.fml.ThECore,foxiwhitee.UkrainianLocalizationFixer.asm.ASMCoreMod'
         attributes 'FMLCorePluginContainsFMLMod': 'true'
         attributes "ForceLoadAsMod": "true"
     }

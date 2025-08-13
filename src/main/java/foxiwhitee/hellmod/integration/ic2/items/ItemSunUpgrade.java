@@ -24,6 +24,6 @@ public class ItemSunUpgrade extends Item {
     }
 
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean p_77624_4_) {
-        list.add(String.format(LocalizationUtils.localize("tooltip.wyvern_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeWywern)));
+        list.add(String.format(LocalizationUtils.localize("tooltip.wyvern_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeWywern)));
     }
 }

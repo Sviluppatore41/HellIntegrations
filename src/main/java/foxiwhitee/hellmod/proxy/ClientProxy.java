@@ -11,6 +11,7 @@ import foxiwhitee.hellmod.client.ClientEventHandler;
 import foxiwhitee.hellmod.client.render.RenderBlockAdvancedDriver;
 import foxiwhitee.hellmod.client.render.RenderBlockCustomEnergyCell;
 import foxiwhitee.hellmod.client.render.assemblers.*;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.tile.TileAdvancedDrive;
 import foxiwhitee.hellmod.tile.assemblers.TileBaseMolecularAssembler;
 import foxiwhitee.hellmod.tile.assemblers.TileHybridMolecularAssembler;
@@ -54,16 +55,15 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(ModBlocks.baseMolecularAssembler), (IItemRenderer)new RenderItemBaseMolecularAssembler());
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(ModBlocks.hybridMolecularAssembler), (IItemRenderer)new RenderItemHybridMolecularAssembler());
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(ModBlocks.ultimateMolecularAssembler), (IItemRenderer)new RenderItemUltimateMolecularAssembler());
-        RegisterUtils.registerTileRenderer(TileBaseMolecularAssembler.class, (TileEntitySpecialRenderer)new RenderBlockBaseMolecularAssembler());
-        RegisterUtils.registerTileRenderer(TileHybridMolecularAssembler.class, (TileEntitySpecialRenderer)new RenderBlockHybridMolecularAssembler());
-        RegisterUtils.registerTileRenderer(TileUltimateMolecularAssembler.class, (TileEntitySpecialRenderer)new RenderBlockUltimateMolecularAssembler());
 
-        //RegisterUtils.registerTileRenderer(TileAdvancedDrive.class, (TileEntitySpecialRenderer)new RenderBlockAdvancedDriver());
-
-
+        if (ContentConfig.enableMolecularAssemblers) {
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(ModBlocks.BASE_MOLECULAR_ASSEMBLER), (IItemRenderer) new RenderItemBaseMolecularAssembler());
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(ModBlocks.HYBRID_MOLECULAR_ASSEMBLER), (IItemRenderer) new RenderItemHybridMolecularAssembler());
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(ModBlocks.ULTIMATE_MOLECULAR_ASSEMBLER), (IItemRenderer) new RenderItemUltimateMolecularAssembler());
+            RegisterUtils.registerTileRenderer(TileBaseMolecularAssembler.class, (TileEntitySpecialRenderer) new RenderBlockBaseMolecularAssembler());
+            RegisterUtils.registerTileRenderer(TileHybridMolecularAssembler.class, (TileEntitySpecialRenderer) new RenderBlockHybridMolecularAssembler());
+            RegisterUtils.registerTileRenderer(TileUltimateMolecularAssembler.class, (TileEntitySpecialRenderer) new RenderBlockUltimateMolecularAssembler());
+        }
     }
 
     @Override
@@ -73,12 +73,14 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerCableBusTextures() {
-        PART_ADV_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartAdvInterfaceFront", new Class[]{String.class}, new Object[]{"PartAdvInterfaceFront"});
-        PART_HYBRID_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartHybridInterfaceFront", new Class[]{String.class}, new Object[]{"PartHybridInterfaceFront"});
-        PART_ULTIMATE_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartUltimateInterfaceFront", new Class[]{String.class}, new Object[]{"PartUltimateInterfaceFront"});
+        if (ContentConfig.enableInterfaces) {
+            PART_ADV_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartAdvInterfaceFront", new Class[]{String.class}, new Object[]{"PartAdvInterfaceFront"});
+            PART_HYBRID_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartHybridInterfaceFront", new Class[]{String.class}, new Object[]{"PartHybridInterfaceFront"});
+            PART_ULTIMATE_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartUltimateInterfaceFront", new Class[]{String.class}, new Object[]{"PartUltimateInterfaceFront"});
 
-        cableBusTexturesBright.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[] { String.class }, new Object[] { "PartAdvancedInterfaceTerminal_Bright" }));
-        cableBusTexturesDark.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[] { String.class }, new Object[] { "PartAdvancedInterfaceTerminal_Dark" }));
-        cableBusTexturesColored.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[] { String.class }, new Object[] { "PartAdvancedInterfaceTerminal_Colored" }));
+            cableBusTexturesBright.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[]{String.class}, new Object[]{"PartAdvancedInterfaceTerminal_Bright"}));
+            cableBusTexturesDark.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[]{String.class}, new Object[]{"PartAdvancedInterfaceTerminal_Dark"}));
+            cableBusTexturesColored.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[]{String.class}, new Object[]{"PartAdvancedInterfaceTerminal_Colored"}));
+        }
     }
 }

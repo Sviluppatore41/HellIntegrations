@@ -110,7 +110,7 @@ public abstract class TIleAEMana extends AENetworkInvTile implements IGridTickab
     public final long extractMana(long amount) {
         if (Platform.isServer()) {
             try {
-                AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop));
+                AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP));
                 mana.setStackSize(amount);
                 IAEItemStack remainder = getProxy().getStorage().getItemInventory().extractItems(mana.copy(), Actionable.SIMULATE, source);
                 if (remainder != null && remainder.getStackSize() > 0) {
@@ -126,7 +126,7 @@ public abstract class TIleAEMana extends AENetworkInvTile implements IGridTickab
     public final void injectMana(long amount) {
         if (Platform.isServer()) {
             try {
-                AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop));
+                AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP));
                 mana.setStackSize(amount);
                 IAEItemStack remainder = getProxy().getStorage().getItemInventory().injectItems(mana.copy(), Actionable.SIMULATE, source);
                 if (remainder != null && remainder.getStackSize() > 0 && remainder.getStackSize() != Integer.MAX_VALUE) {

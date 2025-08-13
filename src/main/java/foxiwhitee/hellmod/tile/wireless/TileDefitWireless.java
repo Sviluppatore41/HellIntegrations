@@ -13,6 +13,6 @@ public class TileDefitWireless extends TileCustomWireless{
 
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(ModBlocks.wirelessDefit);
+        return new ItemStack(ModBlocks.WIRELESS_DEFIT);
     }
 }

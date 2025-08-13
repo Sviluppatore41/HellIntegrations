@@ -12,7 +12,7 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public final void worldLoad(WorldEvent.Load e) {
-        CellInventory.addBasicBlackList(Item.getIdFromItem(BotaniaIntegration.mana_drop), 32767);
-        CustomCellInventory.addBasicBlackList(Item.getIdFromItem(BotaniaIntegration.mana_drop), 32767);
+        CellInventory.addBasicBlackList(Item.getIdFromItem(BotaniaIntegration.MANA_DROP), 32767);
+        CustomCellInventory.addBasicBlackList(Item.getIdFromItem(BotaniaIntegration.MANA_DROP), 32767);
     }
 }

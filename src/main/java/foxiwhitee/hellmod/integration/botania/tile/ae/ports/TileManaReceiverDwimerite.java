@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.integration.botania.tile.ae;
+package foxiwhitee.hellmod.integration.botania.tile.ae.ports;
 
 public class TileManaReceiverDwimerite extends TileManaReceiver {
 

@@ -1,6 +1,7 @@
 package foxiwhitee.hellmod.integration.botania.integration.avaritia.items;
 
 import foxiwhitee.hellmod.HellCore;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.integration.botania.flowers.*;
 import foxiwhitee.hellmod.integration.botania.integration.avaritia.flower.logic.LogicAsgardandelion;
 import foxiwhitee.hellmod.integration.botania.integration.avaritia.flower.logic.LogicHelibrium;
@@ -35,8 +36,12 @@ public class ItemGenerationFlowerCoresAvaritia extends Item implements ICoreGene
 
     @Override
     public void registerIcons(IIconRegister register) {
-        for (int i = 0; i < names.length; i++) {
-            icons[i] = register.registerIcon(HellCore.MODID + ":botania/cores/generation/" + names[i]);
+        if (ContentConfig.enableAsgardandelions) {
+            for (int i = 0; i < names.length; i++) {
+                icons[i] = register.registerIcon(HellCore.MODID + ":botania/cores/generation/" + names[i]);
+            }
+        } else {
+            icons[0] = register.registerIcon(HellCore.MODID + ":botania/cores/generation/" + names[0]);
         }
     }
 
@@ -48,9 +53,14 @@ public class ItemGenerationFlowerCoresAvaritia extends Item implements ICoreGene
 
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < names.length; i++) {
-            list.add(new ItemStack(item, 1, i));
-            GeneratingFlowersRegister.addFlower(names[i], new CoreGeneratingFlowerWrapper(getLogic(names[i]), names[i]));
+        if (ContentConfig.enableAsgardandelions) {
+            for (int i = 0; i < names.length; i++) {
+                list.add(new ItemStack(item, 1, i));
+                GeneratingFlowersRegister.addFlower(names[i], new CoreGeneratingFlowerWrapper(getLogic(names[i]), names[i]));
+            }
+        } else {
+            list.add(new ItemStack(item, 1, 0));
+            GeneratingFlowersRegister.addFlower(names[0], new CoreGeneratingFlowerWrapper(getLogic(names[0]), names[0]));
         }
     }
 

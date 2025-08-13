@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.items;
 
+import appeng.block.AEBaseItemBlock;
 import appeng.me.helpers.IGridProxyable;
 import foxiwhitee.hellmod.config.HellConfig;
 import foxiwhitee.hellmod.ModBlocks;
@@ -8,6 +9,7 @@ import foxiwhitee.hellmod.integration.avaritia.blocks.BlockCustomNeutronCollecto
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 import foxiwhitee.hellmod.integration.botania.blocks.BlockCustomManaPool;
 import foxiwhitee.hellmod.integration.botania.blocks.BlockCustomSpreader;
+import foxiwhitee.hellmod.integration.draconic.DraconicEvolutionIntegration;
 import foxiwhitee.hellmod.integration.ic2.IC2Integration;
 import foxiwhitee.hellmod.integration.ic2.blocks.BlockAutoReplicator;
 import foxiwhitee.hellmod.integration.ic2.blocks.BlockCustomMatterGen;
@@ -23,7 +25,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ModItemBlock extends ItemBlock {
+public class ModItemBlock extends AEBaseItemBlock {
     private final Block blockType;
 
     public ModItemBlock(Block b) {
@@ -50,62 +52,77 @@ public class ModItemBlock extends ItemBlock {
         return true;
     }
 
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean adv) {
+    @Override
+    public void addCheckedInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean advancedToolTips) {
+        super.addCheckedInformation(itemStack, player, list, advancedToolTips);
         if (HellConfig.enable_tooltips) {
-            if (this.blockType.equals(IC2Integration.panel1) ||
-                this.blockType.equals(IC2Integration.panel2) ||
-                this.blockType.equals(IC2Integration.panel3) ||
-                this.blockType.equals(IC2Integration.panel4) ||
-                this.blockType.equals(IC2Integration.panel5) ||
-                this.blockType.equals(IC2Integration.panel6) ||
-                this.blockType.equals(IC2Integration.panel7) ||
-                this.blockType.equals(IC2Integration.panel8)) {
+            if (this.blockType.equals(ModBlocks.ADVANCED_INTERFACE)){
+                list.add(LocalizationUtils.localize("tooltip.interface", 18));
+            } else if (this.blockType.equals(ModBlocks.HYBRID_INTERFACE)){
+                list.add(LocalizationUtils.localize("tooltip.interface", 27));
+            } else if (this.blockType.equals(ModBlocks.ULTIMATE_INTERFACE)){
+                list.add(LocalizationUtils.localize("tooltip.interface", 36));
+            } else if (this.blockType.equals(ModBlocks.AUTO_CRYSTALLIZER)){
+                list.add(LocalizationUtils.localize("tooltip.autoCrystallizer"));
+            } else if (this.blockType.equals(ModBlocks.AUTO_PRESS)){
+                list.add(LocalizationUtils.localize("tooltip.autoPress"));
+            } else if (this.blockType.equals(DraconicEvolutionIntegration.AUTO_AWAKENER_BLOCKS)){
+                list.add(LocalizationUtils.localize("tooltip.autoAwakener"));
+            } else if (this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER1) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER2) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER3) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER4) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER5) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER6) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER7) ||
+                    this.blockType.equals(IC2Integration.SOLAR_PANEL_TIER8)) {
 
                 list.add(LocalizationUtils.localize("tooltip.panel.generation.day") + ((BlockCustomSolarPanel) (this.blockType)).getGenDay());
                 list.add(LocalizationUtils.localize("tooltip.panel.generation.night") + ((BlockCustomSolarPanel) (this.blockType)).getGenNight());
                 list.add(LocalizationUtils.localize("tooltip.panel.output") + ((BlockCustomSolarPanel) (this.blockType)).getGenDay() * 2);
                 list.add(LocalizationUtils.localize("tooltip.panel.storage") + ((BlockCustomSolarPanel) (this.blockType)).getGenDay() * 10);
-            } else if (this.blockType.equals(ThaumcraftIntegration.stabilizer)) {
+            } else if (this.blockType.equals(ThaumcraftIntegration.STABILIZER)) {
                 list.add(LocalizationUtils.localize("tooltip.stabilizer"));
-            } else if (this.blockType.equals(AvaritiaIntegration.basicNeutronCollector) ||
-                    this.blockType.equals(AvaritiaIntegration.advancedNeutronCollector) ||
-                    this.blockType.equals(AvaritiaIntegration.hybridNeutronCollector) ||
-                    this.blockType.equals(AvaritiaIntegration.ultimateNeutronCollector) ||
-                    this.blockType.equals(AvaritiaIntegration.quantiumNeutronCollector)) {
+            } else if (this.blockType.equals(AvaritiaIntegration.BASIC_NEUTRON_COLLECTOR) ||
+                    this.blockType.equals(AvaritiaIntegration.ADVANCEDN_NEUTRON_COLLECTOR) ||
+                    this.blockType.equals(AvaritiaIntegration.HYBRID_NEUTRON_COLLECTOR) ||
+                    this.blockType.equals(AvaritiaIntegration.ULTIMATE_NEUTRON_COLLECTOR) ||
+                    this.blockType.equals(AvaritiaIntegration.QUANTIUM_NEUTRON_COLLECTOR)) {
                 list.add(LocalizationUtils.localize("tooltip.neutronCollector", ((BlockCustomNeutronCollector)blockType).getStack().stackSize, ((BlockCustomNeutronCollector)blockType).getStack().getDisplayName(), ((BlockCustomNeutronCollector)blockType).getTicks()));
-            } else if (this.blockType.equals(BotaniaIntegration.asgardPool) ||
-                    this.blockType.equals(BotaniaIntegration.helhelmPool) ||
-                    this.blockType.equals(BotaniaIntegration.valhallaPool) ||
-                    this.blockType.equals(BotaniaIntegration.midgardPool)) {
+            } else if (this.blockType.equals(BotaniaIntegration.ASGARD_POOL) ||
+                    this.blockType.equals(BotaniaIntegration.HELHELM_POOL) ||
+                    this.blockType.equals(BotaniaIntegration.VALHALLA_POOL) ||
+                    this.blockType.equals(BotaniaIntegration.MIDGARD_POOL)) {
                 list.add(LocalizationUtils.localize("tooltip.customManaPool", ((BlockCustomManaPool)blockType).getMaxMana() / 1000000));
-            } else if (this.blockType.equals(BotaniaIntegration.asgardSpreader) ||
-                    this.blockType.equals(BotaniaIntegration.helhelmSpreader) ||
-                    this.blockType.equals(BotaniaIntegration.valhallaSpreader) ||
-                    this.blockType.equals(BotaniaIntegration.midgardSpreader)) {
+            } else if (this.blockType.equals(BotaniaIntegration.ASGARD_SPREADER) ||
+                    this.blockType.equals(BotaniaIntegration.HELHELM_SPREADER) ||
+                    this.blockType.equals(BotaniaIntegration.VALHALLA_SPREADER) ||
+                    this.blockType.equals(BotaniaIntegration.MIDGARD_SPREADER)) {
                 list.add(LocalizationUtils.localize("tooltip.customManaSpreader", ((BlockCustomSpreader)blockType).getManaPerSec()));
-            } else if (this.blockType.equals(IC2Integration.advanced_matter) ||
-                    this.blockType.equals(IC2Integration.nano_matter) ||
-                    this.blockType.equals(IC2Integration.quantum_matter)) {
+            } else if (this.blockType.equals(IC2Integration.ADVANCED_MATTER) ||
+                    this.blockType.equals(IC2Integration.NANO_MATTER) ||
+                    this.blockType.equals(IC2Integration.QUANTUM_MATTER)) {
                 list.add(LocalizationUtils.localize("tooltip.customMatterGen.matter", ((BlockCustomMatterGen)blockType).getMatter()));
                 list.add(LocalizationUtils.localize("tooltip.customMatterGen.tank", ((BlockCustomMatterGen)blockType).getTank()));
-            } else if (this.blockType.equals(IC2Integration.advanced_scanner)) {
+            } else if (this.blockType.equals(IC2Integration.ADVANCED_SCANNER)) {
                 list.add(LocalizationUtils.localize("tooltip.advancedScanner"));
-            } else if (this.blockType.equals(IC2Integration.advanced_replicator) ||
-                    this.blockType.equals(IC2Integration.nano_replicator) ||
-                    this.blockType.equals(IC2Integration.quantum_replicator)) {
+            } else if (this.blockType.equals(IC2Integration.ADVANCED_REPLICATOR) ||
+                    this.blockType.equals(IC2Integration.NANO_REPLICATOR) ||
+                    this.blockType.equals(IC2Integration.QUANTUM_REPLICATOR)) {
                 list.add(LocalizationUtils.localize("tooltip.customReplicator.speed", ((BlockAutoReplicator)blockType).getItemsPerSec()));
                 list.add(LocalizationUtils.localize("tooltip.customReplicator.discount", ((BlockAutoReplicator)blockType).getDiscount()).replace("PROS", "%"));
                 list.add(LocalizationUtils.localize("tooltip.customReplicator.desc"));
-            } else if (this.blockType.equals(ModBlocks.baseMolecularAssembler)) {
+            } else if (this.blockType.equals(ModBlocks.BASE_MOLECULAR_ASSEMBLER)) {
                 list.add(LocalizationUtils.localize("tooltip.assembler.speed", HellConfig.basic_molecular_assembler_speed));
-            } else if (this.blockType.equals(ModBlocks.hybridMolecularAssembler)) {
+            } else if (this.blockType.equals(ModBlocks.HYBRID_MOLECULAR_ASSEMBLER)) {
                 list.add(LocalizationUtils.localize("tooltip.assembler.speed", HellConfig.hybrid_molecular_assembler_speed));
-            } else if (this.blockType.equals(ModBlocks.ultimateMolecularAssembler)) {
+            } else if (this.blockType.equals(ModBlocks.ULTIMATE_MOLECULAR_ASSEMBLER)) {
                 list.add(LocalizationUtils.localize("tooltip.assembler.speed", HellConfig.ultimate_molecular_assembler_speed));
-            } else if (this.blockType.equals(ModBlocks.cobblestone_duper)) {
+            } else if (this.blockType.equals(ModBlocks.COBBLESTONE_DUPER)) {
                 list.add(LocalizationUtils.localize("tooltip.cobblestoneDuper"));
             }
         }
     }
+
 }
 

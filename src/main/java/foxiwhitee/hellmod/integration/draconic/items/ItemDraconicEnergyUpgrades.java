@@ -49,16 +49,16 @@ public class ItemDraconicEnergyUpgrades extends Item {
         int meta = stack.getItemDamage();
         switch (meta) {
             case 0:
-                list.add(String.format(LocalizationUtils.localize("tooltip.wyvern_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeWywern)));
+                list.add(String.format(LocalizationUtils.localize("tooltip.wyvern_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeWywern)));
                 break;
             case 1:
-                list.add(String.format(LocalizationUtils.localize("tooltip.awakened_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeAwakened)));
+                list.add(String.format(LocalizationUtils.localize("tooltip.awakened_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeAwakened)));
                 break;
             case 2:
-                list.add(String.format(LocalizationUtils.localize("tooltip.chaotic_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeChaotic)));
+                list.add(String.format(LocalizationUtils.localize("tooltip.chaotic_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeChaotic)));
                 break;
             case 3:
-                list.add(String.format(LocalizationUtils.localize("tooltip.arial_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeArial)));
+                list.add(String.format(LocalizationUtils.localize("tooltip.arial_storage_card.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name"), EnergyUtility.formatNumber(HellConfig.energyUpgradeArial)));
                 break;
         }
     }

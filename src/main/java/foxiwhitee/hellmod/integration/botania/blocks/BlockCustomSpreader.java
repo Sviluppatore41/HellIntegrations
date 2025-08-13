@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.botania.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import foxiwhitee.hellmod.config.HellConfig;
@@ -30,7 +31,7 @@ import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
 import vazkii.botania.common.item.ModItems;
 
-public class BlockCustomSpreader  extends Block implements ITileEntityProvider, IWandable, IWandHUD, IWireframeAABBProvider {
+public class BlockCustomSpreader extends AEBaseBlock implements ITileEntityProvider, IWandable, IWandHUD, IWireframeAABBProvider {
     public IIcon iIcon;
     private String name;
 
@@ -41,6 +42,7 @@ public class BlockCustomSpreader  extends Block implements ITileEntityProvider, 
         setStepSound(soundTypeWood);
         setBlockName(name);
         setCreativeTab(HellCore.HELL_TAB);
+        isOpaque = false;
     }
 
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase base, ItemStack par6ItemStack) {
@@ -65,9 +67,6 @@ public class BlockCustomSpreader  extends Block implements ITileEntityProvider, 
         return meta;
     }
 
-    public boolean isOpaqueCube() {
-        return false;
-    }
 
     public void registerBlockIcons(IIconRegister reg) {
         switch (name) {

@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.items;
+package foxiwhitee.hellmod.items.storage;
 
 import foxiwhitee.hellmod.HellCore;
 import foxiwhitee.hellmod.utils.localization.LocalizationUtils;
@@ -10,12 +10,12 @@ import net.minecraft.util.IIcon;
 
 import java.util.List;
 
-public class ItemFluidStorageComponent extends Item {
-    private final static String[] prefixes = {"1K", "4K", "16K", "64K", "256K", "1M", "4M", "16M", "65M", "262M", "1G", "4G", "16G", "67G", "268G", "1T"};
+public class ItemCustomStorageComponent extends Item {
+    private final static String[] prefixes = {"256K", "1M", "4M", "16M", "65M", "262M", "1G", "4G", "16G", "67G", "268G", "1T", "4T", "68T", "274T", "1P", "4P", "17P", "70P", "281P", "1E", "4E", "9E"};
     private final IIcon[] icons = new IIcon[prefixes.length];
     private final String name;
 
-    public ItemFluidStorageComponent(String name) {
+    public ItemCustomStorageComponent(String name) {
         this.name = name;
         setCreativeTab(HellCore.HELL_TAB);
         setUnlocalizedName(name);

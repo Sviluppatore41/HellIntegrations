@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.botania.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import foxiwhitee.hellmod.HellCore;
 import foxiwhitee.hellmod.integration.botania.client.gui.GuiFlowerSynthesizer;
@@ -17,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 @SimpleGuiHandler(index = GuiHandlers.flowerSynthesizer, tile = TileFlowerSynthesizer.class, gui = GuiFlowerSynthesizer.class, container = ContainerFlowerSynthesizer.class)
-public class BlockFlowerSynthesizer extends Block implements ITileEntityProvider {
+public class BlockFlowerSynthesizer extends AEBaseBlock implements ITileEntityProvider {
     public BlockFlowerSynthesizer(String name) {
         super(Material.iron);
         setCreativeTab(HellCore.HELL_TAB);

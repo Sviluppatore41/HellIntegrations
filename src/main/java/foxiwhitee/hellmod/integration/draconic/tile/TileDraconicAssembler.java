@@ -8,6 +8,7 @@ import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.InvOperation;
 import appeng.util.Platform;
 import cofh.api.energy.IEnergyReceiver;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.config.HellConfig;
 import foxiwhitee.hellmod.ModRecipes;
 import foxiwhitee.hellmod.integration.draconic.DraconicEvolutionIntegration;
@@ -82,12 +83,14 @@ public class TileDraconicAssembler extends AEBaseInvTile implements IEnergyRecei
         boolean hasStackUpgrade = false;
         for (int i = 0; i < this.upgrades.getSizeInventory(); i++) {
             ItemStack stack = this.upgrades.getStackInSlot(i);
-            if (stack != null && stack.getItem() == DraconicEvolutionIntegration.draconicEnergyUpgrades) {
-                int damage = stack.getItemDamage();
-                localMaxEnergyStored += CAPACITY_CARDS[damage];
-                localReceiveEnergy += CAPACITY_CARDS[damage] / 10;
+            if (ContentConfig.enableEnergyUpgrades) {
+                if (stack != null && stack.getItem() == DraconicEvolutionIntegration.DRACONIC_ENERGY_UPGRADES) {
+                    int damage = stack.getItemDamage();
+                    localMaxEnergyStored += CAPACITY_CARDS[damage];
+                    localReceiveEnergy += CAPACITY_CARDS[damage] / 10;
+                }
             }
-            if (stack != null && stack.getItem() == DraconicEvolutionIntegration.draconicAssemblerUpgrades) {
+            if (stack != null && stack.getItem() == DraconicEvolutionIntegration.DRACONIC_ASSEMBLER_UPGRADES) {
                 int damage = stack.getItemDamage();
                 switch (damage) {
                     case 0: localTicksForCraft -= HellConfig.draconicAssemblerSpeedUpgrade; break;

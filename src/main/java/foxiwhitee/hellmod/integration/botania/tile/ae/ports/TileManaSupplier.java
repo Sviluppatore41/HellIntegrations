@@ -1,51 +1,35 @@
-package foxiwhitee.hellmod.integration.botania.tile.ae;
+package foxiwhitee.hellmod.integration.botania.tile.ae.ports;
 
-
-import appeng.api.config.Actionable;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.security.IActionHost;
-import appeng.api.networking.security.MachineSource;
-import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
 import appeng.api.storage.IMEInventory;
 import appeng.api.storage.ISaveProvider;
-import appeng.api.storage.data.IAEItemStack;
-import appeng.api.util.AECableType;
 import appeng.api.util.DimensionalCoord;
-import appeng.me.GridAccessException;
-import appeng.tile.TileEvent;
-import appeng.tile.events.TileEventType;
-import appeng.tile.grid.AENetworkTile;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.InvOperation;
-import appeng.util.Platform;
-import appeng.util.item.AEItemStack;
 import foxiwhitee.hellmod.config.HellConfig;
-import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
-import foxiwhitee.hellmod.network.NetworkManager;
-import foxiwhitee.hellmod.network.packets.PacketUpdateMana;
-import io.netty.buffer.ByteBuf;
+import foxiwhitee.hellmod.integration.botania.tile.ae.TIleAEMana;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
 import vazkii.botania.api.mana.IManaPool;
-import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 import vazkii.botania.api.mana.spark.ISparkEntity;
 
 import java.util.List;
 
-public class TileManaReceiver extends TIleAEMana implements IManaReceiver, ISaveProvider, ISparkAttachable, IManaPool {
+public class TileManaSupplier extends TIleAEMana implements IManaPool, ISaveProvider, ISparkAttachable {
     private final DimensionalCoord location = new DimensionalCoord(this);
 
-    public TileManaReceiver() {
+    public TileManaSupplier() {
         setMaxStoredMana(HellConfig.manaMidgardPool);
     }
+
+    @Override
+    public void onChangeInventory(IInventory iInventory, int i, InvOperation invOperation, ItemStack itemStack, ItemStack itemStack1) {}
 
     @Override
     public TickingRequest getTickingRequest(IGridNode iGridNode) {
@@ -61,27 +45,25 @@ public class TileManaReceiver extends TIleAEMana implements IManaReceiver, ISave
     protected AppEngInternalInventory getInventory() { return new AppEngInternalInventory(this, 1); }
 
     @Override
-    public TickRateModulation tick(IGridNode iGridNode, int i) {
-        extractMana(getMaxStoredMana() - getStoredMana());
+    public TickRateModulation tick(IGridNode node, int ticts) {
+        this.injectMana(getCurrentMana());
         return TickRateModulation.IDLE;
     }
 
-    public int getCurrentMana() {
-        return (int) Math.min(Integer.MAX_VALUE, getStoredMana());
-    }
-
     public boolean isFull() {
-        return false;
+        return this.getCurrentMana() >= getMaxStoredMana();
     }
 
     public void recieveMana(int mana) {
-        if (mana >= 0) return;
-        if (Math.abs(mana) > getMaxStoredMana()) setStoredMana(0);
-        else setStoredMana(this.getStoredMana() - Math.abs(mana));
+        setStoredMana(Math.max(0, Math.min(this.getCurrentMana() + mana, getMaxStoredMana())));
     }
 
     public boolean canRecieveManaFromBursts() {
-        return true;
+        return !isFull();
+    }
+
+    public boolean isOutputtingPower() {
+        return false;
     }
 
     public void saveChanges(IMEInventory inv) {
@@ -103,7 +85,9 @@ public class TileManaReceiver extends TIleAEMana implements IManaReceiver, ISave
     public void attachSpark(ISparkEntity iSparkEntity) {}
 
     @Override
-    public int getAvailableSpaceForMana() { return 0; }
+    public int getAvailableSpaceForMana() {
+        return (int) Math.min(Integer.MAX_VALUE, Math.max(0, getMaxStoredMana() - this.getCurrentMana()));
+    }
 
     @Override
     public ISparkEntity getAttachedSpark() {
@@ -117,13 +101,10 @@ public class TileManaReceiver extends TIleAEMana implements IManaReceiver, ISave
     }
 
     @Override
-    public boolean areIncomingTranfersDone() { return false; }
+    public boolean areIncomingTranfersDone() {return false;}
 
     @Override
-    public boolean isOutputtingPower() {
-        return false;
+    public int getCurrentMana() {
+        return (int) Math.min(Integer.MAX_VALUE, getStoredMana());
     }
-
-    @Override
-    public void onChangeInventory(IInventory iInventory, int i, InvOperation invOperation, ItemStack itemStack, ItemStack itemStack1) {}
 }

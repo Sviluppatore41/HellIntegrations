@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.botania.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import foxiwhitee.hellmod.HellCore;
 import foxiwhitee.hellmod.client.gui.GuiFluidReceiver;
@@ -18,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 @SimpleGuiHandler(index = GuiHandlers.manaGenerator, tile = TileManaGenerator.class, gui = GuiManaGenerator.class, container = ContainerManaGenerator.class)
-public class BlockManaGenerator  extends Block implements ITileEntityProvider {
+public class BlockManaGenerator extends AEBaseBlock implements ITileEntityProvider {
     private final String name;
     private int index;
     public BlockManaGenerator(String name, int index) {

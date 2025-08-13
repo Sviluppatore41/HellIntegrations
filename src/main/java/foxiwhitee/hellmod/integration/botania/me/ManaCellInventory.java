@@ -50,7 +50,7 @@ public class ManaCellInventory implements ICellInventory {
     public IAEItemStack injectItems(IAEItemStack input, Actionable mode, BaseActionSource source) {
         if (input == null || input.getStackSize() == 0L) {
             return null;
-        } else if (input.getItem() != BotaniaIntegration.mana_drop) {
+        } else if (input.getItem() != BotaniaIntegration.MANA_DROP) {
             return input;
         } else  {
             if (cellItem != null) {
@@ -102,7 +102,7 @@ public class ManaCellInventory implements ICellInventory {
     }
 
     public IAEItemStack extractItems(IAEItemStack input, Actionable mode, BaseActionSource source) {
-        if (input == null || input.getItem() != BotaniaIntegration.mana_drop || (source instanceof PlayerSource && ((PlayerSource)source).isPlayer() && !(((PlayerSource)source).player.capabilities.isCreativeMode))) {
+        if (input == null || input.getItem() != BotaniaIntegration.MANA_DROP || (source instanceof PlayerSource && ((PlayerSource)source).isPlayer() && !(((PlayerSource)source).player.capabilities.isCreativeMode))) {
             return null;
         } else {
             long size = input.getStackSize();
@@ -127,7 +127,7 @@ public class ManaCellInventory implements ICellInventory {
 
     public IItemList<IAEItemStack> getAvailableItems(IItemList<IAEItemStack> list) {
         if (list == null) list = AEApi.instance().storage().createItemList();
-        AEItemStack stack = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop));
+        AEItemStack stack = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP));
         stack.setStackSize(this.storedItems);
         list.add(stack);
         return list;

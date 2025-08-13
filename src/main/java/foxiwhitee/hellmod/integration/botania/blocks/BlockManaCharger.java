@@ -21,6 +21,7 @@ public class BlockManaCharger extends BlockBaseBotania implements ITileEntityPro
     public BlockManaCharger(String name) {
         super(name);
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.2F, 1.0F);
+        isOpaque = false;
     }
 
     public static int renderID = 443;
@@ -59,10 +60,6 @@ public class BlockManaCharger extends BlockBaseBotania implements ITileEntityPro
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return (TileEntity)new TileManaCharger();
-    }
-
-    public boolean isOpaqueCube() {
-        return false;
     }
 
     public boolean isNormalCube() {

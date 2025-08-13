@@ -8,6 +8,7 @@ import appeng.api.util.AEColor;
 import foxiwhitee.hellmod.ModItems;
 import foxiwhitee.hellmod.client.render.CableBusTextures;
 import foxiwhitee.hellmod.config.HellConfig;
+import foxiwhitee.hellmod.items.part.ItemParts;
 import foxiwhitee.hellmod.parts.EnumParts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -42,7 +43,7 @@ public class PartCableBimare extends PartBaseSmartCable {
 
     @Override
     public ItemStack getPartItemStack(AEColor paramAEColor) {
-        return ModItems.ITEM_PARTS.createPart(EnumParts.BIMARE_SMART_CABLE, paramAEColor).stack(1);
+        return ((ItemParts)ModItems.ITEM_PARTS).createPart(EnumParts.BIMARE_SMART_CABLE, paramAEColor).stack(1);
     }
 
     @Override

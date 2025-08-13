@@ -52,13 +52,14 @@ public class ItemMultiThaumcraftParts extends AEBaseItem implements IPartItem, I
 
         for(EnumPartsThaumcraftTerminals part : EnumPartsThaumcraftTerminals.values()) {
             if (part != EnumPartsThaumcraftTerminals.InvalidTypeThaumcraft) {
-                if (part.isCable()) {
-                    for(AEColor color : AEColor.values()) {
-                        this.createPart(part, color);
+                if (part.isRegister()) {
+                    if (part.isCable()) {
+                        for (AEColor color : AEColor.values()) {
+                            this.createPart(part, color);
+                        }
                     }
+                    this.createPart(part, 0);
                 }
-
-                this.createPart(part, 0);
             }
         }
 

@@ -76,7 +76,7 @@ public class TileMatterUnifier extends AENetworkInvTile implements ISaveProvider
 
     @Nullable
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(IC2Integration.matterUnifier);
+        return new ItemStack(IC2Integration.MATTER_UNIFIER);
     }
 
     public IInventory getInternalInventory() {

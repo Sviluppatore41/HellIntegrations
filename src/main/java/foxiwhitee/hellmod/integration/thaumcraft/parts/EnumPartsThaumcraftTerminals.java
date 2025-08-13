@@ -5,6 +5,7 @@ import appeng.core.features.AEFeature;
 import appeng.core.localization.GuiText;
 import appeng.integration.IntegrationType;
 import foxiwhitee.hellmod.ModItems;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.integration.thaumcraft.ThaumcraftIntegration;
 import net.minecraft.item.ItemStack;
 
@@ -14,9 +15,9 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public enum EnumPartsThaumcraftTerminals {
-    InvalidTypeThaumcraft(-1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)null),
-    PART_ALCHEMICAL_CONSTRUCTION_PATTERN_TERMINAL(0, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartAlchemicalConstructionPatternTerminal.class),
-    PART_INFUSION_PATTERN_TERMINAL(1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class) PartInfusionPatternTerminal.class);
+    InvalidTypeThaumcraft(-1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)null, false),
+    PART_ALCHEMICAL_CONSTRUCTION_PATTERN_TERMINAL(0, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartAlchemicalConstructionPatternTerminal.class, ContentConfig.enableCruciblePatternTerminal),
+    PART_INFUSION_PATTERN_TERMINAL(1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class) PartInfusionPatternTerminal.class, ContentConfig.enableInfusionPatternTerminal);
 
     private final int baseDamage;
     private final Set<AEFeature> features;
@@ -24,17 +25,19 @@ public enum EnumPartsThaumcraftTerminals {
     private final Class<? extends IPart> myPart;
     private final GuiText extraName;
     private Constructor<? extends IPart> constructor;
+    private final boolean register;
 
-    private EnumPartsThaumcraftTerminals(int baseMetaValue, Set<AEFeature> features, Set<IntegrationType> integrations, Class<? extends IPart> c) {
-        this(baseMetaValue, features, integrations, c, (GuiText)null);
+    private EnumPartsThaumcraftTerminals(int baseMetaValue, Set<AEFeature> features, Set<IntegrationType> integrations, Class<? extends IPart> c, boolean register) {
+        this(baseMetaValue, features, integrations, c, (GuiText)null, register);
     }
 
-    private EnumPartsThaumcraftTerminals(int baseMetaValue, Set<AEFeature> features, Set<IntegrationType> integrations, Class<? extends IPart> c, GuiText en) {
+    private EnumPartsThaumcraftTerminals(int baseMetaValue, Set<AEFeature> features, Set<IntegrationType> integrations, Class<? extends IPart> c, GuiText en, boolean register) {
         this.features = Collections.unmodifiableSet(features);
         this.integrations = Collections.unmodifiableSet(integrations);
         this.myPart = c;
         this.extraName = en;
         this.baseDamage = baseMetaValue;
+        this.register = register;
     }
 
     public boolean isCable() {
@@ -71,5 +74,9 @@ public enum EnumPartsThaumcraftTerminals {
 
     public ItemStack getStack() {
         return new ItemStack(ThaumcraftIntegration.ITEM_PARTS_TERMINALS, 1, this.getBaseDamage());
+    }
+
+    public boolean isRegister() {
+        return register;
     }
 }

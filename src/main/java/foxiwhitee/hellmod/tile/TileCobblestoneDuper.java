@@ -77,7 +77,7 @@ public class TileCobblestoneDuper extends AENetworkInvTile implements IMEChest, 
     }
 
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(ModBlocks.cobblestone_duper);
+        return new ItemStack(ModBlocks.COBBLESTONE_DUPER);
     }
 
     private void updateStatus() {

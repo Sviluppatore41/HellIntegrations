@@ -13,6 +13,6 @@ public class TileXaurWireless extends TileCustomWireless{
 
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(ModBlocks.wirelessXaur);
+        return new ItemStack(ModBlocks.WIRELESS_XAUR);
     }
 }

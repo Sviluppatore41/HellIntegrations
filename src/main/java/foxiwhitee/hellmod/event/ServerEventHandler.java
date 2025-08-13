@@ -2,7 +2,7 @@ package foxiwhitee.hellmod.event;
 
 import appeng.me.storage.CellInventory;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import foxiwhitee.hellmod.items.ItemFluidDrop;
+import foxiwhitee.hellmod.items.fluid.ItemFluidDrop;
 import foxiwhitee.hellmod.utils.cells.CustomCellInventory;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.world.WorldEvent;

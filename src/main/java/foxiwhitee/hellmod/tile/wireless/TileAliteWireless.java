@@ -14,6 +14,6 @@ public class TileAliteWireless extends TileCustomWireless{
 
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(ModBlocks.wirelessAlite);
+        return new ItemStack(ModBlocks.WIRELESS_ALITE);
     }
 }

@@ -79,7 +79,7 @@ public class ChaoticFluxCapicator extends RFItemBase implements ICustomUpgradabl
                 for (int i = 0; i < 9; i++) {
                     long max = Math.min(getEnergyStored(container), getMaxExtract(container));
                     ItemStack stack = player.inventory.getStackInSlot(i);
-                    if (stack != null && stack.getItem() instanceof IEnergyContainerItem && stack.getItem() != DraconicEvolutionIntegration.chaotic_capicator) {
+                    if (stack != null && stack.getItem() instanceof IEnergyContainerItem && stack.getItem() != DraconicEvolutionIntegration.CHAOTIC_CAPICATOR) {
                         IEnergyContainerItem item = (IEnergyContainerItem)stack.getItem();
                         extractEnergy(container, item.receiveEnergy(stack, (int)max, false), false);
                     }
@@ -88,7 +88,7 @@ public class ChaoticFluxCapicator extends RFItemBase implements ICustomUpgradabl
                 for (int i = (mode == 3) ? 1 : 0; i < 5; i++) {
                     long max = Math.min(getEnergyStored(container), getMaxExtract(container));
                     ItemStack stack = player.getEquipmentInSlot(i);
-                    if (stack != null && stack.getItem() instanceof IEnergyContainerItem && stack.getItem() != DraconicEvolutionIntegration.chaotic_capicator) {
+                    if (stack != null && stack.getItem() instanceof IEnergyContainerItem && stack.getItem() != DraconicEvolutionIntegration.CHAOTIC_CAPICATOR) {
                         IEnergyContainerItem item = (IEnergyContainerItem)stack.getItem();
                         extractEnergy(container, item.receiveEnergy(stack, (int)max, false), false);
                     }

@@ -11,6 +11,6 @@ public class TileAsgardManaPool extends TileCustomManaPool{
 
     @Override
     public String getName() {
-        return BotaniaIntegration.asgardPool.getUnlocalizedName().replace("tile.", "");
+        return BotaniaIntegration.ASGARD_POOL.getUnlocalizedName().replace("tile.", "");
     }
 }

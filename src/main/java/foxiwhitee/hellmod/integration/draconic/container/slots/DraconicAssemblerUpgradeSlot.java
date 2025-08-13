@@ -14,7 +14,7 @@ public class DraconicAssemblerUpgradeSlot extends HellSlot {
     @Override
     public boolean isItemValid(ItemStack itemstack) {
         return (itemstack == null ||
-                (itemstack.getItem() == DraconicEvolutionIntegration.draconicAssemblerUpgrades && itemstack.getItemDamage() >= 0 && itemstack.getItemDamage() <= 1) ||
+                (itemstack.getItem() == DraconicEvolutionIntegration.DRACONIC_ASSEMBLER_UPGRADES && itemstack.getItemDamage() >= 0 && itemstack.getItemDamage() <= 1) ||
                 itemstack.getItem() instanceof ItemDraconicEnergyUpgrades);
     }
 }

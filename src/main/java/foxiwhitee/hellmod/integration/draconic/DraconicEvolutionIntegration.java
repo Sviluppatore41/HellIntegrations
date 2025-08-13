@@ -18,6 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.HellCore;
 import foxiwhitee.hellmod.ModRecipes;
 import foxiwhitee.hellmod.blocks.BaseBlock;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.config.HellConfig;
 import foxiwhitee.hellmod.integration.IIntegration;
 import foxiwhitee.hellmod.integration.Integration;
@@ -30,6 +31,7 @@ import foxiwhitee.hellmod.integration.draconic.client.render.items.*;
 import foxiwhitee.hellmod.integration.draconic.entity.EntityArialHeart;
 import foxiwhitee.hellmod.integration.draconic.entity.EntityChaoticHeart;
 import foxiwhitee.hellmod.integration.draconic.entity.EntityHeart;
+import foxiwhitee.hellmod.integration.draconic.event.OnDropEvent;
 import foxiwhitee.hellmod.integration.draconic.helpers.IFusionCraftingInventory;
 import foxiwhitee.hellmod.integration.draconic.itemBlock.BlockAwakenedDraconiumItemBlock;
 import foxiwhitee.hellmod.integration.draconic.itemBlock.BlockChaosItemBlock;
@@ -46,9 +48,9 @@ import foxiwhitee.hellmod.integration.draconic.items.weapons.ChaoticSword;
 import foxiwhitee.hellmod.integration.draconic.recipes.FusionRecipe;
 import foxiwhitee.hellmod.integration.draconic.tile.*;
 import foxiwhitee.hellmod.items.DefaultItem;
-import foxiwhitee.hellmod.utils.event.AEventHandler;
-import foxiwhitee.hellmod.utils.event.CommonEventHandler;
-import foxiwhitee.hellmod.utils.event.CEventHandler;
+import foxiwhitee.hellmod.integration.draconic.event.AEventHandler;
+import foxiwhitee.hellmod.integration.draconic.event.CommonEventHandler;
+import foxiwhitee.hellmod.integration.draconic.event.CEventHandler;
 import foxiwhitee.hellmod.utils.helpers.OreDictUtil;
 import foxiwhitee.hellmod.utils.helpers.RegisterUtils;
 import net.minecraft.block.Block;
@@ -73,293 +75,396 @@ import static foxiwhitee.hellmod.ModRecipes.registerDraconicAssemblerRecipe;
 public class DraconicEvolutionIntegration implements IIntegration {
     private static Map<String, ResourceLocation> cachedResources = new HashMap<>();
 
-    public static ItemArmor.ArmorMaterial CHAOTIC_ARMOR = EnumHelper.addArmorMaterial("CHAOTIC_ARMOR", -1, new int[] { 4, 9, 7, 4 }, 40);
-    public static Item.ToolMaterial CHAOTIC = EnumHelper.addToolMaterial("CHAOTIC", 10, -1, 400.0F, 60.0F, 45);
+    public static final ItemArmor.ArmorMaterial CHAOTIC_ARMOR = EnumHelper.addArmorMaterial("CHAOTIC_ARMOR", -1, new int[] { 4, 9, 7, 4 }, 40);
+    public static final Item.ToolMaterial CHAOTIC = EnumHelper.addToolMaterial("CHAOTIC", 10, -1, 400.0F, 60.0F, 45);
 
-    public static ItemArmor.ArmorMaterial ARIAL_ARMOR = EnumHelper.addArmorMaterial("ARIAL_ARMOR", -1, new int[] { 4, 9, 7, 4 }, 80);
-    public static Item.ToolMaterial ARIAL = EnumHelper.addToolMaterial("ARIAL", 11, -1, 500.0F, 90.0F, 85);
+    public static final ItemArmor.ArmorMaterial ARIAL_ARMOR = EnumHelper.addArmorMaterial("ARIAL_ARMOR", -1, new int[] { 4, 9, 7, 4 }, 80);
+    public static final Item.ToolMaterial ARIAL = EnumHelper.addToolMaterial("ARIAL", 11, -1, 500.0F, 90.0F, 85);
 
-    public static ItemArmor chaotic_helm = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 0, "chaotic_helm");
-    public static ItemArmor chaotic_chest = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 1, "chaotic_chest");
-    public static ItemArmor chaotic_legs = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 2, "chaotic_legs");
-    public static ItemArmor chaotic_boots = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 3, "chaotic_boots");
+    public static final Item CHAOTIC_HELM = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 0, "chaoticHelm");
+    public static final Item CHAOTIC_CHEST = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 1, "chaoticChest");
+    public static final Item CHAOTIC_LEGS = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 2, "chaoticLegs");
+    public static final Item CHAOTIC_BOOTS = (ItemArmor)new ChaoticArmor(CHAOTIC_ARMOR, 3, "chaoticBoots");
 
-    public static ItemArmor arial_helm = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 0, "arial_helm");
-    public static ItemArmor arial_chest = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 1, "arial_chest");
-    public static ItemArmor arial_legs = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 2, "arial_legs");
-    public static ItemArmor arial_boots = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 3, "arial_boots");
+    public static final Item ARIAL_HELM = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 0, "arialHelm");
+    public static final Item ARIAL_CHEST = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 1, "arialChest");
+    public static final Item ARIAL_LEGS = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 2, "arialLegs");
+    public static final Item ARIAL_BOOTS = (ItemArmor)new ArialArmor(ARIAL_ARMOR, 3, "arialBoots");
 
-    public static Item chaotic_capicator = (Item)new ChaoticFluxCapicator("chaoticFluxCapacitor");
-    public static Item arial_capicator = (Item)new ArialFluxCapicator("arial_capicator");
+    public static final Item CHAOTIC_CAPICATOR = (Item)new ChaoticFluxCapicator("chaoticCapacitor");
+    public static final Item ARIAL_CAPICATOR = (Item)new ArialFluxCapicator("arialCapacitor");
 
-    public static ItemSword chaotic_sword = (ItemSword)new ChaoticSword(CHAOTIC, "chaotic_sword");
-    public static ItemBow chaotic_bow = (ItemBow)new ChaoticBow( "chaotic_bow");
-    public static ItemSword arial_sword = (ItemSword)new ArialSword(ARIAL, "arial_sword");
-    public static ItemBow arial_bow = (ItemBow)new ArialBow( "arial_bow");
+    public static final Item CHAOTIC_SWORD = (ItemSword)new ChaoticSword(CHAOTIC, "chaoticSword");
+    public static final Item CHAOTIC_BOW = (ItemBow)new ChaoticBow( "chaoticBow");
+    public static final Item ARIAL_SWORD = (ItemSword)new ArialSword(ARIAL, "arialSword");
+    public static final Item ARIAL_BOW = (ItemBow)new ArialBow( "arialBow");
 
-    public static Item chaotic_pickaxe = (Item)new ChaoticPickaxe(CHAOTIC, "chaotic_pickaxe");
-    public static Item chaotic_shovel = (Item)new ChaoticShovel(CHAOTIC, "chaotic_shovel");
-    public static Item chaotic_axe = (Item)new ChaoticAxe(CHAOTIC, "chaotic_axe");
-    public static Item chaotic_distruction_staff = (Item)new ChaoticDistructionStaff(CHAOTIC, "chaoticdistructionstaff");
+    public static final Item CHAOTIC_PICKAXE = (Item)new ChaoticPickaxe(CHAOTIC, "chaoticPickaxe");
+    public static final Item CHAOTIC_SHOVEL = (Item)new ChaoticShovel(CHAOTIC, "chaoticShovel");
+    public static final Item CHAOTIC_AXE = (Item)new ChaoticAxe(CHAOTIC, "chaoticAxe");
+    public static final Item CHAOTIC_DISTRUCTION_STAFF = (Item)new ChaoticDistructionStaff(CHAOTIC, "chaoticDistructionStaff");
 
-    public static Item arial_pickaxe = (Item)new ArialPickaxe(ARIAL, "arial_pickaxe");
-    public static Item arial_shovel = (Item)new ArialShovel(ARIAL, "arial_shovel");
-    public static Item arial_axe = (Item)new ArialAxe(ARIAL, "arial_axe");
-    public static Item arial_distruction_staff = (Item)new ArialDistructionStaff(ARIAL, "arial_distruction_staff");
+    public static final Item ARIAL_PICKAXE = (Item)new ArialPickaxe(ARIAL, "arialPickaxe");
+    public static final Item ARIAL_SHOVEL = (Item)new ArialShovel(ARIAL, "arialShovel");
+    public static final Item ARIAL_AXE = (Item)new ArialAxe(ARIAL, "arialAxe");
+    public static final Item ARIAL_DISTRUCTION_STAFF = (Item)new ArialDistructionStaff(ARIAL, "arialDistructionStaff");
 
-    public static Item upgradeDragonAutoAwakenedBlocks = new ItemDragonUpgrade("upgradeDragonAutoAwakenedBlocks", "draconic/upgradeDragonAutoAwakenedBlocks");
-    public static Item upgradeChaosAutoAwakenedBlocks = new ItemChaosUpgrade("upgradeChaosAutoAwakenedBlocks", "draconic/upgradeChaosAutoAwakenedBlocks");
-    public static Item upgradeArialAutoAwakenedBlocks = new ItemArialUpgrade("upgradeArialAutoAwakenedBlocks", "draconic/upgradeArialAutoAwakenedBlocks");
-    public static Item arialCore = new DefaultItem("arialCore", "draconic/arialCore") {
+    public static final Item UPGRADE_DRAGON_AUTO_AWAKENED_BLOCKS = new ItemDragonUpgrade("upgradeDragonAutoAwakenedBlocks", "draconic/upgradeDragonAutoAwakenedBlocks");
+    public static final Item UPGRADE_CHAOS_AUTO_AWAKENED_BLOCKS = new ItemChaosUpgrade("upgradeChaosAutoAwakenedBlocks", "draconic/upgradeChaosAutoAwakenedBlocks");
+    public static final Item UPGRADE_ARIAL_AUTO_AWAKENED_BLOCKS = new ItemArialUpgrade("upgradeArialAutoAwakenedBlocks", "draconic/upgradeArialAutoAwakenedBlocks");
+
+    public static final Item ARIAL_CORE = new DefaultItem("arialCore", "draconic/arialCore") {
         @Override
         public boolean hasEffect(ItemStack par1ItemStack, int pass) {
             return true;
         }
     };
-    public static Item arialEnergyCore = new DefaultItem("arialEnergyCore", "draconic/arialEnergyCore") {
+    public static final Item ARIAL_ENERGY_CORE = new DefaultItem("arialEnergyCore", "draconic/arialEnergyCore") {
         @Override
         public boolean hasEffect(ItemStack par1ItemStack, int pass) {
             return true;
         }
     };
-    public static Item arialHeart = new ItemArialHeart("arialHeart");
-    public static Item chaoticHeart = new ItemChaoticHeart("chaoticHeart");
+    public static final Item ARIAL_HEART = new ItemArialHeart("arialHeart");
+    public static final Item CHAOTIC_HEART = new ItemChaoticHeart("chaoticHeart");
 
-    public static Item draconicAssemblerUpgrades = new ItemDraconicAssemblerUpgrades("draconicAssemblerUpgrades");
-    public static Item draconicEnergyUpgrades = new ItemDraconicEnergyUpgrades("draconicEnergyUpgrades");
+    public static final Item DRACONIC_ASSEMBLER_UPGRADES = new ItemDraconicAssemblerUpgrades("draconicAssemblerUpgrades");
+    public static final Item DRACONIC_ENERGY_UPGRADES = new ItemDraconicEnergyUpgrades("draconicEnergyUpgrades");
 
-    public static Block autoAwakener = (Block)new BlockAutoAwakenedBlocks("autoAwakener");
+    public static final Item CHAOTIC_INGOT = new DefaultItem("ingot_chaotic", "draconic/ingot_chaotic");
+    public static final Item CHAOS_FRAGMENT = new DefaultItem("fragment_chaos", "draconic/fragment_chaos");
+    public static final Item CHAOTIC_ENERGY_CORE = new DefaultItem("chaoticEnergyCore", "draconic/chaoticEnergyCore");
 
-    public static Block chaotic_block = new BlockChaos();
-    public static Block arial_block = new BaseBlock("arial_block").setBlockTextureName(HellCore.MODID + ":draconic/arial_block");
+    public static final Block AUTO_AWAKENER_BLOCKS = new BlockAutoAwakenedBlocks("autoAwakener");
 
-    public static Block draconicAssembler = new BlockDraconicAssembler("dragon_assembler");
+    public static final Block CHAOTIC_BLOCK = new BlockChaos();
+    public static final Block ARIAL_BLOCK = new BaseBlock("arialBlock").setBlockTextureName(HellCore.MODID + ":draconic/arialBlock");
 
-    public static Block fusion_core = new BlockFusionCraftingCore("fusion_core");
-    public static Block fusion_injector = new BlockFusionInjector("fusion_injector");
+    public static final Block DRACONIC_ASSEMBLER = new BlockDraconicAssembler("dragonAssembler");
 
-    public static Block custom_upgrade_modifier = new BlockCustomUpgradeModifier("custom_upgrade_modifier");
+    public static final Block FUSION_CORE = new BlockFusionCraftingCore("fusionCore");
+    public static final Block FUSION_INJECTOR = new BlockFusionInjector("fusionInjector");
+
+    public static final Block CUSTOM_UPGRADE_MODIFIER = new BlockCustomUpgradeModifier("customUpgradeModifier");
 
     public void preInit(FMLPreInitializationEvent e) {
-        RegisterUtils.registerItems(chaotic_helm, chaotic_chest, chaotic_legs, chaotic_boots,
-                chaotic_capicator, chaotic_sword, chaotic_pickaxe, chaotic_shovel, chaotic_axe, chaotic_bow, chaotic_distruction_staff);
-        RegisterUtils.registerItems(arial_helm, arial_chest, arial_legs, arial_boots,
-                arial_capicator, arial_sword, arial_pickaxe, arial_shovel, arial_axe, arial_bow, arial_distruction_staff);
-        RegisterUtils.registerBlock(autoAwakener, AEBaseItemBlock.class);
-        RegisterUtils.registerBlocks(arial_block, draconicAssembler, fusion_core, custom_upgrade_modifier);
-        RegisterUtils.registerBlock(fusion_injector, ItemBlockFusionInjector.class);
-        RegisterUtils.registerTile(TileAutoAwakenedBlocks.class);
-        RegisterUtils.registerTile(TileDraconicAssembler.class);
-        RegisterUtils.registerTile(TileFusionCraftingCore.class);
-        RegisterUtils.registerTile(TileFusionInjector.class);
-        RegisterUtils.registerTile(TileCustomUpgradeModifier.class);
-        RegisterUtils.registerItems(upgradeDragonAutoAwakenedBlocks, upgradeChaosAutoAwakenedBlocks, upgradeArialAutoAwakenedBlocks, arialCore, arialEnergyCore, arialHeart, chaoticHeart, draconicAssemblerUpgrades, draconicEnergyUpgrades);
-        foxiwhitee.hellmod.ModItems.addItems("draconic", "", "ingot_chaotic", "fragment_chaos", "chaoticEnergyCore");
+        if (ContentConfig.enableAutoAwakener) {
+            RegisterUtils.registerBlock(AUTO_AWAKENER_BLOCKS);
+            RegisterUtils.registerTile(TileAutoAwakenedBlocks.class);
+            RegisterUtils.registerItems(UPGRADE_DRAGON_AUTO_AWAKENED_BLOCKS, UPGRADE_CHAOS_AUTO_AWAKENED_BLOCKS, UPGRADE_ARIAL_AUTO_AWAKENED_BLOCKS);
+        }
+        if ((ContentConfig.enableChaosBlocks && ContentConfig.enableChaosHeart) || (ContentConfig.enableArialBlock && ContentConfig.enableArialHeart)) {
+            EntityRegistry.registerModEntity(EntityHeart.class, "Persistent Heart", 12, HellCore.instance, 32, 5, true);
+        }
+        if (ContentConfig.enableChaosBlocks) {
+            RegisterUtils.registerBlock(CHAOTIC_BLOCK, BlockChaosItemBlock.class);
 
-        EntityRegistry.registerModEntity(EntityHeart.class, "Persistent Heart", 12, HellCore.instance, 32, 5, true);
-        EntityRegistry.registerModEntity(EntityChaoticHeart.class, "Chaotic Heart", 13, HellCore.instance, 32, 5, true);
-        EntityRegistry.registerModEntity(EntityArialHeart.class, "Arial Heart", 14, HellCore.instance, 32, 5, true);
-        //RegisterUtils.findClasses("foxiwhitee.hellmod.integration.draconic.tile", TileEntity.class).forEach(RegisterUtils::registerTile);
+            if (ContentConfig.enableChaosHeart) {
+                EntityRegistry.registerModEntity(EntityChaoticHeart.class, "Chaotic Heart", 13, HellCore.instance, 32, 5, true);
+                RegisterUtils.registerItem(CHAOTIC_HEART);
+            }
+        }
+        if (ContentConfig.enableArialBlock) {
+            RegisterUtils.registerBlock(ARIAL_BLOCK, ItemBlock.class);
+
+            if (ContentConfig.enableArialHeart) {
+                EntityRegistry.registerModEntity(EntityArialHeart.class, "Arial Heart", 14, HellCore.instance, 32, 5, true);
+                RegisterUtils.registerItem(ARIAL_HEART);
+            }
+        }
+        if (ContentConfig.enableAssembler) {
+            RegisterUtils.registerBlock(DRACONIC_ASSEMBLER);
+            RegisterUtils.registerTile(TileDraconicAssembler.class);
+            RegisterUtils.registerItem(DRACONIC_ASSEMBLER_UPGRADES);
+        }
+        if (ContentConfig.enableFusion) {
+            RegisterUtils.registerBlocks(FUSION_CORE, FUSION_INJECTOR);
+            RegisterUtils.registerTiles(TileFusionCraftingCore.class, TileFusionInjector.class);
+        }
+        if (ContentConfig.enableEnergyUpgrades) {
+            RegisterUtils.registerItem(DRACONIC_ENERGY_UPGRADES);
+        }
+        if (ContentConfig.enableArialCores) {
+            RegisterUtils.registerItems(ARIAL_ENERGY_CORE, ARIAL_CORE);
+        }
+        if (ContentConfig.enableChaoticEnergyCore) {
+            RegisterUtils.registerItem(CHAOTIC_ENERGY_CORE);
+        }
+        if (ContentConfig.enableChaosIngot) {
+            RegisterUtils.registerItem(CHAOTIC_INGOT);
+        }
+        if (ContentConfig.enableChaosFragment) {
+            RegisterUtils.registerItem(CHAOS_FRAGMENT);
+        }
+        if (ContentConfig.enableChaosArmorAndTools) {
+            RegisterUtils.registerItems(CHAOTIC_HELM, CHAOTIC_CHEST, CHAOTIC_LEGS, CHAOTIC_BOOTS, CHAOTIC_CAPICATOR, CHAOTIC_DISTRUCTION_STAFF, CHAOTIC_SWORD, CHAOTIC_BOW,
+                    CHAOTIC_PICKAXE, CHAOTIC_SHOVEL, CHAOTIC_AXE);
+        }
+        if (ContentConfig.enableArialArmorAndTools) {
+            RegisterUtils.registerItems(ARIAL_HELM, ARIAL_CHEST, ARIAL_LEGS, ARIAL_BOOTS, ARIAL_CAPICATOR, ARIAL_DISTRUCTION_STAFF, ARIAL_SWORD, ARIAL_BOW,
+                    ARIAL_PICKAXE, ARIAL_SHOVEL, ARIAL_AXE);
+        }
+        if (ContentConfig.enableUpgradeModifier) {
+            RegisterUtils.registerBlock(CUSTOM_UPGRADE_MODIFIER, ItemBlock.class);
+            RegisterUtils.registerTile(TileCustomUpgradeModifier.class);
+        }
     }
 
     public void init(FMLInitializationEvent e) {
         if (isClient())
             clientInit();
-        MinecraftForge.EVENT_BUS.register(new CEventHandler());
-        MinecraftForge.EVENT_BUS.register(new AEventHandler());
-        FMLCommonHandler.instance().bus().register(new CEventHandler());
-        FMLCommonHandler.instance().bus().register(new AEventHandler());
-        FMLCommonHandler.instance().bus().register(new CommonEventHandler());
-
+        if (ContentConfig.enableChaosHeart) {
+            FMLCommonHandler.instance().bus().register(new OnDropEvent());
+        }
+        if (ContentConfig.enableChaosArmorAndTools || ContentConfig.enableArialArmorAndTools) {
+            FMLCommonHandler.instance().bus().register(new CommonEventHandler());
+        }
+        if (ContentConfig.enableChaosArmorAndTools) {
+            MinecraftForge.EVENT_BUS.register(new CEventHandler());
+            FMLCommonHandler.instance().bus().register(new CEventHandler());
+        }
+        if (ContentConfig.enableArialArmorAndTools) {
+            MinecraftForge.EVENT_BUS.register(new AEventHandler());
+            FMLCommonHandler.instance().bus().register(new AEventHandler());
+        }
+        if (ContentConfig.enableChaosBlocks) {
+            BlockChaosItemBlock.update();
+        }
         BlockAwakenedDraconiumItemBlock.update();
-        BlockChaosItemBlock.update();
     }
 
     @SideOnly(Side.CLIENT)
     public void clientInit() {
         SEffectHandler.iniEffectRenderer();
+        if (ContentConfig.enableChaosArmorAndTools) {
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_HELM, new RenderChaoticArmor((ItemArmor) CHAOTIC_HELM));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_CHEST, new RenderChaoticArmor((ItemArmor) CHAOTIC_CHEST));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_LEGS, new RenderChaoticArmor((ItemArmor) CHAOTIC_LEGS));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_BOOTS, new RenderChaoticArmor((ItemArmor) CHAOTIC_BOOTS));
 
-        MinecraftForgeClient.registerItemRenderer(chaotic_helm, new RenderChaoticArmor(chaotic_helm));
-        MinecraftForgeClient.registerItemRenderer(chaotic_chest, new RenderChaoticArmor(chaotic_chest));
-        MinecraftForgeClient.registerItemRenderer(chaotic_legs, new RenderChaoticArmor(chaotic_legs));
-        MinecraftForgeClient.registerItemRenderer(chaotic_boots, new RenderChaoticArmor(chaotic_boots));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_BOW, new RenderChaoticBow());
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_BOW, new RenderChaoticBowModel());
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_SWORD, new RenderChaoticTools("models/tools/ChaoticSword.obj", "textures/models/tools/ChaoticSword.png", (IRenderTweak) CHAOTIC_SWORD));
 
-        MinecraftForgeClient.registerItemRenderer(chaotic_bow, new RenderChaoticBow());
-        MinecraftForgeClient.registerItemRenderer(chaotic_bow, new RenderChaoticBowModel());
-        MinecraftForgeClient.registerItemRenderer(chaotic_sword, new RenderChaoticTools("models/tools/ChaoticSword.obj", "textures/models/tools/ChaoticSword.png", (IRenderTweak) chaotic_sword));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_PICKAXE, new RenderChaoticTools("models/tools/ChaoticPickaxe.obj", "textures/models/tools/ChaoticPickaxe.png", (IRenderTweak) CHAOTIC_PICKAXE));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_AXE, new RenderChaoticTools("models/tools/ChaoticLumberAxe.obj", "textures/models/tools/ChaoticLumberAxe.png", (IRenderTweak) CHAOTIC_AXE));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_SHOVEL, new RenderChaoticTools("models/tools/ChaoticShovel.obj", "textures/models/tools/ChaoticShovel.png", (IRenderTweak) CHAOTIC_SHOVEL));
+            MinecraftForgeClient.registerItemRenderer(CHAOTIC_DISTRUCTION_STAFF, new RenderChaoticTools("models/tools/ChaoticStaffOfPower.obj", "textures/models/tools/ChaoticStaffOfPower.png", (IRenderTweak) CHAOTIC_DISTRUCTION_STAFF));
+        }
+        if (ContentConfig.enableArialArmorAndTools) {
+            MinecraftForgeClient.registerItemRenderer(ARIAL_HELM, new RenderArialArmor((ItemArmor) ARIAL_HELM));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_CHEST, new RenderArialArmor((ItemArmor) ARIAL_CHEST));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_LEGS, new RenderArialArmor((ItemArmor) ARIAL_LEGS));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_BOOTS, new RenderArialArmor((ItemArmor) ARIAL_BOOTS));
 
-        MinecraftForgeClient.registerItemRenderer(chaotic_pickaxe, new RenderChaoticTools("models/tools/ChaoticPickaxe.obj", "textures/models/tools/ChaoticPickaxe.png", (IRenderTweak) chaotic_pickaxe));
-        MinecraftForgeClient.registerItemRenderer(chaotic_axe, new RenderChaoticTools("models/tools/ChaoticLumberAxe.obj", "textures/models/tools/ChaoticLumberAxe.png", (IRenderTweak) chaotic_axe));
-        MinecraftForgeClient.registerItemRenderer(chaotic_shovel, new RenderChaoticTools("models/tools/ChaoticShovel.obj", "textures/models/tools/ChaoticShovel.png", (IRenderTweak) chaotic_shovel));
-        MinecraftForgeClient.registerItemRenderer(chaotic_distruction_staff, new RenderChaoticTools("models/tools/ChaoticStaffOfPower.obj", "textures/models/tools/ChaoticStaffOfPower.png", (IRenderTweak) chaotic_distruction_staff));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_BOW, new RenderArialBow());
+            MinecraftForgeClient.registerItemRenderer(ARIAL_BOW, new RenderArialBowModel());
+            MinecraftForgeClient.registerItemRenderer(ARIAL_SWORD, new RenderArialTools("models/tools/ArialSword.obj", "textures/models/tools/ArialSword.png", (IRenderTweak) ARIAL_SWORD));
 
-
-        MinecraftForgeClient.registerItemRenderer(arial_helm, new RenderArialArmor(arial_helm));
-        MinecraftForgeClient.registerItemRenderer(arial_chest, new RenderArialArmor(arial_chest));
-        MinecraftForgeClient.registerItemRenderer(arial_legs, new RenderArialArmor(arial_legs));
-        MinecraftForgeClient.registerItemRenderer(arial_boots, new RenderArialArmor(arial_boots));
-
-        MinecraftForgeClient.registerItemRenderer(arial_bow, new RenderArialBow());
-        MinecraftForgeClient.registerItemRenderer(arial_bow, new RenderArialBowModel());
-        MinecraftForgeClient.registerItemRenderer(arial_sword, new RenderArialTools("models/tools/ArialSword.obj", "textures/models/tools/ArialSword.png", (IRenderTweak) arial_sword));
-
-        MinecraftForgeClient.registerItemRenderer(arial_pickaxe, new RenderArialTools("models/tools/ArialPickaxe.obj", "textures/models/tools/ArialPickaxe.png", (IRenderTweak) arial_pickaxe));
-        MinecraftForgeClient.registerItemRenderer(arial_axe, new RenderArialTools("models/tools/ArialLumberAxe.obj", "textures/models/tools/ArialLumberAxe.png", (IRenderTweak) arial_axe));
-        MinecraftForgeClient.registerItemRenderer(arial_shovel, new RenderArialTools("models/tools/ArialShovel.obj", "textures/models/tools/ArialShovel.png", (IRenderTweak) arial_shovel));
-        MinecraftForgeClient.registerItemRenderer(arial_distruction_staff, new RenderArialTools("models/tools/ArialStaffOfPower.obj", "textures/models/tools/ArialStaffOfPower.png", (IRenderTweak) arial_distruction_staff));
-
-
-        RenderingRegistry.registerEntityRenderingHandler(EntityChaoticHeart.class, new RenderChaoticHeart());
-        RenderingRegistry.registerEntityRenderingHandler(EntityArialHeart.class, new RenderArialHeart());
-
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(draconicAssembler), (IItemRenderer)new RenderItemDraconicAssembler());
-        RegisterUtils.registerTileRenderer(TileDraconicAssembler.class, (TileEntitySpecialRenderer)new RenderBlockDraconicAssembler());
-
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(custom_upgrade_modifier), (IItemRenderer)new RenderItemCustomUpgradeModifier());
-        RegisterUtils.registerTileRenderer(TileCustomUpgradeModifier.class, (TileEntitySpecialRenderer)new RenderCustomUpgradeModifier());
-
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(fusion_core), (IItemRenderer)new RenderItemFusionCraftingCore());
-        RegisterUtils.registerTileRenderer(TileFusionCraftingCore.class, (TileEntitySpecialRenderer)new RenderTileFusionCraftingCore());
-        RegisterUtils.registerItemRenderer(Item.getItemFromBlock(fusion_injector), (IItemRenderer)new RenderItemFusionInjector());
-        RegisterUtils.registerTileRenderer(TileFusionInjector.class, (TileEntitySpecialRenderer)new RenderTileFusionInjector());
+            MinecraftForgeClient.registerItemRenderer(ARIAL_PICKAXE, new RenderArialTools("models/tools/ArialPickaxe.obj", "textures/models/tools/ArialPickaxe.png", (IRenderTweak) ARIAL_PICKAXE));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_AXE, new RenderArialTools("models/tools/ArialLumberAxe.obj", "textures/models/tools/ArialLumberAxe.png", (IRenderTweak) ARIAL_AXE));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_SHOVEL, new RenderArialTools("models/tools/ArialShovel.obj", "textures/models/tools/ArialShovel.png", (IRenderTweak) ARIAL_SHOVEL));
+            MinecraftForgeClient.registerItemRenderer(ARIAL_DISTRUCTION_STAFF, new RenderArialTools("models/tools/ArialStaffOfPower.obj", "textures/models/tools/ArialStaffOfPower.png", (IRenderTweak) ARIAL_DISTRUCTION_STAFF));
+        }
+        if (ContentConfig.enableChaosBlocks && ContentConfig.enableChaosHeart) {
+            RenderingRegistry.registerEntityRenderingHandler(EntityChaoticHeart.class, new RenderChaoticHeart());
+        }
+        if (ContentConfig.enableArialBlock && ContentConfig.enableArialHeart) {
+            RenderingRegistry.registerEntityRenderingHandler(EntityArialHeart.class, new RenderArialHeart());
+        }
+        if (ContentConfig.enableAssembler) {
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(DRACONIC_ASSEMBLER), (IItemRenderer) new RenderItemDraconicAssembler());
+            RegisterUtils.registerTileRenderer(TileDraconicAssembler.class, (TileEntitySpecialRenderer) new RenderBlockDraconicAssembler());
+        }
+        if (ContentConfig.enableUpgradeModifier) {
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(CUSTOM_UPGRADE_MODIFIER), (IItemRenderer) new RenderItemCustomUpgradeModifier());
+            RegisterUtils.registerTileRenderer(TileCustomUpgradeModifier.class, (TileEntitySpecialRenderer) new RenderCustomUpgradeModifier());
+        }
+        if (ContentConfig.enableFusion) {
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(FUSION_CORE), (IItemRenderer) new RenderItemFusionCraftingCore());
+            RegisterUtils.registerTileRenderer(TileFusionCraftingCore.class, (TileEntitySpecialRenderer) new RenderTileFusionCraftingCore());
+            RegisterUtils.registerItemRenderer(Item.getItemFromBlock(FUSION_INJECTOR), (IItemRenderer) new RenderItemFusionInjector());
+            RegisterUtils.registerTileRenderer(TileFusionInjector.class, (TileEntitySpecialRenderer) new RenderTileFusionInjector());
+        }
     }
 
     public void postInit(FMLPostInitializationEvent e) {
-        registerAutoAwakenedBlocksDragonRecipe(new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconiumBlock, 4, 2),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModItems.dragonHeart),
-                new ItemStack(ModItems.draconicCore, 16),
-                new ItemStack(Blocks.tnt));
+        if (ContentConfig.enableAutoAwakener) {
+            registerAutoAwakenedBlocksDragonRecipe(new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4),
+                    new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconiumBlock, 4, 2),
+                    new ItemStack(com.brandon3055.draconicevolution.common.ModItems.dragonHeart),
+                    new ItemStack(ModItems.draconicCore, 16),
+                    new ItemStack(Blocks.tnt));
+            registerAutoAwakenedBlocksChaosRecipe(new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4),
+                    new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconiumBlock, 4, 2),
+                    new ItemStack(com.brandon3055.draconicevolution.common.ModItems.dragonHeart),
+                    new ItemStack(ModItems.draconicCore, 16),
+                    new ItemStack(Blocks.tnt));
+            registerAutoAwakenedBlocksArialRecipe(new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4),
+                    new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconiumBlock, 4, 2),
+                    new ItemStack(com.brandon3055.draconicevolution.common.ModItems.dragonHeart),
+                    new ItemStack(ModItems.draconicCore, 16),
+                    new ItemStack(Blocks.tnt));
 
-        registerAutoAwakenedBlocksChaosRecipe(new ItemStack(chaotic_block, 4),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4, 1),
-                new ItemStack(chaoticHeart),
-                new ItemStack(ModItems.awakenedCore, HellConfig.coresNeedsForChaotic),
-                new ItemStack(Blocks.tnt));
-        registerAutoAwakenedBlocksChaosRecipe(new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconiumBlock, 4, 2),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModItems.dragonHeart),
-                new ItemStack(ModItems.draconicCore, 16),
-                new ItemStack(Blocks.tnt));
+            if (ContentConfig.enableChaosBlocks) {
+                if (ContentConfig.enableChaosHeart) {
+                    registerAutoAwakenedBlocksChaosRecipe(new ItemStack(CHAOTIC_BLOCK, 4),
+                            new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4, 1),
+                            new ItemStack(CHAOTIC_HEART),
+                            new ItemStack(ModItems.awakenedCore, HellConfig.coresNeedsForChaotic),
+                            new ItemStack(Blocks.tnt));
+                    registerAutoAwakenedBlocksArialRecipe(new ItemStack(CHAOTIC_BLOCK, 4),
+                            new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4, 1),
+                            new ItemStack(CHAOTIC_HEART),
+                            new ItemStack(ModItems.awakenedCore, HellConfig.coresNeedsForChaotic),
+                            new ItemStack(Blocks.tnt));
+                }
+                if (ContentConfig.enableArialBlock && ContentConfig.enableArialHeart) {
+                    registerAutoAwakenedBlocksArialRecipe(new ItemStack(ARIAL_BLOCK, 4),
+                            new ItemStack(CHAOTIC_BLOCK, 4, 1),
+                            new ItemStack(ARIAL_HEART),
+                            new ItemStack(ModItems.awakenedCore, HellConfig.coresNeedsForArial),
+                            new ItemStack(Blocks.tnt));
+                }
+            }
+        }
+        if (ContentConfig.enableAssembler) {
+            registerDraconicAssemblerRecipe(new ItemStack(ModItems.draconiumEnergyCore, 1), 0, 10000,
+                    new ItemStack(ModItems.draconicCore, 2),
+                    new ItemStack(ModItems.draconiumIngot, 6),
+                    new ItemStack(Blocks.redstone_block, 8));
+            removeCraftingRecipe(new ItemStack(ModItems.draconiumEnergyCore));
+            registerDraconicAssemblerRecipe(new ItemStack(ModItems.draconiumEnergyCore, 1, 1), 1, 100000,
+                    new ItemStack(ModItems.wyvernCore, 2),
+                    new ItemStack(ModItems.draconiumEnergyCore, 6),
+                    new ItemStack(ModItems.draconiumIngot, 8));
+            removeCraftingRecipe(new ItemStack(ModItems.draconiumEnergyCore, 1, 1));
 
-        registerAutoAwakenedBlocksArialRecipe(new ItemStack(arial_block, 4),
-                new ItemStack(chaotic_block, 4, 1),
-                new ItemStack(arialHeart),
-                new ItemStack(ModItems.awakenedCore, HellConfig.coresNeedsForArial),
-                new ItemStack(Blocks.tnt));
-        registerAutoAwakenedBlocksArialRecipe(new ItemStack(chaotic_block, 4),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4, 1),
-                new ItemStack(chaoticHeart),
-                new ItemStack(ModItems.awakenedCore, HellConfig.coresNeedsForChaotic),
-                new ItemStack(Blocks.tnt));
-        registerAutoAwakenedBlocksArialRecipe(new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconicBlock, 4),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModBlocks.draconiumBlock, 4, 2),
-                new ItemStack(com.brandon3055.draconicevolution.common.ModItems.dragonHeart),
-                new ItemStack(ModItems.draconicCore, 16),
-                new ItemStack(Blocks.tnt));
+            if (ContentConfig.enableChaosIngot && ContentConfig.enableChaosFragment) {
+                registerDraconicAssemblerRecipe(new ItemStack(CHAOS_FRAGMENT, 3), 2, 100000, new ItemStack(CHAOTIC_INGOT));
 
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("fragment_chaos"), 3), 2, 100000, new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("ingot_chaotic")));
-        registerDraconicAssemblerRecipe(new ItemStack(draconicEnergyUpgrades, 1, 0), 1, 75000,
-                new ItemStack(ModBlocks.draconiumBlock, 6, 2),
-                new ItemStack(ModBlocks.energyCrystal, 2),
-                new ItemStack(ModItems.draconiumEnergyCore, 4));
-        registerDraconicAssemblerRecipe(new ItemStack(draconicEnergyUpgrades, 1, 1), 2, 1500000,
-                new ItemStack(ModBlocks.draconicBlock, 8),
-                new ItemStack(ModItems.awakenedCore, 2),
-                new ItemStack(ModItems.draconiumEnergyCore, 6, 1),
-                new ItemStack(draconicEnergyUpgrades, 1, 0),
-                new ItemStack(draconicEnergyUpgrades, 1, 0));
-        registerDraconicAssemblerRecipe(new ItemStack(draconicEnergyUpgrades, 1, 2), 3, 750000000,
-                new ItemStack(chaotic_block, 12),
-                new ItemStack(ModItems.chaoticCore, 1),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("chaoticEnergyCore"), 8),
-                new ItemStack(draconicEnergyUpgrades, 1, 1),
-                new ItemStack(draconicEnergyUpgrades, 1, 1));
-        registerDraconicAssemblerRecipe(new ItemStack(draconicEnergyUpgrades, 1, 3), 4, 75000000000L,
-                new ItemStack(arial_block, 4),
-                new ItemStack(arialCore, 1),
-                new ItemStack(arialEnergyCore, 8),
-                new ItemStack(draconicEnergyUpgrades, 1, 2),
-                new ItemStack(draconicEnergyUpgrades, 1, 2));
-        registerDraconicAssemblerRecipe(new ItemStack(ModItems.draconiumEnergyCore, 1), 0, 10000,
-                new ItemStack(ModItems.draconicCore, 2),
-                new ItemStack(ModItems.draconiumIngot, 6),
-                new ItemStack(Blocks.redstone_block, 8));
-        removeCraftingRecipe(new ItemStack(ModItems.draconiumEnergyCore));
-        registerDraconicAssemblerRecipe(new ItemStack(ModItems.draconiumEnergyCore, 1, 1), 1, 100000,
-                new ItemStack(ModItems.wyvernCore, 2),
-                new ItemStack(ModItems.draconiumEnergyCore, 6),
-                new ItemStack(ModItems.draconiumIngot, 8));
-        removeCraftingRecipe(new ItemStack(ModItems.draconiumEnergyCore, 1, 1));
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("chaoticEnergyCore"), 1), 2, 1000000,
-                new ItemStack(ModItems.awakenedCore, 2),
-                new ItemStack(ModItems.draconiumEnergyCore, 6, 1),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("ingot_chaotic"), 8),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("fragment_chaos"), 4));
-        registerDraconicAssemblerRecipe(new ItemStack(arialEnergyCore, 1), 3, 10000000,
-                new ItemStack(ModItems.chaoticCore, 2),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("chaoticEnergyCore"), 6),
-                new ItemStack(arial_block),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("fragment_chaos"), 8));
-        registerDraconicAssemblerRecipe(new ItemStack(upgradeDragonAutoAwakenedBlocks), 1, 10000000,
-                AEApi.instance().definitions().materials().basicCard().maybeStack(16).get(),
-                AEApi.instance().definitions().materials().advCard().maybeStack(16).get(),
-                new ItemStack(ModBlocks.draconicBlock, 8),
-                new ItemStack(ModItems.awakenedCore));
-        registerDraconicAssemblerRecipe(new ItemStack(upgradeChaosAutoAwakenedBlocks), 2, 1000000000,
-                new ItemStack(upgradeDragonAutoAwakenedBlocks),
-                AEApi.instance().definitions().materials().basicCard().maybeStack(32).get(),
-                AEApi.instance().definitions().materials().advCard().maybeStack(32).get(),
-                new ItemStack(chaotic_block, 4),
-                new ItemStack(ModItems.chaoticCore),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("fragment_chaos"), 8));
-        registerDraconicAssemblerRecipe(new ItemStack(upgradeArialAutoAwakenedBlocks), 3, 100000000000L,
-                new ItemStack(upgradeChaosAutoAwakenedBlocks),
-                AEApi.instance().definitions().materials().basicCard().maybeStack(64).get(),
-                AEApi.instance().definitions().materials().advCard().maybeStack(64).get(),
-                new ItemStack(arial_block, 4),
-                new ItemStack(arialCore),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("fragment_chaos"), 64));
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("advancedEmptyCell")), 0, 100000,
-                AEApi.instance().definitions().materials().emptyStorageCell().maybeStack(2).get(),
-                AEApi.instance().definitions().materials().singularity().maybeStack(4).get(),
-                AEApi.instance().definitions().materials().calcProcessor().maybeStack(8).get(),
-                AEApi.instance().definitions().materials().engProcessor().maybeStack(8).get(),
-                AEApi.instance().definitions().materials().logicProcessor().maybeStack(8).get());
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("hybridEmptyCell")), 0, 100000,
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("advancedEmptyCell"), 2),
-                AEApi.instance().definitions().materials().singularity().maybeStack(8).get(),
-                AEApi.instance().definitions().materials().calcProcessor().maybeStack(16).get(),
-                AEApi.instance().definitions().materials().engProcessor().maybeStack(16).get(),
-                AEApi.instance().definitions().materials().logicProcessor().maybeStack(16).get());
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("ultimateEmptyCell")), 0, 100000,
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("hybridEmptyCell"), 2),
-                AEApi.instance().definitions().materials().singularity().maybeStack(16).get(),
-                AEApi.instance().definitions().materials().calcProcessor().maybeStack(32).get(),
-                AEApi.instance().definitions().materials().engProcessor().maybeStack(32).get(),
-                AEApi.instance().definitions().materials().logicProcessor().maybeStack(32).get());
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("quantumEmptyCell")), 0, 100000,
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("ultimateEmptyCell"), 2),
-                AEApi.instance().definitions().materials().singularity().maybeStack(32).get(),
-                AEApi.instance().definitions().materials().calcProcessor().maybeStack(64).get(),
-                AEApi.instance().definitions().materials().engProcessor().maybeStack(64).get(),
-                AEApi.instance().definitions().materials().logicProcessor().maybeStack(64).get());
-        registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("singularEmptyCell")), 0, 100000,
-                AEApi.instance().definitions().materials().singularity().maybeStack(64).get(),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("advancedEmptyCell"), 8),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("hybridEmptyCell"), 8),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("ultimateEmptyCell"), 8),
-                new ItemStack(foxiwhitee.hellmod.ModItems.ITEMS.get("quantumEmptyCell"), 8));
-        registerFusionRecipe(new ItemStack(draconicAssembler), new ItemStack(fusion_core), 0, 100000,
-                new ItemStack(fusion_injector),
-                new ItemStack(fusion_injector),
-                new ItemStack(fusion_injector),
-                new ItemStack(fusion_injector),
-                new ItemStack(fusion_injector),
-                new ItemStack(fusion_injector),
-                new ItemStack(fusion_injector),
-                new ItemStack(ModItems.draconicCore),
-                new ItemStack(ModItems.draconicCore));
+                if (ContentConfig.enableChaoticEnergyCore) {
+                    registerDraconicAssemblerRecipe(new ItemStack(CHAOTIC_ENERGY_CORE, 1), 2, 1000000,
+                            new ItemStack(ModItems.awakenedCore, 2),
+                            new ItemStack(ModItems.draconiumEnergyCore, 6, 1),
+                            new ItemStack(CHAOTIC_INGOT, 8),
+                            new ItemStack(CHAOS_FRAGMENT, 4));
+
+                    if (ContentConfig.enableArialCores && ContentConfig.enableArialBlock) {
+                        registerDraconicAssemblerRecipe(new ItemStack(ARIAL_ENERGY_CORE, 1), 3, 10000000,
+                                new ItemStack(ModItems.chaoticCore, 2),
+                                new ItemStack(CHAOTIC_ENERGY_CORE, 6),
+                                new ItemStack(ARIAL_BLOCK),
+                                new ItemStack(CHAOS_FRAGMENT, 8));
+                    }
+                }
+            }
+            if (ContentConfig.enableChaosFragment && ContentConfig.enableChaoticEnergyCore && ContentConfig.enableArialCores && ContentConfig.enableArialBlock) {
+                registerDraconicAssemblerRecipe(new ItemStack(ARIAL_ENERGY_CORE, 1), 3, 10000000,
+                        new ItemStack(ModItems.chaoticCore, 2),
+                        new ItemStack(CHAOTIC_ENERGY_CORE, 6),
+                        new ItemStack(ARIAL_BLOCK),
+                        new ItemStack(CHAOS_FRAGMENT, 8));
+            }
+            if (ContentConfig.enableEnergyUpgrades) {
+                registerDraconicAssemblerRecipe(new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 0), 1, 75000,
+                        new ItemStack(ModBlocks.draconiumBlock, 6, 2),
+                        new ItemStack(ModBlocks.energyCrystal, 2),
+                        new ItemStack(ModItems.draconiumEnergyCore, 4));
+                registerDraconicAssemblerRecipe(new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 1), 2, 1500000,
+                        new ItemStack(ModBlocks.draconicBlock, 8),
+                        new ItemStack(ModItems.awakenedCore, 2),
+                        new ItemStack(ModItems.draconiumEnergyCore, 6, 1),
+                        new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 0),
+                        new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 0));
+
+                if (ContentConfig.enableChaosBlocks && ContentConfig.enableChaoticEnergyCore) {
+                    registerDraconicAssemblerRecipe(new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 2), 3, 750000000,
+                            new ItemStack(CHAOTIC_BLOCK, 12),
+                            new ItemStack(ModItems.chaoticCore, 1),
+                            new ItemStack(CHAOTIC_ENERGY_CORE, 8),
+                            new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 1),
+                            new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 1));
+                }
+                if (ContentConfig.enableArialBlock && ContentConfig.enableArialCores) {
+                    registerDraconicAssemblerRecipe(new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 3), 4, 75000000000L,
+                            new ItemStack(ARIAL_BLOCK, 4),
+                            new ItemStack(ARIAL_CORE, 1),
+                            new ItemStack(ARIAL_ENERGY_CORE, 8),
+                            new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 2),
+                            new ItemStack(DRACONIC_ENERGY_UPGRADES, 1, 2));
+                }
+            }
+            if (ContentConfig.enableAutoAwakener) {
+                registerDraconicAssemblerRecipe(new ItemStack(UPGRADE_DRAGON_AUTO_AWAKENED_BLOCKS), 1, 10000000,
+                        AEApi.instance().definitions().materials().basicCard().maybeStack(16).get(),
+                        AEApi.instance().definitions().materials().advCard().maybeStack(16).get(),
+                        new ItemStack(ModBlocks.draconicBlock, 8),
+                        new ItemStack(ModItems.awakenedCore));
+                if (ContentConfig.enableChaosBlocks && ContentConfig.enableChaosFragment) {
+                    registerDraconicAssemblerRecipe(new ItemStack(UPGRADE_CHAOS_AUTO_AWAKENED_BLOCKS), 2, 1000000000,
+                            new ItemStack(UPGRADE_DRAGON_AUTO_AWAKENED_BLOCKS),
+                            AEApi.instance().definitions().materials().basicCard().maybeStack(32).get(),
+                            AEApi.instance().definitions().materials().advCard().maybeStack(32).get(),
+                            new ItemStack(CHAOTIC_BLOCK, 4),
+                            new ItemStack(ModItems.chaoticCore),
+                            new ItemStack(CHAOS_FRAGMENT, 8));
+                }
+                if (ContentConfig.enableArialBlock && ContentConfig.enableArialCores && ContentConfig.enableChaosFragment) {
+                    registerDraconicAssemblerRecipe(new ItemStack(UPGRADE_ARIAL_AUTO_AWAKENED_BLOCKS), 3, 100000000000L,
+                            new ItemStack(UPGRADE_CHAOS_AUTO_AWAKENED_BLOCKS),
+                            AEApi.instance().definitions().materials().basicCard().maybeStack(64).get(),
+                            AEApi.instance().definitions().materials().advCard().maybeStack(64).get(),
+                            new ItemStack(ARIAL_BLOCK, 4),
+                            new ItemStack(ARIAL_CORE),
+                            new ItemStack(CHAOS_FRAGMENT, 64));
+                }
+            }
+            if (ContentConfig.enableStorageCells) {
+                registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 0), 0, 100000,
+                        AEApi.instance().definitions().materials().emptyStorageCell().maybeStack(2).get(),
+                        AEApi.instance().definitions().materials().singularity().maybeStack(4).get(),
+                        AEApi.instance().definitions().materials().calcProcessor().maybeStack(8).get(),
+                        AEApi.instance().definitions().materials().engProcessor().maybeStack(8).get(),
+                        AEApi.instance().definitions().materials().logicProcessor().maybeStack(8).get());
+                registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 1), 0, 100000,
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 2, 0),
+                        AEApi.instance().definitions().materials().singularity().maybeStack(8).get(),
+                        AEApi.instance().definitions().materials().calcProcessor().maybeStack(16).get(),
+                        AEApi.instance().definitions().materials().engProcessor().maybeStack(16).get(),
+                        AEApi.instance().definitions().materials().logicProcessor().maybeStack(16).get());
+                registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 2), 0, 100000,
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 2, 1),
+                        AEApi.instance().definitions().materials().singularity().maybeStack(16).get(),
+                        AEApi.instance().definitions().materials().calcProcessor().maybeStack(32).get(),
+                        AEApi.instance().definitions().materials().engProcessor().maybeStack(32).get(),
+                        AEApi.instance().definitions().materials().logicProcessor().maybeStack(32).get());
+                registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 3), 0, 100000,
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 2, 2),
+                        AEApi.instance().definitions().materials().singularity().maybeStack(32).get(),
+                        AEApi.instance().definitions().materials().calcProcessor().maybeStack(64).get(),
+                        AEApi.instance().definitions().materials().engProcessor().maybeStack(64).get(),
+                        AEApi.instance().definitions().materials().logicProcessor().maybeStack(64).get());
+                registerDraconicAssemblerRecipe(new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 4), 0, 100000,
+                        AEApi.instance().definitions().materials().singularity().maybeStack(64).get(),
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 8, 0),
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 8, 1),
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 8, 2),
+                        new ItemStack(foxiwhitee.hellmod.ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 8, 3));
+            }
+            if (ContentConfig.enableFusion) {
+                registerFusionRecipe(new ItemStack(DRACONIC_ASSEMBLER), new ItemStack(FUSION_CORE), 0, 100000,
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(FUSION_INJECTOR),
+                        new ItemStack(ModItems.draconicCore),
+                        new ItemStack(ModItems.draconicCore));
+            }
+        }
     }
 
     public static void register(BlockDE block, Class<? extends ItemBlock> item) {

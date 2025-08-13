@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.integration.botania.tile;
+package foxiwhitee.hellmod.integration.botania.integration.avaritia.tile;
 
 import foxiwhitee.hellmod.config.HellConfig;
 import net.minecraft.util.IIcon;

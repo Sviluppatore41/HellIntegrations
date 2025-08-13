@@ -4,6 +4,7 @@ import appeng.api.parts.IPart;
 import appeng.core.features.AEFeature;
 import appeng.integration.IntegrationType;
 import foxiwhitee.hellmod.ModItems;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.parts.cables.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,36 +13,36 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 public enum EnumParts {
-    InvalidType(-1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), null),
-    PART_ADV_INTERFACE(0, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)PartAdvancedInterface.class),
-    PART_HYBRID_INTERFACE(1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)PartHybridInterface.class),
-    PART_ULTIMATE_INTERFACE(2, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)PartUltimateInterface.class),
-    ALITE_SMART_CABLE(25, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableAlite.class) {
+    InvalidType(-1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), null, false),
+    PART_ADV_INTERFACE(0, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)PartAdvancedInterface.class, ContentConfig.enableInterfaces),
+    PART_HYBRID_INTERFACE(1, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)PartHybridInterface.class, ContentConfig.enableInterfaces),
+    PART_ULTIMATE_INTERFACE(2, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), (Class)PartUltimateInterface.class, ContentConfig.enableInterfaces),
+    ALITE_SMART_CABLE(25, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableAlite.class, ContentConfig.enableCables) {
         public boolean isCable() {
             return true;
         }
     },
-    BIMARE_SMART_CABLE(42, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableBimare.class) {
+    BIMARE_SMART_CABLE(42, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableBimare.class, ContentConfig.enableCables) {
         public boolean isCable() {
             return true;
         }
     },
-    DEFIT_SMART_CABLE(59, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableDefit.class) {
+    DEFIT_SMART_CABLE(59, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableDefit.class, ContentConfig.enableCables) {
         public boolean isCable() {
             return true;
         }
     },
-    EFRIM_SMART_CABLE(76, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableEfrim.class) {
+    EFRIM_SMART_CABLE(76, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartCableEfrim.class, ContentConfig.enableCables) {
         public boolean isCable() {
             return true;
         }
     },
-    NUR_DENSE_CABLE(93, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartDenseCableNur.class) {
+    NUR_DENSE_CABLE(93, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartDenseCableNur.class, ContentConfig.enableCables) {
         public boolean isCable() {
             return true;
         }
     },
-    XAUR_DENSE_CABLE(110, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartDenseCableXaur.class) {
+    XAUR_DENSE_CABLE(110, EnumSet.of(AEFeature.Core), EnumSet.noneOf(IntegrationType.class), PartDenseCableXaur.class, ContentConfig.enableCables) {
         public boolean isCable() {
             return true;
         }
@@ -57,11 +58,14 @@ public enum EnumParts {
 
     private Constructor<? extends IPart> constructor;
 
-    EnumParts(int baseMetaValue, Set<AEFeature> features, Set<IntegrationType> integrations, Class<? extends IPart> c) {
+    private final boolean register;
+
+    EnumParts(int baseMetaValue, Set<AEFeature> features, Set<IntegrationType> integrations, Class<? extends IPart> c, boolean register) {
         this.features = Collections.unmodifiableSet(features);
         this.integrations = Collections.unmodifiableSet(integrations);
         this.myPart = c;
         this.baseDamage = baseMetaValue;
+        this.register = register;
     }
 
     public boolean isCable() {
@@ -94,5 +98,9 @@ public enum EnumParts {
 
     public ItemStack getStack() {
         return new ItemStack((Item)ModItems.ITEM_PARTS, 1, getBaseDamage());
+    }
+
+    public boolean isRegister() {
+        return register;
     }
 }

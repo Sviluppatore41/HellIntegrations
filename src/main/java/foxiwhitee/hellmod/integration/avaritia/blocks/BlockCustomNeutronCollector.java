@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.avaritia.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.config.HellConfig;
@@ -30,7 +31,7 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 @SimpleGuiHandler(index = GuiHandlers.customNeutronCollector, tile = TileCustomNeutronCollector.class, gui = GuiCustomNeutronCollector.class, container = ContainerCustomNeutronCollector.class, integration = "Avariatia")
-public class BlockCustomNeutronCollector extends BlockContainer implements INeutronCollector {
+public class BlockCustomNeutronCollector extends AEBaseBlock implements INeutronCollector {
     private final Random randy = new Random();
 
     private IIcon top;

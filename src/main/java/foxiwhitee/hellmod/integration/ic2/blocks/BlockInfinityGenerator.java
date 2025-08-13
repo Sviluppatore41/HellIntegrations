@@ -28,10 +28,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 @SimpleGuiHandler(index = GuiHandlers.infinityGenerator, tile = TileInfinityGenerator.class, gui = GuiInfinityGenerator.class, container = ContainerInfinityGenerator.class, integration = "IC2")
-public class BlockInfinityGenerator extends BlockContainer implements ISpecialSintezatorPanel {
+public class BlockInfinityGenerator extends BaseIC2Block implements ISpecialSintezatorPanel {
     private String name;
     public BlockInfinityGenerator(String name) {
-        super(Material.rock);
+        super(name);
         this.name = name;
         setBlockName(name);
         setHardness(3.0F);
@@ -47,8 +47,8 @@ public class BlockInfinityGenerator extends BlockContainer implements ISpecialSi
         }
     }
 
-
-    public TileEntity createNewTileEntity(World world, int meta) {
+    @Override
+    public TileEntity createNewTileEntity(World world, int metadata) {
         switch (name) {
             case "singularGenerator": return new TileSingularGenerator();
             default: return new TileQuantumGenerator();

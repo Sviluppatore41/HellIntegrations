@@ -114,7 +114,7 @@ public class GuiCustomUpgradeModifier extends GuiContainer {
             this.coreInInventory[1] = this.player.inventory.hasItem(ModItems.wyvernCore);
             this.coreInInventory[2] = this.player.inventory.hasItem(ModItems.awakenedCore);
             this.coreInInventory[3] = this.player.inventory.hasItem(ModItems.chaoticCore);
-            this.coreInInventory[4] = this.player.inventory.hasItem(DraconicEvolutionIntegration.arialCore);
+            this.coreInInventory[4] = this.player.inventory.hasItem(DraconicEvolutionIntegration.ARIAL_CORE);
 
             for(ICustomUpgradableItem.EnumUpgrade upgrade : this.upgradableItem.getCUpgrades(this.stack)) {
                 int[] arr$ = upgrade.getCoresApplied(this.stack);

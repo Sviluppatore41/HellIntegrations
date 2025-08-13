@@ -58,7 +58,7 @@ public class TileNeutronUnifier extends AENetworkInvTile implements ISaveProvide
 
     @Nullable
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(AvaritiaIntegration.neutronUnifier);
+        return new ItemStack(AvaritiaIntegration.NEUTRON_UNIFIER);
     }
 
     public IStorageGrid getStorage() {

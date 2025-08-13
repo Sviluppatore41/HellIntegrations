@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.botania.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -39,7 +40,7 @@ import vazkii.botania.common.block.ModBlocks;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockCustomManaPool  extends Block implements ITileEntityProvider, IWandHUD, IWandable, ICraftAchievement {
+public class BlockCustomManaPool extends AEBaseBlock implements ITileEntityProvider, IWandHUD, IWandable, ICraftAchievement {
     public static IIcon manaIcon;
 
     boolean lastFragile;
@@ -58,6 +59,7 @@ public class BlockCustomManaPool  extends Block implements ITileEntityProvider, 
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         BotaniaAPI.blacklistBlockFromMagnet(this, 32767);
         setCreativeTab(HellCore.HELL_TAB);
+        isOpaque = false;
     }
 
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack itemIn) {
@@ -150,10 +152,6 @@ public class BlockCustomManaPool  extends Block implements ITileEntityProvider, 
     }
 
     public boolean isFullBlock() {
-        return false;
-    }
-
-    public boolean isOpaqueCube() {
         return false;
     }
 

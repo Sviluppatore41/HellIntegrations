@@ -17,12 +17,10 @@ import foxiwhitee.hellmod.integration.avaritia.parts.PartCraftingTerminal9x9;
 import foxiwhitee.hellmod.integration.avaritia.parts.PartNeutronCompressorPatternTerminal;
 import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 import foxiwhitee.hellmod.integration.botania.parts.*;
-import foxiwhitee.hellmod.integration.ic2.IC2Integration;
 import foxiwhitee.hellmod.integration.thaumcraft.ThaumcraftIntegration;
 import foxiwhitee.hellmod.integration.thaumcraft.parts.PartAlchemicalConstructionPatternTerminal;
 import foxiwhitee.hellmod.integration.thaumcraft.parts.PartInfusionPatternTerminal;
-import foxiwhitee.hellmod.integration.utility.ExtraUtilityIntegration;
-import foxiwhitee.hellmod.items.ItemFluidDrop;
+import foxiwhitee.hellmod.items.fluid.ItemFluidDrop;
 import foxiwhitee.hellmod.parts.*;
 import foxiwhitee.hellmod.parts.cables.PartBaseCable;
 import foxiwhitee.hellmod.proxy.CommonProxy;
@@ -39,7 +37,7 @@ import net.minecraft.item.ItemStack;
 public class AEHooks {
 
     public static long skipBytes(long old, IAEItemStack what) {
-        if (what.getItem() == BotaniaIntegration.mana_drop || what.getItem() == ItemFluidDrop.DROP)
+        if (what.getItem() == BotaniaIntegration.MANA_DROP || what.getItem() == ItemFluidDrop.DROP)
             return 0L;
         return old;
     }
@@ -66,13 +64,13 @@ public class AEHooks {
 
     public static ItemStack getItem(Object target, ItemStack old) {
         if (target instanceof TileAdvancedInterface) {
-            return new ItemStack(ModBlocks.A_ADVANCED_INTERFACE);
+            return new ItemStack(ModBlocks.ADVANCED_INTERFACE);
         }
         if (target instanceof TileHybridInterface) {
-            return new ItemStack(ModBlocks.A_HYBRID_INTERFACE);
+            return new ItemStack(ModBlocks.HYBRID_INTERFACE);
         }
         if (target instanceof TileUltimateInterface) {
-            return new ItemStack(ModBlocks.A_ULTIMATE_INTERFACE);
+            return new ItemStack(ModBlocks.ULTIMATE_INTERFACE);
         }
         if (target instanceof PartAdvancedInterface) {
             return EnumParts.PART_ADV_INTERFACE.getStack();

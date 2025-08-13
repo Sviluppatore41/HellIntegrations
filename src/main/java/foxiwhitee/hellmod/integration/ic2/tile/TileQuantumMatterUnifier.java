@@ -73,7 +73,7 @@ public class TileQuantumMatterUnifier extends AENetworkInvTile implements ISaveP
 
     @Nullable
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(IC2Integration.matterUnifier);
+        return new ItemStack(IC2Integration.QUANTUM_MATTER_UNIFIER);
     }
 
     public IInventory getInternalInventory() {

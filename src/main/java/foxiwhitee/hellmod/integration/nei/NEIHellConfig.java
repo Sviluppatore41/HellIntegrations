@@ -13,6 +13,7 @@ import java.util.Collections;
 
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.integration.avaritia.client.gui.GuiPartBigPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.client.gui.GuiPartNeutronCompressorPatternTerminal;
 import foxiwhitee.hellmod.integration.botania.client.gui.*;
@@ -32,44 +33,70 @@ import net.minecraft.item.ItemStack;
 import foxiwhitee.hellmod.HellCore;
 import net.minecraft.nbt.NBTTagCompound;
 import java.awt.Rectangle;
+import java.util.List;
 
 public class NEIHellConfig implements IConfigureNEI {
     @Override
     public void loadConfig() {
-        new ArrayList<TemplateRecipeHandler>(Arrays.asList(new GuiDraconicAssemblerHandler(), new GuiFusionCraftingHandler()))
-                .forEach(handler -> {
-                    API.registerRecipeHandler((ICraftingHandler)handler);
-                    API.registerUsageHandler((IUsageHandler)handler);
-                });
+        List<TemplateRecipeHandler> recipeHandlerList = new ArrayList<>();
 
-        API.registerGuiOverlay(GuiDraconicAssembler.class, "drassembler", 5, 11);
-        GuiInfo.customSlotGuis.add(GuiDraconicAssembler.class);
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.draconicAssembler), "drassembler");
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.fusion_core), "fusioncrafting");
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.fusion_injector, 1, 0), "fusioncrafting");
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.fusion_injector, 1, 1), "fusioncrafting");
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.fusion_injector, 1, 2), "fusioncrafting");
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.fusion_injector, 1, 3), "fusioncrafting");
-        API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.fusion_injector, 1, 4), "fusioncrafting");
-        API.registerGuiOverlayHandler(GuiDraconicAssembler.class, new DrAssemblerRecipeOverlayHandler(), "drassembler");
-        sendHandlerInfo("foxiwhitee.hellmod.integration.nei.draconic.assembler.GuiDraconicAssemblerHandler", DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName().replace("tile.", ""), 112, 164, 2);
-        sendHandlerInfo("foxiwhitee.hellmod.integration.nei.draconic.fusion.GuiFusionCraftingHandler", DraconicEvolutionIntegration.fusion_core.getUnlocalizedName().replace("tile.", ""), 112, 164, 2);
-        TemplateRecipeHandler.RecipeTransferRectHandler.registerRectsToGuis(Arrays.asList(GuiFusionCraftingCore.class ), Collections.singletonList(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(98, 63, 11, 31), "fusioncrafting", new Object[0])));
-        API.registerNEIGuiHandler(new DraconicNEIGuiHandler());
-
-        API.registerGuiOverlayHandler(GuiPartNeutronCompressorPatternTerminal.class, new TerminalsRecipeOverlayHandler(1), "extreme_compression");
-
+        if (ContentConfig.enableAssembler) {
+            recipeHandlerList.add(new GuiDraconicAssemblerHandler());
+            API.registerGuiOverlay(GuiDraconicAssembler.class, "drassembler", 5, 11);
+            GuiInfo.customSlotGuis.add(GuiDraconicAssembler.class);
+            API.registerGuiOverlayHandler(GuiDraconicAssembler.class, new DrAssemblerRecipeOverlayHandler(), "drassembler");
+            sendHandlerInfo("foxiwhitee.hellmod.integration.nei.draconic.assembler.GuiDraconicAssemblerHandler", DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName().replace("tile.", ""), 112, 164, 2);
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER), "drassembler");
+        }
+        if (ContentConfig.enableFusion) {
+            recipeHandlerList.add(new GuiFusionCraftingHandler());
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.FUSION_CORE), "fusioncrafting");
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.FUSION_INJECTOR, 1, 0), "fusioncrafting");
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.FUSION_INJECTOR, 1, 1), "fusioncrafting");
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.FUSION_INJECTOR, 1, 2), "fusioncrafting");
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.FUSION_INJECTOR, 1, 3), "fusioncrafting");
+            API.addRecipeCatalyst(new ItemStack(DraconicEvolutionIntegration.FUSION_INJECTOR, 1, 4), "fusioncrafting");
+            sendHandlerInfo("foxiwhitee.hellmod.integration.nei.draconic.fusion.GuiFusionCraftingHandler", DraconicEvolutionIntegration.FUSION_CORE.getUnlocalizedName().replace("tile.", ""), 112, 164, 2);
+            TemplateRecipeHandler.RecipeTransferRectHandler.registerRectsToGuis(Arrays.asList(GuiFusionCraftingCore.class ), Collections.singletonList(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(98, 63, 11, 31), "fusioncrafting", new Object[0])));
+        }
+        if (ContentConfig.enableUpgradeModifier) {
+            API.registerNEIGuiHandler(new DraconicNEIGuiHandler());
+        }
+        if (ContentConfig.enableNeutronPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartNeutronCompressorPatternTerminal.class, new TerminalsRecipeOverlayHandler(1), "extreme_compression");
+        }
         BotaniaRecipeOverlayHandler botaniaRecipeOverlayHandler = new BotaniaRecipeOverlayHandler();
-        API.registerGuiOverlayHandler(GuiPartElvenTradePatternTerminal.class, botaniaRecipeOverlayHandler, null);
-        API.registerGuiOverlayHandler(GuiPartManaPoolPatternTerminal.class, botaniaRecipeOverlayHandler, null);
-        API.registerGuiOverlayHandler(GuiPartPetalsPatternTerminal.class, botaniaRecipeOverlayHandler, null);
-        API.registerGuiOverlayHandler(GuiPartPureDaisyPatternTerminal.class, botaniaRecipeOverlayHandler, null);
-        API.registerGuiOverlayHandler(GuiPartRuneAltarPatternTerminal.class, botaniaRecipeOverlayHandler, null);
 
-        API.registerGuiOverlayHandler(GuiPartAlchemicalConstructionPatternTerminal.class, new TerminalsRecipeOverlayHandler(1), "cruciblerecipe");
-        API.registerGuiOverlayHandler(GuiPartInfusionPatternTerminal.class, new InfusionRecipeOverlayHandler(), "infusionCrafting");
-        API.registerGuiOverlayHandler(GuiPartBigPatternTerminal.class, new ExtremeRecipeOverlayHandler(), "extreme");
-        API.registerGuiOverlay(GuiPartBigPatternTerminal.class, "extreme", 267, 15);
+        if (ContentConfig.enableElvenTradePatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartElvenTradePatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        }
+        if (ContentConfig.enableManaPoolPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartManaPoolPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        }
+        if (ContentConfig.enablePetalsPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartPetalsPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        }
+        if (ContentConfig.enablePureDaisyPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartPureDaisyPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        }
+        if (ContentConfig.enableRuneAltarPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartRuneAltarPatternTerminal.class, botaniaRecipeOverlayHandler, null);
+        }
+        if (ContentConfig.enableCruciblePatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartAlchemicalConstructionPatternTerminal.class, new TerminalsRecipeOverlayHandler(1), "cruciblerecipe");
+        }
+        if (ContentConfig.enableInfusionPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartInfusionPatternTerminal.class, new InfusionRecipeOverlayHandler(), "infusionCrafting");
+        }
+        if (ContentConfig.enableBigPatternTerminal) {
+            API.registerGuiOverlayHandler(GuiPartBigPatternTerminal.class, new ExtremeRecipeOverlayHandler(), "extreme");
+            API.registerGuiOverlay(GuiPartBigPatternTerminal.class, "extreme", 267, 15);
+        }
+
+        recipeHandlerList.forEach(handler -> {
+            API.registerRecipeHandler(handler);
+            API.registerUsageHandler(handler);
+        });
     }
 
     private void sendHandlerInfo(String handler, String nameItem, int height, int width, int perPage) {

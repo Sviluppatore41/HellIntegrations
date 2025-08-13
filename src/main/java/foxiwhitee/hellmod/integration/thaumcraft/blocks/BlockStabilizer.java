@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.thaumcraft.blocks;
 
+import appeng.block.AEBaseBlock;
 import foxiwhitee.hellmod.HellCore;
 import foxiwhitee.hellmod.integration.thaumcraft.tile.TileStabilizer;
 import foxiwhitee.hellmod.utils.helpers.RenderIDs;
@@ -10,12 +11,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thaumcraft.api.crafting.IInfusionStabiliser;
 
-public class BlockStabilizer extends Block  implements ITileEntityProvider, IInfusionStabiliser {
+public class BlockStabilizer extends AEBaseBlock implements ITileEntityProvider, IInfusionStabiliser {
 
     public BlockStabilizer(String name) {
         super(Material.iron);
         this.setBlockName(name);
         this.setCreativeTab(HellCore.HELL_TAB);
+        isOpaque = false;
     }
 
     @Override
@@ -25,10 +27,6 @@ public class BlockStabilizer extends Block  implements ITileEntityProvider, IInf
 
     public int getRenderType() {
         return RenderIDs.STABILIZER.getId();
-    }
-
-    public boolean isOpaqueCube() {
-        return false;
     }
 
     public boolean renderAsNormalBlock() {

@@ -22,7 +22,7 @@ public class RenderItemManaCharger implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack is, Object... data) {
         double time = Minecraft.getSystemTime();
         GL11.glPushMatrix();
-        if (is.getItem() == Item.getItemFromBlock((Block) BotaniaIntegration.manaCharger)) {
+        if (is.getItem() == Item.getItemFromBlock((Block) BotaniaIntegration.MANA_CHARGER)) {
             switch (type) {
                 case EQUIPPED:
                     GL11.glTranslated(0.5D, 1.5D, 0.5D);

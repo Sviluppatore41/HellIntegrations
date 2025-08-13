@@ -15,8 +15,11 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class ThaumBooks extends Item {
-    private String typeBook;
-    public ThaumBooks(String name, String texture, String typeBook) {
+    public enum Type {
+        RESEARCH, DISTORTION
+    }
+    private final Type typeBook;
+    public ThaumBooks(String name, String texture, Type typeBook) {
         this.canRepair = false;
         this.setUnlocalizedName(name);
         this.setTextureName(HellCore.MODID+":"+texture);
@@ -29,9 +32,9 @@ public class ThaumBooks extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-        if (typeBook == "ThaumBook") {
+        if (typeBook == Type.RESEARCH) {
             par3List.add(LocalizationUtils.localize("tooltip.book.thaum.desc"));
-        } else if (typeBook == "DistortionBook") {
+        } else if (typeBook == Type.DISTORTION) {
             par3List.add(LocalizationUtils.localize("tooltip.book.distortion.desc"));
         } else {
             par3List.add(LocalizationUtils.localize("tooltip.book.error"));
@@ -43,12 +46,12 @@ public class ThaumBooks extends Item {
     @Subscribe
     public ItemStack onItemRightClick(ItemStack heldStack, World world, EntityPlayer player){
         if (!world.isRemote) {
-            if (typeBook == "ThaumBook") {
+            if (typeBook == Type.RESEARCH) {
                 player.addChatMessage(new ChatComponentText(LocalizationUtils.localize("tooltip.book.thaum.message.1")));
                 player.addChatMessage(new ChatComponentText(LocalizationUtils.localize("tooltip.book.thaum.message.2")));
                 MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(), "tc research @p all");
                 MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(), "tc aspect @p all 1");
-            } else if (typeBook == "DistortionBook") {
+            } else if (typeBook == Type.DISTORTION) {
                 player.addChatMessage(new ChatComponentText(LocalizationUtils.localize("tooltip.book.distortion.message.1")));
                 player.addChatMessage(new ChatComponentText(LocalizationUtils.localize("tooltip.book.distortion.message.2")));
                 MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(), "tc warp @p set 0 perm");

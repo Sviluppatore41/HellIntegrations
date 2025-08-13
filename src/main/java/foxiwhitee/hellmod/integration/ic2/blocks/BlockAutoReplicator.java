@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.ic2.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.config.HellConfig;
@@ -23,7 +24,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockAutoReplicator  extends Block implements ITileEntityProvider {
+public class BlockAutoReplicator extends AEBaseBlock implements ITileEntityProvider {
     IIcon[] icons = new IIcon[12];
     private String name;
     public BlockAutoReplicator(String name) {

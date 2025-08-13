@@ -1,5 +1,7 @@
 package foxiwhitee.hellmod.integration.ic2.blocks;
 
+import appeng.block.AEBaseBlock;
+import appeng.block.AEBaseTileBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.config.HellConfig;
@@ -22,7 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 @SimpleGuiHandler(index = GuiHandlers.customSolarPanel, tile = TileCustomSolarPanel.class, gui = GuiCustomSolarPanel.class, container = ContainerCustomSolarPanel.class, integration = "IC2")
-public class BlockCustomSolarPanel extends BlockContainer implements ISpecialSintezatorPanel {
+public class BlockCustomSolarPanel extends AEBaseTileBlock implements ISpecialSintezatorPanel {
     @SideOnly(Side.CLIENT)
     private IIcon topIcon, downIcon;
     private String name;
@@ -33,6 +35,18 @@ public class BlockCustomSolarPanel extends BlockContainer implements ISpecialSin
         setHardness(3.0F);
         setStepSound(soundTypeMetal);
         setCreativeTab((CreativeTabs) HellCore.HELL_TAB);
+        Class<? extends TileEntity> tile;
+        switch (name) {
+            case "panel2": tile = TileSolarPanelLevel2.class;
+            case "panel3": tile = TileSolarPanelLevel3.class;
+            case "panel4": tile = TileSolarPanelLevel4.class;
+            case "panel5": tile = TileSolarPanelLevel5.class;
+            case "panel6": tile = TileSolarPanelLevel6.class;
+            case "panel7": tile = TileSolarPanelLevel7.class;
+            case "panel8": tile = TileSolarPanelLevel8.class;
+            default: tile = TileSolarPanelLevel1.class;
+        }
+        setTileEntity(tile);
     }
 
     public int getGenDay() {
@@ -58,21 +72,6 @@ public class BlockCustomSolarPanel extends BlockContainer implements ISpecialSin
             case "panel7": return HellConfig.panel7GenNight;
             case "panel8": return HellConfig.panel8GenNight;
             default: return HellConfig.panel1GenNight;
-        }
-    }
-
-
-
-    public TileEntity createNewTileEntity(World world, int meta) {
-        switch (name) {
-            case "panel2": return new TileSolarPanelLevel2();
-            case "panel3": return new TileSolarPanelLevel3();
-            case "panel4": return new TileSolarPanelLevel4();
-            case "panel5": return new TileSolarPanelLevel5();
-            case "panel6": return new TileSolarPanelLevel6();
-            case "panel7": return new TileSolarPanelLevel7();
-            case "panel8": return new TileSolarPanelLevel8();
-            default: return new TileSolarPanelLevel1();
         }
     }
 
@@ -114,15 +113,15 @@ public class BlockCustomSolarPanel extends BlockContainer implements ISpecialSin
         downIcon = register.registerIcon(HellCore.MODID+ ":panels/bottom");
     }
 
-
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int s, float f1, float f2, float f3) {
+    @Override
+    public boolean onActivated(World w, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
-        if (world.isRemote)
+        if (w.isRemote)
             return true;
-        TileEntity tileentity = world.getTileEntity(i, j, k);
+        TileEntity tileentity = w.getTileEntity(x, y, z);
         if (tileentity != null)
-            player.openGui(HellCore.instance, GuiHandlers.customSolarPanel, world, i, j, k);
+            player.openGui(HellCore.instance, GuiHandlers.customSolarPanel, w, x, y, z);
         return true;
     }
 

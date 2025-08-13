@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderBlockDraconicAssembler extends TileEntitySpecialRendererObjWrapper<TileDraconicAssembler> {
     public RenderBlockDraconicAssembler() {
-        super(TileDraconicAssembler.class, "models/dragon_assembler.obj", "textures/blocks/draconic/dragon_assembler.png");
+        super(TileDraconicAssembler.class, "models/dragon_assembler.obj", "textures/blocks/draconic/dragonAssembler.png");
         createList("Body");
         createList("Down");
     }

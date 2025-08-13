@@ -10,9 +10,7 @@ import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.util.item.AEItemStack;
 import foxiwhitee.hellmod.helpers.IFluidStorageGrid;
-import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
-import foxiwhitee.hellmod.integration.botania.helpers.IManaStorageGrid;
-import foxiwhitee.hellmod.items.ItemFluidDrop;
+import foxiwhitee.hellmod.items.fluid.ItemFluidDrop;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 

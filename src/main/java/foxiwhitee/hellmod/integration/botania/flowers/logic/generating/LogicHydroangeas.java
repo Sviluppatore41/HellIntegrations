@@ -4,7 +4,7 @@ import appeng.api.storage.data.IAEStack;
 import foxiwhitee.hellmod.config.FlowerLogicConfig;
 import foxiwhitee.hellmod.integration.botania.flowers.IGeneratingFlowerLogic;
 import foxiwhitee.hellmod.integration.botania.flowers.LevelTypes;
-import foxiwhitee.hellmod.items.ItemFluidDrop;
+import foxiwhitee.hellmod.items.fluid.ItemFluidDrop;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 

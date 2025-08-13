@@ -44,7 +44,7 @@ public class ContainerPartRuneAltarPatternTerminal extends ContainerManaPatternT
     public AEItemStack[] getInputs() {
         AEItemStack[] input = new AEItemStack[this.getInventoryCraftingSlots().length + 2];
         boolean hasValue = false;
-        AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop));
+        AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP));
         mana.setStackSize(getManaCost());
         input[0] = mana;
         AEItemStack add = AEItemStack.create(new ItemStack(ModBlocks.livingrock));

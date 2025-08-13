@@ -125,7 +125,7 @@ public class EntityArialHeart extends Entity {
                     age = 1240;
                     opPhase = 3;
                     if (coresConsumed < 2) {
-                        EntityHeart item = new EntityHeart(worldObj, posX, posY, posZ, new ItemStack(DraconicEvolutionIntegration.arialHeart));
+                        EntityHeart item = new EntityHeart(worldObj, posX, posY, posZ, new ItemStack(DraconicEvolutionIntegration.ARIAL_HEART));
                         item.motionX = 0;
                         item.motionY = 1;
                         item.motionZ = 0;
@@ -193,7 +193,7 @@ public class EntityArialHeart extends Entity {
             case 4: {
                 if (blocks.size() == 0) {
                     if (!worldObj.isRemote) {
-                        EntityHeart item = new EntityHeart(worldObj, posX, posY, posZ, new ItemStack(DraconicEvolutionIntegration.arialHeart));
+                        EntityHeart item = new EntityHeart(worldObj, posX, posY, posZ, new ItemStack(DraconicEvolutionIntegration.ARIAL_HEART));
                         item.motionX = 0;
                         item.motionY = 0;
                         item.motionZ = 0;
@@ -206,7 +206,7 @@ public class EntityArialHeart extends Entity {
                 }
                 for (MultiblockHelper.TileLocation tile : blocks) {
                     if (!worldObj.isRemote)
-                        worldObj.setBlock(tile.getXCoord(), tile.getYCoord(), tile.getZCoord(), DraconicEvolutionIntegration.arial_block, 0, 2);
+                        worldObj.setBlock(tile.getXCoord(), tile.getYCoord(), tile.getZCoord(), DraconicEvolutionIntegration.ARIAL_BLOCK, 0, 2);
                     worldObj.createExplosion(null, tile.getXCoord(), tile.getYCoord(), tile.getZCoord(), 4, false);
                 }
                 worldObj.createExplosion(null, posX, posY, posZ, 4, false);

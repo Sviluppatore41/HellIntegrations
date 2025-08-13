@@ -1,10 +1,11 @@
 package foxiwhitee.hellmod.blocks;
 
+import appeng.block.AEBaseBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import foxiwhitee.hellmod.HellCore;
 
-public class BaseBlock extends Block {
+public class BaseBlock extends AEBaseBlock {
     public BaseBlock(String name) {
         super(Material.rock);
         this.setBlockName(name);

@@ -27,14 +27,14 @@ public class ManaStorageGrid implements IManaStorageGrid {
     }
 
     public long injectMana(long amount, Actionable actionable, BaseActionSource source) {
-        AEItemStack stackToInject = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop, 1));
+        AEItemStack stackToInject = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP, 1));
         stackToInject.setStackSize(amount);
         IAEItemStack result = (IAEItemStack) getStorageGrid().getItemInventory().injectItems(stackToInject, actionable, source);
         return (result != null) ? result.getStackSize() : 0L;
     }
 
     public long extractMana(long amount, Actionable actionable, BaseActionSource source) {
-        AEItemStack stackToExtract = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop, 1));
+        AEItemStack stackToExtract = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP, 1));
         stackToExtract.setStackSize(amount);
         IAEItemStack result = (IAEItemStack) getStorageGrid().getItemInventory().extractItems(stackToExtract, actionable, source);
         return (result != null) ? result.getStackSize() : 0L;

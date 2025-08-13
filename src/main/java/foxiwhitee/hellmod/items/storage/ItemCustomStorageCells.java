@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.items;
+package foxiwhitee.hellmod.items.storage;
 
 import appeng.api.AEApi;
 import appeng.api.config.FuzzyMode;
@@ -170,19 +170,19 @@ public class ItemCustomStorageCells extends Item implements ICustomStorageCell {
             IMEInventoryHandler<IAEItemStack> invHandler = AEApi.instance().registries().cell().getCellInventory(itemStack, (ISaveProvider)null, StorageChannel.ITEMS);
             ICellInventoryHandler inventoryHandler = (ICellInventoryHandler)invHandler;
             ICellInventory cellInv = inventoryHandler.getCellInv();
-            return cellInv.getUsedBytes() == 0L && entityPlayer.inventory.addItemStackToInventory(new ItemStack(getItemEmptyCell(suffixes[itemStack.getItemDamage()].replaceAll("\\d+", "")))) ? new ItemStack(ModItems.ITEMS.get("storageComponent" + suffixes[itemStack.getItemDamage()])) : itemStack;
+            return cellInv.getUsedBytes() == 0L && entityPlayer.inventory.addItemStackToInventory(getItemEmptyCell(suffixes[itemStack.getItemDamage()].replaceAll("\\d+", ""))) ? new ItemStack(ModItems.CUSTOM_STORAGE_COMPONENT, 1, itemStack.getItemDamage()) : itemStack;
         }
     }
 
 
-    private Item getItemEmptyCell(String suffix) {
+    private ItemStack getItemEmptyCell(String suffix) {
         switch (suffix) {
-            case "M": return ModItems.ITEMS.get("advancedEmptyCell");
-            case "G": return ModItems.ITEMS.get("hybridEmptyCell");
-            case "T": return ModItems.ITEMS.get("ultimateEmptyCell");
-            case "P": return ModItems.ITEMS.get("quantumEmptyCell");
-            case "E": return ModItems.ITEMS.get("singularEmptyCell");
-            default: return AEApi.instance().definitions().materials().emptyStorageCell().maybeItem().get();
+            case "M": return new ItemStack(ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 0);
+            case "G": return new ItemStack(ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 1);
+            case "T": return new ItemStack(ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 2);
+            case "P": return new ItemStack(ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 3);
+            case "E": return new ItemStack(ModItems.CUSTOM_EMPTY_STORAGE_CELLS, 1, 4);
+            default: return AEApi.instance().definitions().materials().emptyStorageCell().maybeStack(1).get();
         }
     }
 

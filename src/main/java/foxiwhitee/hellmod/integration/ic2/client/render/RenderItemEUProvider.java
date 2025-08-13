@@ -13,7 +13,7 @@ public class RenderItemEUProvider implements IItemRenderer {
 
     private static final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation(HellCore.MODID, "models/energy_provider.obj"));
 
-    private static final ResourceLocation texture = new ResourceLocation(HellCore.MODID, "textures/blocks/ic2/energy_provider.png");
+    private static final ResourceLocation texture = new ResourceLocation(HellCore.MODID, "textures/blocks/ic2/energyProvider.png");
 
     public boolean handleRenderType(ItemStack is, ItemRenderType type) {
         return true;

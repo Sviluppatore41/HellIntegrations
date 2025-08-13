@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class TileAutoNanoReplicator extends TileAutoReplicator{
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(IC2Integration.nano_replicator);
+        return new ItemStack(IC2Integration.NANO_REPLICATOR);
     }
 
     @Override

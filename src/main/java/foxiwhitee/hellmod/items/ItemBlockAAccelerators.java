@@ -29,7 +29,7 @@ public class ItemBlockAAccelerators extends AEBaseItemBlock {
     @Override
     public void addCheckedInformation(ItemStack itemStack, EntityPlayer player, List<String> toolTip, boolean advancedToolTips) {
         if (HellConfig.enable_tooltips) {
-            if (this.blockType.equals(ModBlocks.A_ACCELERATORS)){
+            if (this.blockType.equals(ModBlocks.ADVANCED_ACCELERATORS)){
                 int count = 0;
                 switch (itemStack.getItemDamage()) {
                     case 0: count = HellConfig.advanced_accelerator; break;

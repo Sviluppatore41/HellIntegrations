@@ -45,8 +45,15 @@ public class ItemGenerationFlowerCores extends Item implements ICoreGeneratingFl
 
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
+        String name;
+        int skipId = 0;
         for (int i = 0; i < names.length; i++) {
-            list.add(new ItemStack(item, 1, i));
+            name = names[i];
+            if (name.equals("core_hydroangeas") || name.equals("core_thermalily")) {
+                skipId++;
+                continue;
+            }
+            list.add(new ItemStack(item, 1, i - skipId));
             GeneratingFlowersRegister.addFlower(names[i], new CoreGeneratingFlowerWrapper(getLogic(names[i]), names[i]));
         }
     }

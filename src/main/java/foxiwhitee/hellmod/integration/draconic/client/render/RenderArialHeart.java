@@ -27,7 +27,7 @@ public class RenderArialHeart extends Render {
 
         {
             GL11.glRotatef(entity.rotation + f * entity.rotationInc, 0f, 1f, 0f);
-            EntityItem itemEntity = new EntityItem(entity.worldObj, 0, 0, 0, new ItemStack(DraconicEvolutionIntegration.arialHeart));
+            EntityItem itemEntity = new EntityItem(entity.worldObj, 0, 0, 0, new ItemStack(DraconicEvolutionIntegration.ARIAL_HEART));
             itemEntity.hoverStart = 0.0F;
             GL11.glScalef(2F, 2F, 2F);
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, sine * 100f, sine * 100f);

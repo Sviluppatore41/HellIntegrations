@@ -16,7 +16,7 @@ public abstract class ContainerManaPatternTerminal extends ContainerPatternTermi
     public AEItemStack[] getInputs() {
         AEItemStack[] input = new AEItemStack[this.getInventoryCraftingSlots().length + 1];
         boolean hasValue = false;
-        AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop));
+        AEItemStack mana = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP));
         mana.setStackSize(getManaCost());
         input[0] = mana;
         for(int x = 1; x <= this.getInventoryCraftingSlots().length; ++x) {

@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 
 public class CreativeManaCellHandler implements ICellHandler {
     public boolean isCell(ItemStack stack) {
-        return stack != null && stack.getItem() == BotaniaIntegration.creative_mana_storage_cell;
+        return stack != null && stack.getItem() == BotaniaIntegration.CREATIVE_MANA_STORAGE_CELL;
     }
 
     public IMEInventoryHandler<? extends IAEStack<?>> getCellInventory(ItemStack stack, ISaveProvider save, StorageChannel storageChannel) {

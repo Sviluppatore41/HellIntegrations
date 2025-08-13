@@ -65,7 +65,7 @@ public class ContainerDraconicAssembler extends HellBaseContainer {
             if (s instanceof DraconicAssemblerSlot) {
                 ItemStack is = player.inventory.getItemStack();
 
-                if (is != null && is.getItem() == DraconicEvolutionIntegration.draconicAssemblerUpgrades && is.getItemDamage() >= 2) {
+                if (is != null && is.getItem() == DraconicEvolutionIntegration.DRACONIC_ASSEMBLER_UPGRADES && is.getItemDamage() >= 2) {
                     ItemStack ret = this.tile.installUpgrade(s.getSlotIndex(), is.copy());
                     player.inventory.setItemStack(ret);
                     s.onSlotChanged();
@@ -190,7 +190,7 @@ public class ContainerDraconicAssembler extends HellBaseContainer {
             ItemStack playerInventoryItemStack = player.inventory.getStackInSlot(slot);
             if (playerInventoryItemStack == null)
                 return null;
-            boolean validUpgrade = (playerInventoryItemStack.getItem() == DraconicEvolutionIntegration.draconicAssemblerUpgrades &&
+            boolean validUpgrade = (playerInventoryItemStack.getItem() == DraconicEvolutionIntegration.DRACONIC_ASSEMBLER_UPGRADES &&
                     playerInventoryItemStack.getItemDamage() >= 0 &&
                     playerInventoryItemStack.getItemDamage() <= 1) || playerInventoryItemStack.getItem() instanceof ItemDraconicEnergyUpgrades;
             if (validUpgrade) {
@@ -210,7 +210,7 @@ public class ContainerDraconicAssembler extends HellBaseContainer {
                         break;
                     }
                 }
-            } else if (playerInventoryItemStack.getItem() == DraconicEvolutionIntegration.draconicAssemblerUpgrades &&
+            } else if (playerInventoryItemStack.getItem() == DraconicEvolutionIntegration.DRACONIC_ASSEMBLER_UPGRADES &&
                     playerInventoryItemStack.getItemDamage() >= 2) {
                 return null;
             } else {

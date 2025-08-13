@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.utils.event;
+package foxiwhitee.hellmod.integration.draconic.event;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -43,21 +43,6 @@ public class CEventHandler {
             CCustomArmorHandler.ArmorSummery summery = (new CCustomArmorHandler.ArmorSummery()).getSummery(player);
             if (summery != null && summery.jumpModifier > 0.0F)
                 player.motionY += (summery.jumpModifier * 0.1F);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.NORMAL)
-    public void onDropEvent(LivingDropsEvent event) {
-        if (!event.entity.worldObj.isRemote && event.entity instanceof com.brandon3055.draconicevolution.common.entity.EntityChaosGuardian) {
-            Entity attacker = event.source.getEntity();
-            if (attacker instanceof EntityPlayer)
-                ((EntityPlayer)attacker).inventory.addItemStackToInventory(new ItemStack(DraconicEvolutionIntegration.chaoticHeart));
-            Iterator i$ = event.entity.worldObj.playerEntities.iterator();
-            while (i$.hasNext()) {
-                Object o = i$.next();
-                if (o instanceof EntityPlayer)
-                    ((EntityPlayer)o).addChatComponentMessage((IChatComponent)new ChatComponentText(LocalizationUtils.localize("msg.de.dragonDeath.txt")));
-            }
         }
     }
 }

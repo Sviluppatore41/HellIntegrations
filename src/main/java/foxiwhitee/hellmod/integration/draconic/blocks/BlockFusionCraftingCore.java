@@ -1,4 +1,5 @@
 package foxiwhitee.hellmod.integration.draconic.blocks;
+import appeng.block.AEBaseBlock;
 import com.brandon3055.brandonscore.common.utills.InfoHelper;
 import com.brandon3055.draconicevolution.common.utills.IHudDisplayBlock;
 import cpw.mods.fml.relauncher.Side;
@@ -35,7 +36,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 @SimpleGuiHandler(index = GuiHandlers.fusionCraftingCore, tile = TileFusionCraftingCore.class, gui = GuiFusionCraftingCore.class, container = ContainerFusionCraftingCore.class, integration = "DraconicEvolution")
-public class BlockFusionCraftingCore extends Block implements ITileEntityProvider, IHudDisplayBlock {
+public class BlockFusionCraftingCore extends AEBaseBlock implements ITileEntityProvider, IHudDisplayBlock {
     private final Random rand;
 
     public IIcon[] icon;
@@ -46,6 +47,7 @@ public class BlockFusionCraftingCore extends Block implements ITileEntityProvide
         setHardness(5.0F);
         setResistance(10.0F);
         setBlockName(name);
+        isOpaque = false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -69,10 +71,6 @@ public class BlockFusionCraftingCore extends Block implements ITileEntityProvide
         if (tile != null)
             player.openGui(HellCore.MODID, GuiHandlers.fusionCraftingCore, world, x, y, z);
         return true;
-    }
-
-    public boolean isOpaqueCube() {
-        return false;
     }
 
     public boolean renderAsNormalBlock() {

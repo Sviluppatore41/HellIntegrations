@@ -11,6 +11,6 @@ public class TileHelHelmManaPool extends TileCustomManaPool{
 
     @Override
     public String getName() {
-        return BotaniaIntegration.helhelmPool.getUnlocalizedName().replace("tile.", "");
+        return BotaniaIntegration.HELHELM_POOL.getUnlocalizedName().replace("tile.", "");
     }
 }

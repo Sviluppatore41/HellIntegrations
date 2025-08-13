@@ -1,5 +1,7 @@
 package foxiwhitee.hellmod.integration.ic2.blocks;
 
+import appeng.api.util.IOrientable;
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.HellCore;
@@ -162,34 +164,23 @@ public abstract class BaseIC2Block extends BlockContainer {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    @Override
+    public void getSubBlocks(Item item, CreativeTabs tabs, List list) {
         list.add(new ItemStack(item, 1, 0));
     }
 
     private boolean isActive(IBlockAccess iba, int x, int y, int z) {
-        return ((TileEntityBlock)iba.getTileEntity(x, y, z)).getActive();
-    }
-
-    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-        if (axis == ForgeDirection.UNKNOWN)
+        if (iba != null && iba.getTileEntity(x, y, z) != null) {
+            return ((TileEntityBlock) iba.getTileEntity(x, y, z)).getActive();
+        } else {
             return false;
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity instanceof IWrenchable) {
-            IWrenchable te = (IWrenchable)tileEntity;
-            int newFacing = ForgeDirection.getOrientation(te.getFacing()).getRotation(axis).ordinal();
-            if (te.wrenchCanSetFacing(null, newFacing))
-                te.setFacing((short)newFacing);
         }
-        return false;
     }
 
     public void randomDisplayTick(World world, int i, int j, int k, Random random) {
         if (!IC2.platform.isRendering())
             return;
     }
-
-    public abstract TileEntity createNewTileEntity(World world, int meta);
 
     public boolean isCanActive() {
         return canActive;

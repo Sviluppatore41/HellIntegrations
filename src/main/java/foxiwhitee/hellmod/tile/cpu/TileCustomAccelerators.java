@@ -15,13 +15,13 @@ public class TileCustomAccelerators extends TileCraftingTile implements ICustomA
 
         int storage = ((TileCustomAccelerators) obj).getAcceleratorCount() / 4;
         if (storage == HellConfig.advanced_accelerator) {
-            return new ItemStack(ModBlocks.A_ACCELERATORS, 1, 1);
+            return new ItemStack(ModBlocks.ADVANCED_ACCELERATORS, 1, 1);
         } else if (storage == HellConfig.hybrid_accelerator) {
-            return new ItemStack(ModBlocks.A_ACCELERATORS, 1, 2);
+            return new ItemStack(ModBlocks.ADVANCED_ACCELERATORS, 1, 2);
         } else if (storage == HellConfig.ultimate_accelerator) {
-            return new ItemStack(ModBlocks.A_ACCELERATORS, 1, 3);
+            return new ItemStack(ModBlocks.ADVANCED_ACCELERATORS, 1, 3);
         } else if (storage == HellConfig.quantum_accelerator) {
-            return new ItemStack(ModBlocks.A_ACCELERATORS, 1, 4);
+            return new ItemStack(ModBlocks.ADVANCED_ACCELERATORS, 1, 4);
         }
         return super.getItemFromTile(obj);
     }

@@ -6,7 +6,7 @@ import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
 public class TileValhallaSpreader extends TileCustomSpreader{
     @Override
     public String getName() {
-        return BotaniaIntegration.valhallaSpreader.getUnlocalizedName().replace("tile.", "");
+        return BotaniaIntegration.VALHALLA_SPREADER.getUnlocalizedName().replace("tile.", "");
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ItemParts extends AEBaseItem implements IPartItem, IItemGroup {
 
     public ItemParts(IPartHelper partHelper) {
         Preconditions.checkNotNull(partHelper);
-        setUnlocalizedName("tmpart");
+        setUnlocalizedName("hipart");
         setCreativeTab(HellCore.HELL_TAB);
         this.registered = new HashMap<>(INITIAL_REGISTERED_CAPACITY);
         this.nameResolver = new NameResolver((Class)getClass());
@@ -56,10 +56,12 @@ public class ItemParts extends AEBaseItem implements IPartItem, IItemGroup {
         instance = this;
         for (EnumParts part : EnumParts.values()) {
             if (part != EnumParts.InvalidType) {
-                if (part.isCable())
-                    for (AEColor color : AEColor.values())
-                        createPart(part, color);
-                createPart(part, 0);
+                if (part.isRegister()) {
+                    if (part.isCable())
+                        for (AEColor color : AEColor.values())
+                            createPart(part, color);
+                    createPart(part, 0);
+                }
             }
         }
     }

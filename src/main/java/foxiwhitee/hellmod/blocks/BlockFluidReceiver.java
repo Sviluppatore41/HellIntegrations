@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.blocks;
 
+import appeng.block.AEBaseBlock;
 import appeng.util.Platform;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import foxiwhitee.hellmod.HellCore;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 @SimpleGuiHandler(index = GuiHandlers.fluidReceiver, tile = TileFluidReceiver.class, gui = GuiFluidReceiver.class, container = ContainerFluidReceiver.class)
-public class BlockFluidReceiver extends Block implements ITileEntityProvider {
+public class BlockFluidReceiver extends AEBaseBlock implements ITileEntityProvider {
     private final String name;
     public BlockFluidReceiver(String name) {
         super(Material.iron);

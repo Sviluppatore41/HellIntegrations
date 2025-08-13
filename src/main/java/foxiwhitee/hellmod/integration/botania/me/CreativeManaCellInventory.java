@@ -16,14 +16,14 @@ import net.minecraft.item.ItemStack;
 
 public class CreativeManaCellInventory implements IMEInventoryHandler<IAEItemStack> {
     public IAEItemStack injectItems(IAEItemStack stack, Actionable p1, BaseActionSource p2) {
-        if (stack != null && stack.getItem() == BotaniaIntegration.mana_drop) {
+        if (stack != null && stack.getItem() == BotaniaIntegration.MANA_DROP) {
             return null;
         }
         return stack;
     }
 
     public IAEItemStack extractItems(IAEItemStack stack, Actionable p1, BaseActionSource p2) {
-        if (stack != null && stack.getItem() == BotaniaIntegration.mana_drop) {
+        if (stack != null && stack.getItem() == BotaniaIntegration.MANA_DROP) {
             return stack.copy();
         }
         return null;
@@ -31,7 +31,7 @@ public class CreativeManaCellInventory implements IMEInventoryHandler<IAEItemSta
 
     public IItemList<IAEItemStack> getAvailableItems(IItemList list) {
         IItemList<IAEItemStack> l = AEApi.instance().storage().createItemList();
-        AEItemStack stack = AEItemStack.create(new ItemStack(BotaniaIntegration.mana_drop));
+        AEItemStack stack = AEItemStack.create(new ItemStack(BotaniaIntegration.MANA_DROP));
         stack.setStackSize(2305843009213693951L);
         l.add(stack);
         return l;
@@ -46,11 +46,11 @@ public class CreativeManaCellInventory implements IMEInventoryHandler<IAEItemSta
     }
 
     public boolean isPrioritized(IAEItemStack stack) {
-        return stack != null && stack.getItem() == BotaniaIntegration.mana_drop;
+        return stack != null && stack.getItem() == BotaniaIntegration.MANA_DROP;
     }
 
     public boolean canAccept(IAEItemStack stack) {
-        return stack != null && stack.getItem() == BotaniaIntegration.mana_drop;
+        return stack != null && stack.getItem() == BotaniaIntegration.MANA_DROP;
     }
 
     public int getPriority() {

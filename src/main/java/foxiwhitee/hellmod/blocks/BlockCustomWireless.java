@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.blocks;
 
+import appeng.block.AEBaseBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.HellCore;
@@ -12,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class BlockCustomWireless extends Block implements ITileEntityProvider {
+public class BlockCustomWireless extends AEBaseBlock implements ITileEntityProvider {
     protected IIcon[] icons = new IIcon[6];
     private String name;
     public BlockCustomWireless(String name) {

@@ -13,6 +13,6 @@ public class TileBimareWireless extends TileCustomWireless{
 
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(ModBlocks.wirelessBimare);
+        return new ItemStack(ModBlocks.WIRELESS_BIMARE);
     }
 }

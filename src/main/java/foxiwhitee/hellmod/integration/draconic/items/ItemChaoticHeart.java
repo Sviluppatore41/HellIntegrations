@@ -28,7 +28,7 @@ public class ItemChaoticHeart extends ItemHeart {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
         par3List.add(LocalizationUtils.localize("tooltip.ChaosHeart"));
-        par3List.add(LocalizationUtils.localize("tooltip.Heart.1", LocalizationUtils.localize(DraconicEvolutionIntegration.chaotic_block.getUnlocalizedName() + "1.name")));
+        par3List.add(LocalizationUtils.localize("tooltip.Heart.1", LocalizationUtils.localize(DraconicEvolutionIntegration.CHAOTIC_BLOCK.getUnlocalizedName() + "1.name")));
         par3List.add(LocalizationUtils.localize("tooltip.Heart.2"));
         par3List.add(LocalizationUtils.localize("tooltip.Heart.3", HellConfig.coresNeedsForChaotic, LocalizationUtils.localize(ModItems.awakenedCore.getUnlocalizedName() + ".name")));
         par3List.add(LocalizationUtils.localize("tooltip.Heart.4"));

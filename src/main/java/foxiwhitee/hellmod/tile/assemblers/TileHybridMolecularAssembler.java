@@ -12,7 +12,7 @@ public class TileHybridMolecularAssembler extends TileCustomMolecularAssembler{
 
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(ModBlocks.hybridMolecularAssembler);
+        return new ItemStack(ModBlocks.HYBRID_MOLECULAR_ASSEMBLER);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class TileHybridMolecularAssembler extends TileCustomMolecularAssembler{
 
     @Override
     public String getName() {
-        return ModBlocks.hybridMolecularAssembler.getUnlocalizedName();
+        return ModBlocks.HYBRID_MOLECULAR_ASSEMBLER.getUnlocalizedName();
     }
 }

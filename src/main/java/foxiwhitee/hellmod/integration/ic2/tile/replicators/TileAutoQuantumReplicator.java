@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class TileAutoQuantumReplicator extends TileAutoReplicator{
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(IC2Integration.quantum_replicator);
+        return new ItemStack(IC2Integration.QUANTUM_REPLICATOR);
     }
 
     @Override

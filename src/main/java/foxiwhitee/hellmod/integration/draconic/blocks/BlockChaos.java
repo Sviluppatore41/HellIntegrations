@@ -31,7 +31,6 @@ public class BlockChaos extends BlockDE {
         this.setCreativeTab(HellCore.HELL_TAB);
         this.setBlockName("chaosBlock");
         this.setHarvestLevel("pickaxe", 4);
-        DraconicEvolutionIntegration.register(this, BlockChaosItemBlock.class);
     }
 
     public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {

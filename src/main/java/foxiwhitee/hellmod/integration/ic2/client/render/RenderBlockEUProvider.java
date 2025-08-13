@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderBlockEUProvider extends TileEntitySpecialRendererObjWrapper<TileEUProvider> {
     public RenderBlockEUProvider() {
-        super(TileEUProvider.class, "models/energy_provider.obj", "textures/blocks/ic2/energy_provider.png");
+        super(TileEUProvider.class, "models/energy_provider.obj", "textures/blocks/ic2/energyProvider.png");
         createList("all");
     }
 

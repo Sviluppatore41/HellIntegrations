@@ -52,13 +52,14 @@ public class ItemMultiBotaniaParts extends AEBaseItem implements IPartItem, IIte
 
         for(EnumPartsBotaniaTerminals part : EnumPartsBotaniaTerminals.values()) {
             if (part != EnumPartsBotaniaTerminals.InvalidTypeBotania) {
-                if (part.isCable()) {
-                    for(AEColor color : AEColor.values()) {
-                        this.createPart(part, color);
+                if (part.isRegister()) {
+                    if (part.isCable()) {
+                        for (AEColor color : AEColor.values()) {
+                            this.createPart(part, color);
+                        }
                     }
+                    this.createPart(part, 0);
                 }
-
-                this.createPart(part, 0);
             }
         }
 

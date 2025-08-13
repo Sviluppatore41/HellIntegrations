@@ -11,6 +11,7 @@ import appeng.parts.misc.PartInterface;
 import appeng.tile.misc.TileInterface;
 import cpw.mods.fml.common.Loader;
 import foxiwhitee.hellmod.config.ConfigHandler;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.container.ContainerAdvancedDrive;
 import foxiwhitee.hellmod.container.interfaces.ContainerAdvancedInterface;
 import foxiwhitee.hellmod.container.ContainerCustomMolecularAssembler;
@@ -21,14 +22,8 @@ import foxiwhitee.hellmod.event.ServerEventHandler;
 import foxiwhitee.hellmod.helpers.IFluidStorageGrid;
 import foxiwhitee.hellmod.helpers.IInterfaceTerminalSupport;
 import foxiwhitee.hellmod.helpers.InterfaceTerminalSupportedClassProvider;
-import foxiwhitee.hellmod.integration.botania.helpers.IManaStorageGrid;
-import foxiwhitee.hellmod.integration.botania.me.CreativeManaCellHandler;
-import foxiwhitee.hellmod.integration.botania.me.ManaCellHandler;
-import foxiwhitee.hellmod.integration.botania.me.ManaStorageGrid;
-import foxiwhitee.hellmod.items.ItemFluidDrop;
 import foxiwhitee.hellmod.me.FluidCellHandler;
 import foxiwhitee.hellmod.me.FluidStorageGrid;
-import foxiwhitee.hellmod.me.ItemDisplayBlackList;
 import foxiwhitee.hellmod.parts.PartAdvancedInterface;
 import foxiwhitee.hellmod.parts.PartAdvancedInterfaceTerminal;
 import foxiwhitee.hellmod.parts.PartHybridInterface;
@@ -48,7 +43,6 @@ import foxiwhitee.hellmod.ModRecipes;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import foxiwhitee.hellmod.config.HellConfig;
 import foxiwhitee.hellmod.utils.handler.GuiHandlerRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -141,44 +135,52 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        AEApi.instance().registries().cell().addCellHandler((ICellHandler)new CustomCellHandler());
-        AEApi.instance().registries().cell().addCellHandler(new FluidCellHandler());
-        AEApi.instance().registries().gridCache().registerGridCache(IFluidStorageGrid.class, FluidStorageGrid.class);
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(TileInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(PartInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(TileAdvancedInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(PartAdvancedInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(TileHybridInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(PartHybridInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(TileUltimateInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>)((Object)(PartUltimateInterface.class)));
-        InterfaceTerminalSupportedClassProvider.register(TileBaseMolecularAssembler.class);
-        InterfaceTerminalSupportedClassProvider.register(TileHybridMolecularAssembler.class);
-        InterfaceTerminalSupportedClassProvider.register(TileUltimateMolecularAssembler.class);
-
+        if (ContentConfig.enableStorageCells) {
+            AEApi.instance().registries().cell().addCellHandler((ICellHandler)new CustomCellHandler());
+        }
+        if (ContentConfig.enableMEFluid) {
+            AEApi.instance().registries().cell().addCellHandler(new FluidCellHandler());
+            AEApi.instance().registries().gridCache().registerGridCache(IFluidStorageGrid.class, FluidStorageGrid.class);
+        }
+        if (ContentConfig.enableInterfaces) {
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (TileInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (PartInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (TileAdvancedInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (PartAdvancedInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (TileHybridInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (PartHybridInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (TileUltimateInterface.class)));
+            InterfaceTerminalSupportedClassProvider.register((Class<? extends IInterfaceTerminalSupport>) ((Object) (PartUltimateInterface.class)));
+        }
+        if (ContentConfig.enableMolecularAssemblers) {
+            InterfaceTerminalSupportedClassProvider.register(TileBaseMolecularAssembler.class);
+            InterfaceTerminalSupportedClassProvider.register(TileHybridMolecularAssembler.class);
+            InterfaceTerminalSupportedClassProvider.register(TileUltimateMolecularAssembler.class);
+        }
     }
 
     public void postInit(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(ServerEventHandler.INSTANCE);
         ModRecipes.registerRecipes();
-        GUI_ADV_INTERFACE = EnumHelper.addEnum(GuiBridge.class, "PartAdvInterface", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerAdvancedInterface.class, IInterfaceHost.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
-        GUI_HYBRID_INTERFACE = EnumHelper.addEnum(GuiBridge.class, "PartHybridInterface", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerHybridInterface.class, IInterfaceHost.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
-        GUI_ULTIMATE_INTERFACE = EnumHelper.addEnum(GuiBridge.class, "PartUltimateInterface", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerUltimateInterface.class, IInterfaceHost.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
-
+        if (ContentConfig.enableInterfaces) {
+            GUI_ADV_INTERFACE = EnumHelper.addEnum(GuiBridge.class, "PartAdvInterface", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerAdvancedInterface.class, IInterfaceHost.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+            GUI_HYBRID_INTERFACE = EnumHelper.addEnum(GuiBridge.class, "PartHybridInterface", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerHybridInterface.class, IInterfaceHost.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+            GUI_ULTIMATE_INTERFACE = EnumHelper.addEnum(GuiBridge.class, "PartUltimateInterface", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerUltimateInterface.class, IInterfaceHost.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+        }
         //PART_ADV_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartAdvInterfaceFront", new Class[]{String.class}, new Object[]{"PartAdvInterfaceFront"});
         //PART_HYBRID_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartHybridInterfaceFront", new Class[]{String.class}, new Object[]{"PartHybridInterfaceFront"});
         //PART_ULTIMATE_INTERFACE_FRONT = EnumHelper.addEnum(CableBusTextures.class, "PartUltimateInterfaceFront", new Class[]{String.class}, new Object[]{"PartUltimateInterfaceFront"});
-
-        GUI_BASE_MOLECULAR_ASSEMBLER = (GuiBridge)EnumHelper.addEnum(GuiBridge.class, "BaseModularAssembler", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerCustomMolecularAssembler.class, TileBaseMolecularAssembler.class, GuiHostType.WORLD, SecurityPermissions.BUILD });
-        GUI_HYBRID_MOLECULAR_ASSEMBLER = (GuiBridge)EnumHelper.addEnum(GuiBridge.class, "HybridModularAssembler", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerCustomMolecularAssembler.class, TileHybridMolecularAssembler.class, GuiHostType.WORLD, SecurityPermissions.BUILD });
-        GUI_ULTIMATE_MOLECULAR_ASSEMBLER = (GuiBridge)EnumHelper.addEnum(GuiBridge.class, "UltimateModularAssembler", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerCustomMolecularAssembler.class, TileUltimateMolecularAssembler.class, GuiHostType.WORLD, SecurityPermissions.BUILD });
-        
+        if (ContentConfig.enableMolecularAssemblers) {
+            GUI_BASE_MOLECULAR_ASSEMBLER = (GuiBridge) EnumHelper.addEnum(GuiBridge.class, "BaseModularAssembler", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerCustomMolecularAssembler.class, TileBaseMolecularAssembler.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+            GUI_HYBRID_MOLECULAR_ASSEMBLER = (GuiBridge) EnumHelper.addEnum(GuiBridge.class, "HybridModularAssembler", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerCustomMolecularAssembler.class, TileHybridMolecularAssembler.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+            GUI_ULTIMATE_MOLECULAR_ASSEMBLER = (GuiBridge) EnumHelper.addEnum(GuiBridge.class, "UltimateModularAssembler", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerCustomMolecularAssembler.class, TileUltimateMolecularAssembler.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+        }
         guiBridges.put(0, EnumHelper.addEnum(GuiBridge.class, "AdvancedInterfaceTerminal", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerAdvancedInterfaceTerminal.class, PartAdvancedInterfaceTerminal.class, GuiHostType.WORLD, SecurityPermissions.BUILD }));
         //cableBusTexturesBright.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[] { String.class }, new Object[] { "PartAdvancedInterfaceTerminal_Bright" }));
         //cableBusTexturesDark.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[] { String.class }, new Object[] { "PartAdvancedInterfaceTerminal_Dark" }));
         //cableBusTexturesColored.put(0, EnumHelper.addEnum(CableBusTextures.class, "AdvancedInterfaceTerminal", new Class[] { String.class }, new Object[] { "PartAdvancedInterfaceTerminal_Colored" }));
-
-        GUI_ADV_ME_DRIVE = (GuiBridge)EnumHelper.addEnum(GuiBridge.class, "AdvMEDrive", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerAdvancedDrive.class, TileAdvancedDrive.class, GuiHostType.WORLD, SecurityPermissions.BUILD });
-
+        if (ContentConfig.enableAdvancedDriver) {
+            GUI_ADV_ME_DRIVE = (GuiBridge) EnumHelper.addEnum(GuiBridge.class, "AdvMEDrive", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerAdvancedDrive.class, TileAdvancedDrive.class, GuiHostType.WORLD, SecurityPermissions.BUILD});
+        }
     }
 }

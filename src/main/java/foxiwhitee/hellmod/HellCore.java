@@ -80,17 +80,7 @@ public class HellCore {
     public void init(FMLInitializationEvent e) {
         proxy.init(e);
         IntegrationLoader.init(e);
-        //MinecraftForge.EVENT_BUS.register(new TooltipHandler());
 
-        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            try {
-                Field fontRendererField = Minecraft.class.getDeclaredField("fontRenderer");
-                //fontRendererField.setAccessible(true);
-                //fontRendererField.set(Minecraft.getMinecraft(), new CustomFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("minecraft:textures/font/ascii.png"), Minecraft.getMinecraft().getTextureManager(), false));
-            } catch (Exception ee) {
-                ee.printStackTrace();
-            }
-        }
     }
 
     @Mod.EventHandler

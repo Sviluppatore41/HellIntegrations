@@ -110,27 +110,27 @@ public class ChaoticArmor extends ItemArmor implements ISpecialArmor, IConfigura
 
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        if (stack.getItem() == DraconicEvolutionIntegration.chaotic_helm)
+        if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_HELM)
             return this.helmIcon;
-        if (stack.getItem() == DraconicEvolutionIntegration.chaotic_chest)
+        if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_CHEST)
             return this.chestIcon;
-        return (stack.getItem() == DraconicEvolutionIntegration.chaotic_legs) ? this.leggsIcon : this.bootsIcon;
+        return (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_LEGS) ? this.leggsIcon : this.bootsIcon;
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getIconIndex(ItemStack stack) {
-        if (stack.getItem() == DraconicEvolutionIntegration.chaotic_helm)
+        if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_HELM)
             return this.helmIcon;
-        if (stack.getItem() == DraconicEvolutionIntegration.chaotic_chest)
+        if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_CHEST)
             return this.chestIcon;
-        return (stack.getItem() == DraconicEvolutionIntegration.chaotic_legs) ? this.leggsIcon : this.bootsIcon;
+        return (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_LEGS) ? this.leggsIcon : this.bootsIcon;
     }
 
     @SideOnly(Side.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
         if (!ConfigHandler.useOldArmorModel)
             return HellCore.MODID + ":textures/models/armor/armorChaotic.png";
-        return (stack.getItem() != DraconicEvolutionIntegration.chaotic_helm && stack.getItem() != DraconicEvolutionIntegration.chaotic_chest && stack.getItem() != DraconicEvolutionIntegration.chaotic_boots) ? HellCore.MODID + ":textures/models/armor/chaotic_layer_2.png" : "draconicadditions:textures/models/armor/chaotic_layer_1.png";
+        return (stack.getItem() != DraconicEvolutionIntegration.CHAOTIC_HELM && stack.getItem() != DraconicEvolutionIntegration.CHAOTIC_CHEST && stack.getItem() != DraconicEvolutionIntegration.CHAOTIC_BOOTS) ? HellCore.MODID + ":textures/models/armor/chaotic_layer_2.png" : "draconicadditions:textures/models/armor/chaotic_layer_1.png";
     }
 
     public EnumRarity getRarity(ItemStack p_77613_1_) {
@@ -171,7 +171,7 @@ public class ChaoticArmor extends ItemArmor implements ISpecialArmor, IConfigura
 
     public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
         if (stack != null) {
-            if (stack.getItem() == DraconicEvolutionIntegration.chaotic_helm) {
+            if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_HELM) {
                 if (world.isRemote)
                     return;
                 if (getEnergyStored(stack) >= HellConfig.chaoticArmorEnergyToRemoveEffects && clearNegativeEffects((Entity)player))
@@ -188,11 +188,11 @@ public class ChaoticArmor extends ItemArmor implements ISpecialArmor, IConfigura
                     extractEnergy(stack, HellConfig.chaoticArmorEnergyToAddFood, false);
                 }
             }
-            if (stack.getItem() == DraconicEvolutionIntegration.chaotic_chest && IConfigurableItem.ProfileHelper.getBoolean(stack, "DamageBoost", false)) {
+            if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_CHEST && IConfigurableItem.ProfileHelper.getBoolean(stack, "DamageBoost", false)) {
                 player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 20, 1, true));
                 extractEnergy(stack, HellConfig.chaoticArmorEnergyToAddFood, false);
             }
-            if (stack.getItem() == DraconicEvolutionIntegration.chaotic_boots && IConfigurableItem.ProfileHelper.getBoolean(stack, "SpeedBoost", false)) {
+            if (stack.getItem() == DraconicEvolutionIntegration.CHAOTIC_BOOTS && IConfigurableItem.ProfileHelper.getBoolean(stack, "SpeedBoost", false)) {
                 player.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 20, 1, true));
                 extractEnergy(stack, HellConfig.chaoticArmorEnergyToAddFood, false);
             }

@@ -1,17 +1,9 @@
-package foxiwhitee.hellmod.utils.event;
+package foxiwhitee.hellmod.integration.draconic.event;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import foxiwhitee.hellmod.integration.draconic.DraconicEvolutionIntegration;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.living.*;
-
-import java.util.Iterator;
 
 public class AEventHandler {
     @SubscribeEvent(priority = EventPriority.NORMAL)

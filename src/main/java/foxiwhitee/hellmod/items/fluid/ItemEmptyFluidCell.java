@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.items;
+package foxiwhitee.hellmod.items.fluid;
 
 import foxiwhitee.hellmod.HellCore;
 import net.minecraft.item.Item;

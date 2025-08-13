@@ -220,7 +220,7 @@ public class ContainerCustomUpgradeModifier extends ContainerDataSync {
     }
 
     static {
-        CORES_INDEX = new Item[]{ModItems.draconicCore, ModItems.wyvernCore, ModItems.awakenedCore, ModItems.chaoticCore, DraconicEvolutionIntegration.arialCore};
+        CORES_INDEX = new Item[]{ModItems.draconicCore, ModItems.wyvernCore, ModItems.awakenedCore, ModItems.chaoticCore, DraconicEvolutionIntegration.ARIAL_CORE};
     }
 
     public TileEntity getTile() {

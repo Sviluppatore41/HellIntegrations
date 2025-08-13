@@ -17,6 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.ModItems;
 import foxiwhitee.hellmod.client.render.CableBusTextures;
 import foxiwhitee.hellmod.config.HellConfig;
+import foxiwhitee.hellmod.items.part.ItemParts;
 import foxiwhitee.hellmod.parts.EnumParts;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -58,7 +59,7 @@ public class PartCableAlite extends PartBaseSmartCable {
 
     @Override
     public ItemStack getPartItemStack(AEColor paramAEColor) {
-        return ModItems.ITEM_PARTS.createPart(EnumParts.ALITE_SMART_CABLE, paramAEColor).stack(1);
+        return ((ItemParts)ModItems.ITEM_PARTS).createPart(EnumParts.ALITE_SMART_CABLE, paramAEColor).stack(1);
     }
 
     @Override

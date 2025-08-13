@@ -32,7 +32,7 @@ public class TileAutoAwakenedBlocks extends TileAutomatedUpgradeableBlock {
 
     @Override
     protected ItemStack getItemFromTile(Object obj) {
-        return new ItemStack(DraconicEvolutionIntegration.autoAwakener);
+        return new ItemStack(DraconicEvolutionIntegration.AUTO_AWAKENER_BLOCKS);
     }
 
     @Override

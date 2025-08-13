@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 public class TileHybridNeutronCollector extends TileCustomNeutronCollector{
     @Override
     public String getName() {
-        return AvaritiaIntegration.hybridNeutronCollector.getUnlocalizedName().replace("tile.", "");
+        return AvaritiaIntegration.HYBRID_NEUTRON_COLLECTOR.getUnlocalizedName().replace("tile.", "");
     }
 
     @Override

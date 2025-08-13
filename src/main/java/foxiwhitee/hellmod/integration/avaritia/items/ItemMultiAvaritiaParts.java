@@ -52,13 +52,14 @@ public class ItemMultiAvaritiaParts extends AEBaseItem implements IPartItem, IIt
 
         for(EnumPartsAvaritiaTerminals part : EnumPartsAvaritiaTerminals.values()) {
             if (part != EnumPartsAvaritiaTerminals.InvalidTypeAvaritia) {
-                if (part.isCable()) {
-                    for(AEColor color : AEColor.values()) {
-                        this.createPart(part, color);
+                if (part.isRegister()) {
+                    if (part.isCable()) {
+                        for (AEColor color : AEColor.values()) {
+                            this.createPart(part, color);
+                        }
                     }
+                    this.createPart(part, 0);
                 }
-
-                this.createPart(part, 0);
             }
         }
 

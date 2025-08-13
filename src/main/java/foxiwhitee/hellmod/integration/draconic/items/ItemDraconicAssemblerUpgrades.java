@@ -48,22 +48,22 @@ public class ItemDraconicAssemblerUpgrades extends Item {
         int meta = stack.getItemDamage();
         switch (meta) {
             case 0:
-                list.add(String.format(LocalizationUtils.localize("tooltip.speed_card_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name"), HellConfig.draconicAssemblerSpeedUpgrade));
+                list.add(String.format(LocalizationUtils.localize("tooltip.speed_card_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name"), HellConfig.draconicAssemblerSpeedUpgrade));
                 break;
             case 1:
-                list.add(String.format(LocalizationUtils.localize("tooltip.stack_card_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name")));
+                list.add(String.format(LocalizationUtils.localize("tooltip.stack_card_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name")));
                 break;
             case 2:
-                list.add(String.format(LocalizationUtils.localize("tooltip.wyvern_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name")));
+                list.add(String.format(LocalizationUtils.localize("tooltip.wyvern_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name")));
                 break;
             case 3:
-                list.add(String.format(LocalizationUtils.localize("tooltip.awakened_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name")));
+                list.add(String.format(LocalizationUtils.localize("tooltip.awakened_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name")));
                 break;
             case 4:
-                list.add(String.format(LocalizationUtils.localize("tooltip.chaotic_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name")));
+                list.add(String.format(LocalizationUtils.localize("tooltip.chaotic_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name")));
                 break;
             case 5:
-                list.add(String.format(LocalizationUtils.localize("tooltip.arial_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.draconicAssembler.getUnlocalizedName() + ".name")));
+                list.add(String.format(LocalizationUtils.localize("tooltip.arial_module_ass.desc"), LocalizationUtils.localize(DraconicEvolutionIntegration.DRACONIC_ASSEMBLER.getUnlocalizedName() + ".name")));
                 break;
         }
     }

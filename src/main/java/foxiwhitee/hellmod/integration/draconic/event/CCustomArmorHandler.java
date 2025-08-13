@@ -1,4 +1,4 @@
-package foxiwhitee.hellmod.utils.event;
+package foxiwhitee.hellmod.integration.draconic.event;
 
 import cofh.api.energy.IEnergyContainerItem;
 import com.brandon3055.brandonscore.BrandonsCore;
@@ -12,8 +12,14 @@ import com.brandon3055.draconicevolution.common.utills.IUpgradableItem;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
+
 import foxiwhitee.hellmod.config.HellConfig;
-import foxiwhitee.hellmod.integration.draconic.items.armors.ArialArmor;
+import foxiwhitee.hellmod.integration.draconic.items.armors.ChaoticArmor;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -27,9 +33,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-import java.util.*;
-
-public class ACustomArmorHandler {
+public class CCustomArmorHandler {
     public static final UUID WALK_SPEED_UUID = UUID.fromString("0ea6ce8e-d2e8-11e5-ab30-625662870761");
 
     private static final DamageSource ADMIN_KILL = (new DamageSource("administrative.kill")).setDamageAllowedInCreativeMode().setDamageBypassesArmor().setDamageIsAbsolute();
@@ -96,7 +100,7 @@ public class ACustomArmorHandler {
             event.entityLiving.setHealth(10.0F);
             return;
         }
-        if (!summery.hasArial)
+        if (!summery.hasChaotic)
             return;
         int[] charge = new int[summery.armorStacks.length];
         long totalCharge = 0L;
@@ -107,11 +111,11 @@ public class ACustomArmorHandler {
                 totalCharge += charge[i];
             }
         }
-        if (totalCharge < HellConfig.arialArmorBaseStorage)
+        if (totalCharge < HellConfig.chaoticArmorBaseStorage)
             return;
         for (i = 0; i < summery.armorStacks.length; i++) {
             if (summery.armorStacks[i] != null)
-                ((IEnergyContainerItem)summery.armorStacks[i].getItem()).extractEnergy(summery.armorStacks[i], (int)(charge[i] / totalCharge * HellConfig.arialArmorBaseStorage), false);
+                ((IEnergyContainerItem)summery.armorStacks[i].getItem()).extractEnergy(summery.armorStacks[i], (int)(charge[i] / totalCharge * HellConfig.chaoticArmorBaseStorage), false);
         }
         player.addChatComponentMessage((new ChatComponentTranslation("msg.de.shieldDepleted.txt", new Object[0])).setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.DARK_RED)));
         event.setCanceled(true);
@@ -130,7 +134,7 @@ public class ACustomArmorHandler {
             return;
         float totalPointsToAdd = Math.min(summery.maxProtectionPoints - summery.protectionPoints, summery.maxProtectionPoints / 60.0F);
         totalPointsToAdd *= 1.0F - summery.entropy / 100.0F;
-        totalPointsToAdd = Math.min(totalPointsToAdd, (float)(summery.totalEnergyStored / (summery.hasArial ? HellConfig.arialArmorEnergyPerProtectionPoint : BalanceConfigHandler.wyvernArmorEnergyPerProtectionPoint)));
+        totalPointsToAdd = Math.min(totalPointsToAdd, (float)(summery.totalEnergyStored / (summery.hasChaotic ? HellConfig.chaoticArmorEnergyPerProtectionPoint : BalanceConfigHandler.wyvernArmorEnergyPerProtectionPoint)));
         if (totalPointsToAdd < 0.0F)
             totalPointsToAdd = 0.0F;
         summery.entropy -= summery.meanRecoveryPoints * 0.01F;
@@ -282,7 +286,7 @@ public class ACustomArmorHandler {
 
         public boolean hasHillStep = false;
 
-        public boolean hasArial = false;
+        public boolean hasChaotic = false;
 
         public ArmorSummery getSummery(EntityPlayer player) {
             ItemStack[] armorSlots = player.inventory.armorInventory;
@@ -308,8 +312,8 @@ public class ACustomArmorHandler {
                     this.energyAllocation[i] = armor.getEnergyStored(stack);
                     this.totalEnergyStored += this.energyAllocation[i];
                     this.maxTotalEnergyStorage += armor.getMaxEnergyStored(stack);
-                    if (stack.getItem() instanceof ArialArmor)
-                        this.hasArial = true;
+                    if (stack.getItem() instanceof ChaoticArmor)
+                        this.hasChaotic = true;
                     this.fireResistance += armor.getFireResistance(stack);
                     switch (i) {
                         case 2:

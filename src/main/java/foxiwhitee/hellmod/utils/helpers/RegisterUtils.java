@@ -5,6 +5,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import foxiwhitee.hellmod.HellCore;
+import foxiwhitee.hellmod.items.ModItemBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -80,9 +81,14 @@ public class RegisterUtils {
         GameRegistry.registerTileEntity(tile, tile.getSimpleName());
     }
 
+    @SafeVarargs
+    public static void registerTiles(Class<? extends TileEntity>... tiles) {
+        Arrays.stream(tiles).forEach(RegisterUtils::registerTile);
+    }
+
     public static void registerBlock(Block block) {
         block.setCreativeTab(tab);
-        GameRegistry.registerBlock(block, block.getUnlocalizedName().replace("tile.", ""));
+        GameRegistry.registerBlock(block, ModItemBlock.class, block.getUnlocalizedName().replace("tile.", ""));
         blocks.add(block);
 
     }
@@ -104,6 +110,12 @@ public class RegisterUtils {
     public static void registerItem(Item item) {
         item.setCreativeTab(tab);
         GameRegistry.registerItem(item, item.getUnlocalizedName());
+        items.add(item);
+    }
+
+    public static void registerItem(Item item, String name) {
+        item.setCreativeTab(tab);
+        GameRegistry.registerItem(item, name);
         items.add(item);
     }
 

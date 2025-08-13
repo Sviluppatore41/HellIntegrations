@@ -14,10 +14,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 public class RenderBlockAdvancedDriver extends TileEntitySpecialRenderer {
-    private static final ResourceLocation TOP_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/adv_me_drive.png");
-    private static final ResourceLocation BOTTOM_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/adv_me_driveBottom.png");
-    private static final ResourceLocation SIDE_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/adv_me_driveSide.png");
-    private static final ResourceLocation FRONT_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/adv_me_driveFront.png");
+    private static final ResourceLocation TOP_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/advancedDriver.png");
+    private static final ResourceLocation BOTTOM_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/advancedDriverBottom.png");
+    private static final ResourceLocation SIDE_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/advancedDriverSide.png");
+    private static final ResourceLocation FRONT_TEXTURE = new ResourceLocation(HellCore.MODID, "textures/blocks/ae2/advancedDriverFront.png");
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks) {
         if (!(te instanceof TileAdvancedDrive)) return;

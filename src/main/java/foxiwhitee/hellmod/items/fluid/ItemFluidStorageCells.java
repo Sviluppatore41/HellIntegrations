@@ -1,26 +1,20 @@
-package foxiwhitee.hellmod.items;
+package foxiwhitee.hellmod.items.fluid;
 
 import appeng.api.AEApi;
-import appeng.api.config.FuzzyMode;
 import appeng.api.storage.*;
 import appeng.api.storage.data.IAEItemStack;
-import appeng.items.contents.CellConfig;
-import appeng.items.contents.CellUpgrades;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import foxiwhitee.hellmod.ModItems;
 import foxiwhitee.hellmod.config.HellConfig;
 import foxiwhitee.hellmod.helpers.IFluidStorageCell;
-import foxiwhitee.hellmod.utils.cells.ICustomStorageCell;
 import foxiwhitee.hellmod.utils.localization.LocalizationUtils;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -126,7 +120,7 @@ public class ItemFluidStorageCells extends Item implements IFluidStorageCell {
             IMEInventoryHandler<IAEItemStack> invHandler = AEApi.instance().registries().cell().getCellInventory(itemStack, (ISaveProvider)null, StorageChannel.ITEMS);
             ICellInventoryHandler inventoryHandler = (ICellInventoryHandler)invHandler;
             ICellInventory cellInv = inventoryHandler.getCellInv();
-            return cellInv.getUsedBytes() == 0L && entityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.emptyFluidCell)) ? new ItemStack(ModItems.fluidStorageComponent, 1, itemStack.getItemDamage()) : itemStack;
+            return cellInv.getUsedBytes() == 0L && entityPlayer.inventory.addItemStackToInventory(new ItemStack(ModItems.EMPTY_FLUID_CELL)) ? new ItemStack(ModItems.FLUID_STORAGE_COMPONENT, 1, itemStack.getItemDamage()) : itemStack;
         }
     }
 

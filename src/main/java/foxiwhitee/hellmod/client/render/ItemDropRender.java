@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Map;
 
-import foxiwhitee.hellmod.items.ItemFluidDrop;
+import foxiwhitee.hellmod.items.fluid.ItemFluidDrop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;

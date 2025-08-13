@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.draconic.blocks;
 
+import appeng.block.AEBaseBlock;
 import com.brandon3055.brandonscore.common.utills.InfoHelper;
 import com.brandon3055.draconicevolution.common.utills.IHudDisplayBlock;
 import cpw.mods.fml.relauncher.Side;
@@ -32,7 +33,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockFusionInjector extends Block implements ITileEntityProvider, IHudDisplayBlock {
+public class BlockFusionInjector extends AEBaseBlock implements ITileEntityProvider, IHudDisplayBlock {
     private final Random rand;
 
     public IIcon[] icon;
@@ -43,6 +44,7 @@ public class BlockFusionInjector extends Block implements ITileEntityProvider, I
         setHardness(5.0F);
         setResistance(10.0F);
         setBlockName(name);
+        isOpaque = false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -51,7 +53,8 @@ public class BlockFusionInjector extends Block implements ITileEntityProvider, I
         this.icon[0] = register.registerIcon(HellCore.MODID + ":models/base_fusion_injector");
     }
 
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    @Override
+    public void getCheckedSubBlocks(Item item, CreativeTabs tabs, List<ItemStack> list) {
         for (int i = 0; i < 5; i++)
             list.add(new ItemStack(item, 1, i));
     }
@@ -96,15 +99,11 @@ public class BlockFusionInjector extends Block implements ITileEntityProvider, I
     }
 
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-        return Item.getItemFromBlock(DraconicEvolutionIntegration.fusion_injector);
+        return Item.getItemFromBlock(DraconicEvolutionIntegration.FUSION_INJECTOR);
     }
 
     public int damageDropped(int metadata) {
         return metadata;
-    }
-
-    public boolean isOpaqueCube() {
-        return false;
     }
 
     public boolean renderAsNormalBlock() {

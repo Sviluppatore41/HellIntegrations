@@ -62,7 +62,7 @@ public class ItemManaCell extends Item implements IManaStorageCell {
 
     public void getSubItems(Item item, CreativeTabs tabs, List list) {
         for (int i = 0; i < prefixes.length; i++) {
-            ItemStack stack = new ItemStack(BotaniaIntegration.manaStorageCell, 1, i);
+            ItemStack stack = new ItemStack(BotaniaIntegration.MANA_STORAGE_CELL, 1, i);
             list.add(stack);
             ItemStack fullStack = stack.copy();
             NBTTagCompound tag = new NBTTagCompound();
@@ -118,9 +118,9 @@ public class ItemManaCell extends Item implements IManaStorageCell {
             IItemList list = inv.getAvailableItems(StorageChannel.ITEMS.createList());
             if (list.isEmpty() && ia != null) {
                 playerInventory.setInventorySlotContents(playerInventory.currentItem, null);
-                ItemStack extraA = ia.addItems(new ItemStack(BotaniaIntegration.manaStorageComponent, 1, stack.getItemDamage()));
+                ItemStack extraA = ia.addItems(new ItemStack(BotaniaIntegration.MANA_STORAGE_COMPONENT, 1, stack.getItemDamage()));
                 if (extraA != null) player.dropPlayerItemWithRandomChoice(extraA, false);
-                ItemStack extraB = ia.addItems(new ItemStack(BotaniaIntegration.empty_mana_storage_cell));
+                ItemStack extraB = ia.addItems(new ItemStack(BotaniaIntegration.EMPTY_MANA_STORAGE_CELL));
                 if (extraB != null) player.dropPlayerItemWithRandomChoice(extraB, false);
                 if (player.inventoryContainer != null) player.inventoryContainer.detectAndSendChanges();
                 return true;

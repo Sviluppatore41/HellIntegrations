@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderItemDraconicAssembler implements IItemRenderer {
     protected ResourceLocation getTexture() {
-        return new ResourceLocation(HellCore.MODID, "textures/blocks/draconic/dragon_assembler.png");
+        return new ResourceLocation(HellCore.MODID, "textures/blocks/draconic/dragonAssembler.png");
     }
 
     private final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation(HellCore.MODID, "models/dragon_assembler.obj"));

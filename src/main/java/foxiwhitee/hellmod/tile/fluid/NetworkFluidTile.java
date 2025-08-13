@@ -12,12 +12,8 @@ import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkInvTile;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
-import foxiwhitee.hellmod.integration.botania.BotaniaIntegration;
-import foxiwhitee.hellmod.items.ItemFluidDrop;
-import foxiwhitee.hellmod.tile.TileNetworkInv;
-import net.minecraft.item.ItemStack;
+import foxiwhitee.hellmod.items.fluid.ItemFluidDrop;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 

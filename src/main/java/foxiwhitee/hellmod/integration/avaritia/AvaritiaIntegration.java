@@ -14,6 +14,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fox.spiteful.avaritia.items.ItemSingularity;
 import fox.spiteful.avaritia.items.LudicrousItems;
+import foxiwhitee.hellmod.config.ContentConfig;
 import foxiwhitee.hellmod.integration.avaritia.blocks.BlockNeutronUnifier;
 import foxiwhitee.hellmod.integration.avaritia.container.ContainerPartBigPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.container.ContainerPartBigProcessingPatternTerminal;
@@ -26,14 +27,15 @@ import foxiwhitee.hellmod.integration.avaritia.items.*;
 import foxiwhitee.hellmod.integration.avaritia.parts.PartBigProcessingPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.tile.TileNeutronUnifier;
 import foxiwhitee.hellmod.integration.avaritia.tile.collectors.*;
-import foxiwhitee.hellmod.items.ItemBlockAE2;
 import foxiwhitee.hellmod.items.ModItemBlock;
 import foxiwhitee.hellmod.integration.avaritia.parts.PartBigPatternTerminal;
 import foxiwhitee.hellmod.integration.avaritia.parts.PartCraftingTerminal9x9;
 import foxiwhitee.hellmod.integration.avaritia.parts.PartNeutronCompressorPatternTerminal;
 import foxiwhitee.hellmod.utils.helpers.RegisterUtils;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -42,18 +44,17 @@ import java.util.HashMap;
 @Integration(modid = "Avaritia")
 public class AvaritiaIntegration implements IIntegration {
     public static ItemMultiAvaritiaParts ITEM_PARTS_TERMINALS = new ItemMultiAvaritiaParts(AEApi.instance().partHelper());
+    public static final Item BIG_PATTERN = new ItemEncodedBigPattern("encodedBigPattern");
+    public static final Item BIG_PROCESSING_PATTERN = new ItemEncodedBigProcessingPattern("encodedBigProcessingPattern");
+    public static final Item NEUTRON_PATTERN = new ItemEncodedNeutronPattern("encodedNeutronPattern");
 
-    public static BlockCustomNeutronCollector basicNeutronCollector = new BlockCustomNeutronCollector("basicNeutronCollector");
-    public static BlockCustomNeutronCollector advancedNeutronCollector = new BlockCustomNeutronCollector("advancedNeutronCollector");
-    public static BlockCustomNeutronCollector hybridNeutronCollector = new BlockCustomNeutronCollector("hybridNeutronCollector");
-    public static BlockCustomNeutronCollector ultimateNeutronCollector = new BlockCustomNeutronCollector("ultimateNeutronCollector");
-    public static BlockCustomNeutronCollector quantiumNeutronCollector = new BlockCustomNeutronCollector("quantiumNeutronCollector");
+    public static final Block BASIC_NEUTRON_COLLECTOR = new BlockCustomNeutronCollector("basicNeutronCollector");
+    public static final Block ADVANCEDN_NEUTRON_COLLECTOR = new BlockCustomNeutronCollector("advancedNeutronCollector");
+    public static final Block HYBRID_NEUTRON_COLLECTOR = new BlockCustomNeutronCollector("hybridNeutronCollector");
+    public static final Block ULTIMATE_NEUTRON_COLLECTOR = new BlockCustomNeutronCollector("ultimateNeutronCollector");
+    public static final Block QUANTIUM_NEUTRON_COLLECTOR = new BlockCustomNeutronCollector("quantiumNeutronCollector");
 
-    public static Block neutronUnifier = new BlockNeutronUnifier("neutronUnifier");
-
-    public static ItemEncodedPattern BIG_PATTERN = new ItemEncodedBigPattern("encoded_big_pattern");
-    public static ItemEncodedPattern BIG_PROCESSING_PATTERN = new ItemEncodedBigProcessingPattern("encoded_big_processing_pattern");
-    public static ItemEncodedPattern NEUTRON_PATTERN = new ItemEncodedNeutronPattern("encoded_neutron_pattern");
+    public static final Block NEUTRON_UNIFIER = new BlockNeutronUnifier("neutronUnifier");
 
     private static HashMap<Integer, GuiBridge> guiBridges = new HashMap<>();
 
@@ -68,30 +69,33 @@ public class AvaritiaIntegration implements IIntegration {
     public static CableBusTextures getBusTextureBright(int id) {
         return cableBusTexturesBright.get(id);
     }
-
     public static CableBusTextures getBusTextureDark(int id) {
         return cableBusTexturesDark.get(id);
     }
-
     public static CableBusTextures getBusTextureColored(int id) {
         return cableBusTexturesColored.get(id);
     }
 
     @Override
     public void preInit(FMLPreInitializationEvent paramFMLPreInitializationEvent) {
-        RegisterUtils.registerBlocks(ModItemBlock.class, basicNeutronCollector, advancedNeutronCollector, hybridNeutronCollector, ultimateNeutronCollector, quantiumNeutronCollector);
-        RegisterUtils.registerBlocks(ItemBlockAE2.class, neutronUnifier);
-        GameRegistry.registerItem(BIG_PATTERN, "encoded_big_pattern");
-        GameRegistry.registerItem(BIG_PROCESSING_PATTERN, "encoded_big_processing_pattern");
-        GameRegistry.registerItem(NEUTRON_PATTERN, "encoded_neutron_pattern");
-        GameRegistry.registerItem(ITEM_PARTS_TERMINALS, "avaritiaPart");
-        //RegisterUtils.findClasses("foxiwhitee.hellmod.integration.avaritia.tile", TileEntity.class).forEach(RegisterUtils::registerTile);
-        RegisterUtils.registerTile(TileBaseNeutronCollector.class);
-        RegisterUtils.registerTile(TileAdvancedNeutronCollector.class);
-        RegisterUtils.registerTile(TileHybridNeutronCollector.class);
-        RegisterUtils.registerTile(TileUltimateNeutronCollector.class);
-        RegisterUtils.registerTile(TileQuantumNeutronCollector.class);
-        RegisterUtils.registerTile(TileNeutronUnifier.class);
+        RegisterUtils.registerItem(ITEM_PARTS_TERMINALS, "avaritiaPart");
+        if (ContentConfig.enableCollectors) {
+            RegisterUtils.registerBlocks(BASIC_NEUTRON_COLLECTOR, ADVANCEDN_NEUTRON_COLLECTOR, HYBRID_NEUTRON_COLLECTOR, ULTIMATE_NEUTRON_COLLECTOR, QUANTIUM_NEUTRON_COLLECTOR);
+            RegisterUtils.findClasses("foxiwhitee.hellmod.integration.avaritia.tile.collectors", TileEntity.class).forEach(RegisterUtils::registerTile);
+        }
+        if (ContentConfig.enableNeutronUnifier) {
+            RegisterUtils.registerBlock(NEUTRON_UNIFIER);
+            RegisterUtils.registerTile(TileNeutronUnifier.class);
+        }
+        if (ContentConfig.enableBigPatternTerminal) {
+            RegisterUtils.registerItem(BIG_PATTERN);
+        }
+        if (ContentConfig.enableBigProcessingPatternTerminal) {
+            RegisterUtils.registerItem(BIG_PROCESSING_PATTERN);
+        }
+        if (ContentConfig.enableNeutronPatternTerminal) {
+            RegisterUtils.registerItem(NEUTRON_PATTERN);
+        }
     }
 
     @Override
@@ -106,10 +110,18 @@ public class AvaritiaIntegration implements IIntegration {
 
     @Override
     public void postInit(FMLPostInitializationEvent paramFMLPostInitializationEvent) {
-        guiBridges.put(0, EnumHelper.addEnum(GuiBridge.class, "PartPatternTerminal9x9", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerPartBigPatternTerminal.class, PartBigPatternTerminal.class, GuiHostType.WORLD, SecurityPermissions.CRAFT }));
-        guiBridges.put(1, EnumHelper.addEnum(GuiBridge.class, "PartCraftingTerminal9x9", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerPartCraftingTerminal9x9.class, PartCraftingTerminal9x9.class, GuiHostType.WORLD, SecurityPermissions.CRAFT }));
-        guiBridges.put(2, EnumHelper.addEnum(GuiBridge.class, "PartNeutronCompressorPatternTerminal", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerPartNeutronCompressorPatternTerminal.class, PartNeutronCompressorPatternTerminal.class, GuiHostType.WORLD, SecurityPermissions.CRAFT}));
-        guiBridges.put(3, EnumHelper.addEnum(GuiBridge.class, "PartPatternProcessingTerminal9x9", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerPartBigProcessingPatternTerminal.class, PartBigProcessingPatternTerminal.class, GuiHostType.WORLD, SecurityPermissions.CRAFT}));
+        if (ContentConfig.enableBigPatternTerminal) {
+            guiBridges.put(0, EnumHelper.addEnum(GuiBridge.class, "PartPatternTerminal9x9", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerPartBigPatternTerminal.class, PartBigPatternTerminal.class, GuiHostType.WORLD, SecurityPermissions.CRAFT }));
+        }
+        if (ContentConfig.enableBigCraftingTerminal) {
+            guiBridges.put(1, EnumHelper.addEnum(GuiBridge.class, "PartCraftingTerminal9x9", new Class[] { Class.class, Class.class, GuiHostType.class, SecurityPermissions.class }, new Object[] { ContainerPartCraftingTerminal9x9.class, PartCraftingTerminal9x9.class, GuiHostType.WORLD, SecurityPermissions.CRAFT }));
+        }
+        if (ContentConfig.enableNeutronPatternTerminal) {
+            guiBridges.put(2, EnumHelper.addEnum(GuiBridge.class, "PartNeutronCompressorPatternTerminal", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerPartNeutronCompressorPatternTerminal.class, PartNeutronCompressorPatternTerminal.class, GuiHostType.WORLD, SecurityPermissions.CRAFT}));
+        }
+        if (ContentConfig.enableBigProcessingPatternTerminal) {
+            guiBridges.put(3, EnumHelper.addEnum(GuiBridge.class, "PartPatternProcessingTerminal9x9", new Class[]{Class.class, Class.class, GuiHostType.class, SecurityPermissions.class}, new Object[]{ContainerPartBigProcessingPatternTerminal.class, PartBigProcessingPatternTerminal.class, GuiHostType.WORLD, SecurityPermissions.CRAFT}));
+        }
 
         if (isClient()) {
             registerClientCableBusTextures();
@@ -118,21 +130,26 @@ public class AvaritiaIntegration implements IIntegration {
 
     @SideOnly(Side.CLIENT)
     private void registerClientCableBusTextures() {
-        cableBusTexturesBright.put(0, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminal", new Class[] { String.class }, new Object[] { "PartBigPatternTerm_Bright" }));
-        cableBusTexturesDark.put(0, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminal", new Class[] { String.class }, new Object[] { "PartBigPatternTerm_Dark" }));
-        cableBusTexturesColored.put(0, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminal", new Class[] { String.class }, new Object[] { "PartBigPatternTerm_Colored" }));
-
-        cableBusTexturesBright.put(1, EnumHelper.addEnum(CableBusTextures.class, "CraftingTerminal9x9", new Class[] { String.class }, new Object[] { "PartCraftingTerminal9x9_Bright" }));
-        cableBusTexturesDark.put(1, EnumHelper.addEnum(CableBusTextures.class, "CraftingTerminal9x9", new Class[] { String.class }, new Object[] { "PartCraftingTerminal9x9_Dark" }));
-        cableBusTexturesColored.put(1, EnumHelper.addEnum(CableBusTextures.class, "CraftingTerminal9x9", new Class[] { String.class }, new Object[] { "PartCraftingTerminal9x9_Colored" }));
-
-        cableBusTexturesBright.put(2, EnumHelper.addEnum(CableBusTextures.class, "NeutronCompressorPatternTerminal", new Class[] { String.class }, new Object[] { "PartNeutronCompressorPatternTerminal_Bright" }));
-        cableBusTexturesDark.put(2, EnumHelper.addEnum(CableBusTextures.class, "NeutronCompressorPatternTerminal", new Class[] { String.class }, new Object[] { "PartNeutronCompressorPatternTerminal_Dark" }));
-        cableBusTexturesColored.put(2, EnumHelper.addEnum(CableBusTextures.class, "NeutronCompressorPatternTerminal", new Class[] { String.class }, new Object[] { "PartNeutronCompressorPatternTerminal_Colored" }));
-
-        cableBusTexturesBright.put(3, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminalProcessing", new Class[] { String.class }, new Object[] { "PartBigPatternTermProcessing_Bright" }));
-        cableBusTexturesDark.put(3, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminalProcessing", new Class[] { String.class }, new Object[] { "PartBigPatternTermProcessing_Dark" }));
-        cableBusTexturesColored.put(3, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminalProcessing", new Class[] { String.class }, new Object[] { "PartBigPatternTermProcessing_Colored" }));
+        if (ContentConfig.enableBigPatternTerminal) {
+            cableBusTexturesBright.put(0, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminal", new Class[] { String.class }, new Object[] { "PartBigPatternTerm_Bright" }));
+            cableBusTexturesDark.put(0, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminal", new Class[] { String.class }, new Object[] { "PartBigPatternTerm_Dark" }));
+            cableBusTexturesColored.put(0, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminal", new Class[] { String.class }, new Object[] { "PartBigPatternTerm_Colored" }));
+        }
+        if (ContentConfig.enableBigCraftingTerminal) {
+            cableBusTexturesBright.put(1, EnumHelper.addEnum(CableBusTextures.class, "CraftingTerminal9x9", new Class[] { String.class }, new Object[] { "PartCraftingTerminal9x9_Bright" }));
+            cableBusTexturesDark.put(1, EnumHelper.addEnum(CableBusTextures.class, "CraftingTerminal9x9", new Class[] { String.class }, new Object[] { "PartCraftingTerminal9x9_Dark" }));
+            cableBusTexturesColored.put(1, EnumHelper.addEnum(CableBusTextures.class, "CraftingTerminal9x9", new Class[] { String.class }, new Object[] { "PartCraftingTerminal9x9_Colored" }));
+        }
+        if (ContentConfig.enableNeutronPatternTerminal) {
+            cableBusTexturesBright.put(2, EnumHelper.addEnum(CableBusTextures.class, "NeutronCompressorPatternTerminal", new Class[] { String.class }, new Object[] { "PartNeutronCompressorPatternTerminal_Bright" }));
+            cableBusTexturesDark.put(2, EnumHelper.addEnum(CableBusTextures.class, "NeutronCompressorPatternTerminal", new Class[] { String.class }, new Object[] { "PartNeutronCompressorPatternTerminal_Dark" }));
+            cableBusTexturesColored.put(2, EnumHelper.addEnum(CableBusTextures.class, "NeutronCompressorPatternTerminal", new Class[] { String.class }, new Object[] { "PartNeutronCompressorPatternTerminal_Colored" }));
+        }
+        if (ContentConfig.enableBigProcessingPatternTerminal) {
+            cableBusTexturesBright.put(3, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminalProcessing", new Class[] { String.class }, new Object[] { "PartBigPatternTermProcessing_Bright" }));
+            cableBusTexturesDark.put(3, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminalProcessing", new Class[] { String.class }, new Object[] { "PartBigPatternTermProcessing_Dark" }));
+            cableBusTexturesColored.put(3, EnumHelper.addEnum(CableBusTextures.class, "BigPatternTerminalProcessing", new Class[] { String.class }, new Object[] { "PartBigPatternTermProcessing_Colored" }));
+        }
     }
 
     @SideOnly(Side.CLIENT)

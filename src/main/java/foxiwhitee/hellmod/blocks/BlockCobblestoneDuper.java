@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.blocks;
 
+import appeng.block.AEBaseBlock;
 import appeng.util.Platform;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import foxiwhitee.hellmod.HellCore;
@@ -21,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 @SimpleGuiHandler(index = GuiHandlers.cobblestoneDuper, tile = TileCobblestoneDuper.class, gui = GuiCobblestoneDuper.class, container = ContainerCobblestoneDuper.class)
-public class BlockCobblestoneDuper extends Block implements ITileEntityProvider {
+public class BlockCobblestoneDuper extends AEBaseBlock implements ITileEntityProvider {
     IIcon[] icons = new IIcon[3];
     private String name;
     public BlockCobblestoneDuper(String name) {

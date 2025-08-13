@@ -14,6 +14,9 @@ public class DefaultItem extends Item {
         this.setCreativeTab(HellCore.HELL_TAB);
         //this.setMaxDamage(800);
         this.maxStackSize = 64;
-        RegisterUtils.registerItem(this);
+    }
+
+    public DefaultItem(String name) {
+        this(name, name);
     }
 }

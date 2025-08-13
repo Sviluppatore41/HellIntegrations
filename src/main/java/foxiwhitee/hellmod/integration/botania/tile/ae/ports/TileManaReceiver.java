@@ -1,4 +1,5 @@
-package foxiwhitee.hellmod.integration.botania.tile.ae;
+package foxiwhitee.hellmod.integration.botania.tile.ae.ports;
+
 
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.TickRateModulation;
@@ -8,30 +9,26 @@ import appeng.api.storage.ISaveProvider;
 import appeng.api.util.DimensionalCoord;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.inventory.InvOperation;
-import appeng.util.Platform;
 import foxiwhitee.hellmod.config.HellConfig;
-import foxiwhitee.hellmod.network.NetworkManager;
-import foxiwhitee.hellmod.network.packets.PacketUpdateMana;
+import foxiwhitee.hellmod.integration.botania.tile.ae.TIleAEMana;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import vazkii.botania.api.mana.IManaPool;
+import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 import vazkii.botania.api.mana.spark.ISparkEntity;
 
 import java.util.List;
 
-public class TileManaSupplier extends TIleAEMana implements IManaPool, ISaveProvider, ISparkAttachable {
+public class TileManaReceiver extends TIleAEMana implements IManaReceiver, ISaveProvider, ISparkAttachable, IManaPool {
     private final DimensionalCoord location = new DimensionalCoord(this);
 
-    public TileManaSupplier() {
+    public TileManaReceiver() {
         setMaxStoredMana(HellConfig.manaMidgardPool);
     }
-
-    @Override
-    public void onChangeInventory(IInventory iInventory, int i, InvOperation invOperation, ItemStack itemStack, ItemStack itemStack1) {}
 
     @Override
     public TickingRequest getTickingRequest(IGridNode iGridNode) {
@@ -47,25 +44,27 @@ public class TileManaSupplier extends TIleAEMana implements IManaPool, ISaveProv
     protected AppEngInternalInventory getInventory() { return new AppEngInternalInventory(this, 1); }
 
     @Override
-    public TickRateModulation tick(IGridNode node, int ticts) {
-        this.injectMana(getCurrentMana());
+    public TickRateModulation tick(IGridNode iGridNode, int i) {
+        extractMana(getMaxStoredMana() - getStoredMana());
         return TickRateModulation.IDLE;
     }
 
+    public int getCurrentMana() {
+        return (int) Math.min(Integer.MAX_VALUE, getStoredMana());
+    }
+
     public boolean isFull() {
-        return this.getCurrentMana() >= getMaxStoredMana();
+        return false;
     }
 
     public void recieveMana(int mana) {
-        setStoredMana(Math.max(0, Math.min(this.getCurrentMana() + mana, getMaxStoredMana())));
+        if (mana >= 0) return;
+        if (Math.abs(mana) > getMaxStoredMana()) setStoredMana(0);
+        else setStoredMana(this.getStoredMana() - Math.abs(mana));
     }
 
     public boolean canRecieveManaFromBursts() {
-        return !isFull();
-    }
-
-    public boolean isOutputtingPower() {
-        return false;
+        return true;
     }
 
     public void saveChanges(IMEInventory inv) {
@@ -87,9 +86,7 @@ public class TileManaSupplier extends TIleAEMana implements IManaPool, ISaveProv
     public void attachSpark(ISparkEntity iSparkEntity) {}
 
     @Override
-    public int getAvailableSpaceForMana() {
-        return (int) Math.min(Integer.MAX_VALUE, Math.max(0, getMaxStoredMana() - this.getCurrentMana()));
-    }
+    public int getAvailableSpaceForMana() { return 0; }
 
     @Override
     public ISparkEntity getAttachedSpark() {
@@ -103,10 +100,13 @@ public class TileManaSupplier extends TIleAEMana implements IManaPool, ISaveProv
     }
 
     @Override
-    public boolean areIncomingTranfersDone() {return false;}
+    public boolean areIncomingTranfersDone() { return false; }
 
     @Override
-    public int getCurrentMana() {
-        return (int) Math.min(Integer.MAX_VALUE, getStoredMana());
+    public boolean isOutputtingPower() {
+        return false;
     }
+
+    @Override
+    public void onChangeInventory(IInventory iInventory, int i, InvOperation invOperation, ItemStack itemStack, ItemStack itemStack1) {}
 }

@@ -1,5 +1,6 @@
 package foxiwhitee.hellmod.integration.draconic.blocks;
 
+import appeng.block.AEBaseBlock;
 import appeng.util.Platform;
 import foxiwhitee.hellmod.HellCore;
 import foxiwhitee.hellmod.client.gui.GuiAutomatedUpgradeableBlock;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 @SimpleGuiHandler(index = GuiHandlers.draconicAssembler, tile = TileDraconicAssembler.class, gui = GuiDraconicAssembler.class, container = ContainerDraconicAssembler.class, integration = "DraconicEvolution")
-public class BlockDraconicAssembler extends Block implements ITileEntityProvider {
+public class BlockDraconicAssembler extends AEBaseBlock implements ITileEntityProvider {
 
     public BlockDraconicAssembler(String name) {
         super(Material.iron);
@@ -36,6 +37,7 @@ public class BlockDraconicAssembler extends Block implements ITileEntityProvider
         this.setHardness(3);
         this.setResistance(10);
         this.setHarvestLevel("pickaxe", 3);
+        isOpaque = false;
     }
 
     public boolean renderAsNormalBlock() {
@@ -86,9 +88,5 @@ public class BlockDraconicAssembler extends Block implements ITileEntityProvider
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileDraconicAssembler && stack.hasTagCompound())
             ((TileDraconicAssembler)tile).readItemNBT(stack.stackTagCompound);
-    }
-
-    public boolean isOpaqueCube() {
-        return false;
     }
 }
